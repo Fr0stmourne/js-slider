@@ -1,4 +1,6 @@
 const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,6 +12,9 @@ const PATHS = {
   dist: path.join(__dirname, '../dist'),
   assets: 'assets/',
 };
+
+// const PAGES_DIR = `${PATHS.src}/pug/pages/`;
+// const PAGES = fs.readdirSync(PAGES_DIR).filter(fileName => fileName.endsWith('.pug'));
 
 module.exports = {
   // BASE config
@@ -27,6 +32,19 @@ module.exports = {
   mode: 'base',
   module: {
     rules: [
+      {
+        test: /\.pug$/,
+        loader: 'pug-loader',
+      },
+      {
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'ts-loader',
+          },
+        ],
+      },
       {
         test: /\.js$/,
         loader: ['babel-loader', 'eslint-loader'],
@@ -86,7 +104,7 @@ module.exports = {
           'style-loader',
           MiniCssExtractPlugin.loader,
           {
-            loader: 'css-loader',
+            loader: 'css-loader?url=false',
             options: {
               sourceMap: true,
             },
@@ -123,18 +141,38 @@ module.exports = {
       template: `${PATHS.src}/index.html`,
       filename: './index.html',
     }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jquery: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      'window.$': 'jquery',
+    }),
     new CopyWebpackPlugin([
       {
         from: `${PATHS.src}/img`,
         to: `${PATHS.assets}img`,
       },
-    ]),
-    new CopyWebpackPlugin([
       {
         from: `${PATHS.src}/fonts`,
         to: `${PATHS.assets}fonts`,
       },
+      // {
+      //   from: `${PATHS.src}/pug/components`,
+      //   to: `${PATHS.assets}components`,
+      // },
+      // {
+      //   test: /.+\.(png|svg|jpg)/,
+      //   to: `${PATHS.assets}img`,
+      // },
     ]),
+    // ...PAGES.map(
+    //   page =>
+    //     new HtmlWebpackPlugin({
+    //       template: `${PAGES_DIR}/${page}`,
+    //       filename: `./${page.replace(/\.pug/, '.html')}`,
+    //     }),
+    // ),
     new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
   ],
 };
