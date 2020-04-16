@@ -1,11 +1,16 @@
-interface JQuery{
-  myPlugin: () => void;
+import View from './Views/View';
+declare global {
+  interface JQuery {
+    slider: (options ?:object) => void;
+  }
 }
-
-$.fn.myPlugin = () => {
+$.fn.slider = function (options: object) {
   console.log('test');
-  
+  const view = new View();
+  $(this).append(view.element)
+
+  return this;
 }
 
 
-$('#root').myPlugin();
+$('#root').slider();

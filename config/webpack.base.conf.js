@@ -129,7 +129,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.scss'],
+    extensions: ['.js', '.jsx', '.scss', '.ts', '.tsx'],
   },
   plugins: [
     new CleanWebpackPlugin(),
