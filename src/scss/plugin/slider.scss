@@ -13,17 +13,17 @@
   }
 
   &__pin {
-    position: absolute;
-    left: 50px;
+    position: relative;
+    transform: translateY(-75%);
     top: 0;
-    transform: translate(-50%, -25%);
+    left: 10px;
     height: 10px;
     width: 10px;
     border-radius: 50%;
     background-color: red;
   }
 
-  &__text {
+  &__value {
     min-width: 20px;
     padding: 5px;
     height: 20px;
@@ -32,6 +32,7 @@
     position: absolute;
     top: -5px;
     left: 0;
+    text-align: center;
     transform: translate(calc(-50%+5px), -100%);
     border-radius: 5px;
   }

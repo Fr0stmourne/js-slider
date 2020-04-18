@@ -1,19 +1,29 @@
-interface Options {
-  minmaxValues: Array<number>;
-  step?: number;
-  type?: string;
-  isValueEnabled?: boolean;
-  isRanged?: boolean;
-  defaultValue?: number;
-}
+import Model from "../Models/Model";
+import View from "../Views/View";
 
-class Controller {
-  options: Options;
+export default class Controller {
+  model: Model;
+  view: View;
   
-  constructor(options: Options) {
-    this.options = options;
-
+  
+  constructor(model: Model, view: View) {
+    this.model = model;
+    this.view = view;
+    this.view.bindMovePin((percentage: number) => {
+      model.value = model.getPluginConfig().maxValue * percentage
+      console.log('model value', model.value);
+    });
   }
 
+  // bind() {
+  //   this.view.handleChange = (e: Event) => {
+  //     const pinElement = e.target as HTMLElement;
+  //     console.log(pinElement.style.left);
+  //     // console.log(e);
+  //     this.model.value = +(pinElement.style.left).split('px')[0] || 0; 
+  //     console.log(this.model.getPluginConfig());
+      
+  //   }
+  // }
 
 }
