@@ -12,7 +12,6 @@ const testOptions = {
   maxValue: 100,
   step: 7,
   defaultValue: 30,
-  isTooltipEnabled: true,
 }
 
 $.fn.slider = function (options: object) {

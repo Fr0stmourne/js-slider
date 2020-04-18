@@ -6,12 +6,11 @@ function render (markup: string) : HTMLElement {
 
 export default class View {
   _element: HTMLElement;
-  handler: Function;
-  options: any;
+  _options: any;
 
 
   constructor(config: any) {
-    this.options = config;
+    this._options = config;
     this.render(0);
   }
 
@@ -70,15 +69,15 @@ export default class View {
     <div class="slider-plugin js-slider">
       <div class="slider-plugin__bar"></div>
       <div class="slider-plugin__pin js-slider-pin">
-        <div class="slider-plugin__value js-slider-value">${value}</div>
+        <div class="slider-plugin__value ${this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''} js-slider-value">${value}</div>
       </div>
     </div>
     `);
-    console.log('step', this.options.step);
+    console.log('step', this._options.step);
     
     // used append-remove trick to calculate element width
     document.body.appendChild(this._element);
-    const firstVal = this.options.defaultValue / (this.options.maxValue - this.options.minValue) * +this._element.clientWidth;
+    const firstVal = this._options.defaultValue / (this._options.maxValue - this._options.minValue) * +this._element.clientWidth;
     document.body.removeChild(this._element);
 
     (<HTMLElement>this._element.querySelector('.js-slider-pin')).style.left = firstVal + 'px';
