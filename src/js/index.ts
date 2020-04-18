@@ -10,7 +10,7 @@ declare global {
 const testOptions = {
   minValue: 0,
   maxValue: 100,
-  step: 2,
+  step: 7,
   defaultValue: 30,
   isTooltipEnabled: true,
 }

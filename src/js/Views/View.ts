@@ -31,6 +31,7 @@ export default class View {
       let shiftX = event.clientX - pin.getBoundingClientRect().left;
 
       const onMouseMove = (e: MouseEvent) => {
+        const prevLeft = pin.style.left;
         
         let newLeft = e.clientX - shiftX - slider.getBoundingClientRect().left;
 
@@ -43,7 +44,7 @@ export default class View {
         }
         
         const width = slider.clientWidth;
-        const percentage = ((newLeft + 1) / width).toFixed(2);
+        const percentage = (newLeft / width).toFixed(2);
        
         if (handler) handler(percentage);
         
@@ -61,7 +62,7 @@ export default class View {
   }
 
   updateValue(value: number) {     
-    this._element.querySelector('.js-slider-value').textContent = String(Math.round(value));
+    this._element.querySelector('.js-slider-value').textContent = String(value);    
   }
 
   render(value: number) {
@@ -73,7 +74,8 @@ export default class View {
       </div>
     </div>
     `);
-
+    console.log('step', this.options.step);
+    
     // used append-remove trick to calculate element width
     document.body.appendChild(this._element);
     const firstVal = this.options.defaultValue / (this.options.maxValue - this.options.minValue) * +this._element.clientWidth;
