@@ -6,6 +6,7 @@ export default class Model {
   // isRanged: boolean;
   // step: number;
   _value: number;
+  onValueChange: Function;
 
   constructor(options: {
     // defaultValue?: number,
@@ -31,11 +32,15 @@ export default class Model {
 
   set value(newValue: number) {
     this._value = newValue;
+    this.onValueChange(this._value)
   }
 
   getPluginConfig() {
     return this._options;
   }
 
+  bindSetValue(handler?: Function) {
+    this.onValueChange = handler;
+  }
 
 }
