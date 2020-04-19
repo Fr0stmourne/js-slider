@@ -5,6 +5,23 @@
   max-width: 300px;
   width: 100%;
 
+  &--vertical {
+    width: 5px;
+
+    .slider-plugin__bar {
+      height: 300px;
+      width: 100%;
+    }
+
+    .slider-plugin__pin {
+      left: 5px;
+      top: initial;
+      bottom: 50px;
+      transform: translateX(-75%);
+    }
+
+  }
+
   &__bar {
     width: 100%;
     height: 5px;

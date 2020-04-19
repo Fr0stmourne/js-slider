@@ -11,7 +11,8 @@ const testOptions = {
   minValue: 0,
   maxValue: 100,
   step: 7,
-  defaultValue: 30,
+  defaultValue: 70,
+  // isVertical: true,
 }
 
 $.fn.slider = function (options: object) {
