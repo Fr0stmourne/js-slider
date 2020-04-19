@@ -11,12 +11,21 @@ const testOptions = {
   minValue: 0,
   maxValue: 100,
   step: 7,
-  defaultValue: 70,
+  defaultValue: [45, 85],
   // isVertical: true,
+  range: true
+}
+const testOptions1 = {
+  minValue: 0,
+  maxValue: 100,
+  step: 7,
+  defaultValue: 45,
+  // isVertical: true,
+  // range: true
 }
 
 $.fn.slider = function (options: object) {
-  const model = new Model(testOptions);
+  const model = new Model(options);
   const view = new View(model.getPluginConfig());
   const controller = new Controller(model, view)  
   $(this).append(view.element)
@@ -25,7 +34,8 @@ $.fn.slider = function (options: object) {
 }
 
 
-$('#root').slider();
+$('#root').slider(testOptions);
+$('#root-1').slider(testOptions1);
 
 $(() => {
 
@@ -35,7 +45,7 @@ $(() => {
   }
   
 
-  setTimeout(() => {
-    change(11)
-  }, 1000)
+  // setTimeout(() => {
+  //   change(11)
+  // }, 1000)
 })

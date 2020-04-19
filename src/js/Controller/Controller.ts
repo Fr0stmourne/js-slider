@@ -11,17 +11,33 @@ export default class Controller {
     this.view = view;
     this.view.render(this.model.value);
 
-    this.view.bindMovePin((percentage: number) => {
-      model.value = model.getPluginConfig().maxValue * percentage
-    });
+    if (this.model.getPluginConfig().range) {
+      const firstPinHandler = (percentage: number) => {
+        (<number[]>this.model.value)[0] = this.model.getPluginConfig().maxValue * percentage
+        console.log(this.model.value);
+      };
+      const secondPinHandler = (percentage: number) => {
+        (<number[]>this.model.value)[1] = this.model.getPluginConfig().maxValue * percentage
+        console.log(this.model.value);
+      };
+      this.view.bindMovePin([firstPinHandler, secondPinHandler]);
+    } else {
+      this.view.bindMovePin((percentage: number) => {
+        this.model.value = this.model.getPluginConfig().maxValue * percentage
+        console.log(this.model.value);
+      });
+    }
+
 
     this.view.bindInputChange((e: Event) => {
-     console.log('changed:', (<HTMLInputElement>e.target).value);
+    //  console.log('changed:', (<HTMLInputElement>e.target).value);
      model.value = +(<HTMLInputElement>e.target).value;
     })
 
     
-    this.model.bindSetValue((value: number) => {
+    this.model.bindSetValue((value: number | number[]) => {
+      // console.log('trigger');
+      
       this.view.updateValue(value);
     })
 

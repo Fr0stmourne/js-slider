@@ -38,6 +38,10 @@
     width: 10px;
     border-radius: 50%;
     background-color: red;
+
+    &--second {
+      top: -10px;
+    }
   }
 
   &__value {
