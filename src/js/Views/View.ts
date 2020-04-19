@@ -56,11 +56,7 @@ export default class View {
             
             const height = slider.clientHeight;
             const percentage = (newBottom / height).toFixed(2);
-            if (this._options.range) {
-
-            } else {
-              if (handler) handler(percentage);          
-            }
+            if (handler) handler(percentage);
             // pin.style.bottom = newBottom + 'px';
           }
     
@@ -140,9 +136,9 @@ export default class View {
       console.log('VALUES', value);
       
       this._element.querySelector('.js-slider-pin-1 .js-slider-value').textContent = String((<number[]>value)[0]);
-      // debugger
       this._element.querySelector('.js-slider-pin-2 .js-slider-value').textContent = String((<number[]>value)[1]);
-
+      console.log('ДВИГАЮ НА', pxNums);
+      
       (<HTMLElement>this._element.querySelector('.js-slider-pin-1')).style[this._options.isVertical ? 'bottom' : 'left'] = pxNums[0] + 'px';
       (<HTMLElement>this._element.querySelector('.js-slider-pin-2')).style[this._options.isVertical ? 'bottom' : 'left'] = pxNums[1] + 'px';
 

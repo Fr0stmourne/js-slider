@@ -37,7 +37,7 @@ export default class Controller {
 
     
     this.model.bindSetValue((value: number | number[]) => {
-      // console.log('trigger');
+      console.log('trigger');
       
       this.view.updateValue(value);
     })

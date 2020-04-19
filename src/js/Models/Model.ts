@@ -37,7 +37,7 @@ export default class Model {
       (<number[]>this._value)[0] = Math.max(Math.ceil((<number[]>newValue)[0] / this._options.step) * this._options.step, this._options.minValue);
       (<number[]>this._value)[1] = Math.min(Math.ceil((<number[]>newValue)[1] / this._options.step) * this._options.step, this._options.maxValue);
       if ((<number[]>this._value)[0] > (<number[]>this._value)[1]) {
-        this._value = [(<number[]>this._value)[1], (<number[]>this._value)[0]]
+        this._value = [Math.max((<number[]>this._value)[1], this._options.minValue), Math.min((<number[]>this._value)[0], this._options.maxValue)]
       }      
       this.onValueChange(this._value)
     } else {

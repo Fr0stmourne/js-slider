@@ -10,9 +10,9 @@ declare global {
 const testOptions = {
   minValue: 0,
   maxValue: 100,
-  step: 7,
+  step: 1,
   defaultValue: [45, 85],
-  // isVertical: true,
+  isVertical: true,
   range: true
 }
 const testOptions1 = {
@@ -20,7 +20,7 @@ const testOptions1 = {
   maxValue: 100,
   step: 7,
   defaultValue: 45,
-  // isVertical: true,
+  isVertical: true,
   // range: true
 }
 
