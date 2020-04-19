@@ -61,7 +61,7 @@ export default class View {
             } else {
               if (handler) handler(percentage);          
             }
-            pin.style.bottom = newBottom + 'px';
+            // pin.style.bottom = newBottom + 'px';
           }
     
           const onMouseUp = (e: MouseEvent) => {
@@ -95,7 +95,7 @@ export default class View {
            
             if (handler) handler(percentage);
             
-            pin.style.left = newLeft + 'px';
+            // pin.style.left = newLeft + 'px';
           }
     
           const onMouseUp = (e: MouseEvent) => {
