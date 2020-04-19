@@ -34,12 +34,11 @@ export default class Model {
     // console.log('cond', this._options.range);
     
     if (this._options.range) {
-      this._value = [Math.ceil((<number[]>newValue)[0] / this._options.step) * this._options.step,
-      Math.ceil((<number[]>newValue)[1] / this._options.step) * this._options.step];
-      this._value[0] = Math.max(Math.ceil((<number[]>newValue)[0] / this._options.step) * this._options.step, this._options.minValue);
-      this._value[1] = Math.min(Math.ceil((<number[]>newValue)[1] / this._options.step) * this._options.step, this._options.maxValue);
-      console.log('model value', this._value);
-      
+      (<number[]>this._value)[0] = Math.max(Math.ceil((<number[]>newValue)[0] / this._options.step) * this._options.step, this._options.minValue);
+      (<number[]>this._value)[1] = Math.min(Math.ceil((<number[]>newValue)[1] / this._options.step) * this._options.step, this._options.maxValue);
+      if ((<number[]>this._value)[0] > (<number[]>this._value)[1]) {
+        this._value = [(<number[]>this._value)[1], (<number[]>this._value)[0]]
+      }      
       this.onValueChange(this._value)
     } else {
       this._value = Math.ceil(<number>newValue / this._options.step) * this._options.step;

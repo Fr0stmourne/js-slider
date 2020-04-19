@@ -110,8 +110,10 @@ export default class View {
     }
     
     if (this._options.range) {
+      
       const firstPin : HTMLElement = this._element.querySelector('.js-slider-pin-1');
       const secondPin : HTMLElement = this._element.querySelector('.js-slider-pin-2');
+      console.log(firstPin);
       addPin(firstPin, (<Function[]>valueHandler)[0]);
       addPin(secondPin, (<Function[]>valueHandler)[1]);
       
@@ -133,14 +135,16 @@ export default class View {
     console.log('condition!', this._options.range);
     
     if (this._options.range) {
+    
       const pxNums = [getPxNum((<number[]>value)[0]), getPxNum((<number[]>value)[1])];
       console.log('VALUES', value);
       
-      this._element.querySelector('js-slider-pin-1').textContent = String((<number[]>value)[0]);
-      this._element.querySelector('js-slider-pin-2').textContent = String((<number[]>value)[1]);
+      this._element.querySelector('.js-slider-pin-1 .js-slider-value').textContent = String((<number[]>value)[0]);
+      // debugger
+      this._element.querySelector('.js-slider-pin-2 .js-slider-value').textContent = String((<number[]>value)[1]);
 
       (<HTMLElement>this._element.querySelector('.js-slider-pin-1')).style[this._options.isVertical ? 'bottom' : 'left'] = pxNums[0] + 'px';
-      (<HTMLElement>this._element.querySelector('.js-slider-pin-2')).style[this._options.isVertical ? 'bottom' : 'left'] = pxNums[0] + 'px';
+      (<HTMLElement>this._element.querySelector('.js-slider-pin-2')).style[this._options.isVertical ? 'bottom' : 'left'] = pxNums[1] + 'px';
 
     } else {
       const pxNum = getPxNum(<number>value);
