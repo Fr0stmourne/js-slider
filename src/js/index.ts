@@ -40,12 +40,18 @@ $('#root-1').slider(testOptions1);
 $(() => {
 
   function change(val: number) {
-    (<any>$('#root input')).val(String(val));
+    (<any>$('#root-1 input')).val(String(val));
+    (<any>$('#root-1 input')).change();
+  }
+
+  function changeRange(values: number[]) {
+    (<any>$('#root input')).val(String(values.join(' ')));
     (<any>$('#root input')).change();
   }
   
 
-  // setTimeout(() => {
-  //   change(11)
-  // }, 1000)
+  setTimeout(() => {
+    change(11);
+    changeRange([25, 70]);
+  }, 1000)
 })

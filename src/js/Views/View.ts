@@ -160,7 +160,7 @@ export default class View {
       <div class="slider-plugin__pin slider-plugin__pin--second js-slider-pin-2">
         <div class="slider-plugin__value ${this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''} js-slider-value">${(<number[]>value)[1]}</div>
       </div>
-      <input type="number" class="slider-plugin__input js-input" value="${this._options.defaultValue}">
+      <input class="slider-plugin__input js-input" value="${this._options.defaultValue}">
     </div>
       `)
 

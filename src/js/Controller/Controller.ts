@@ -31,8 +31,12 @@ export default class Controller {
 
 
     this.view.bindInputChange((e: Event) => {
-    //  console.log('changed:', (<HTMLInputElement>e.target).value);
-     model.value = +(<HTMLInputElement>e.target).value;
+    if (this.model.getPluginConfig().range) {
+      const newVal = (<HTMLInputElement>e.target).value.split(' ').map(e => +e.trim());
+      model.value = newVal;
+    } else {
+      model.value = +(<HTMLInputElement>e.target).value;
+    }
     })
 
     
