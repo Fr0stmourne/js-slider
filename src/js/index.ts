@@ -26,3 +26,16 @@ $.fn.slider = function (options: object) {
 
 
 $('#root').slider();
+
+$(() => {
+
+  function change(val: number) {
+    (<any>$('#root input')).val(String(val));
+    (<any>$('#root input')).change();
+  }
+  
+
+  setTimeout(() => {
+    change(11)
+  }, 1000)
+})

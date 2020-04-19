@@ -15,6 +15,11 @@ export default class Controller {
       model.value = model.getPluginConfig().maxValue * percentage
     });
 
+    this.view.bindInputChange((e: Event) => {
+     console.log('changed:', (<HTMLInputElement>e.target).value);
+     model.value = +(<HTMLInputElement>e.target).value;
+    })
+
     
     this.model.bindSetValue((value: number) => {
       this.view.updateValue(value);

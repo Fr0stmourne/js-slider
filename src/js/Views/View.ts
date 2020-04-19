@@ -18,6 +18,15 @@ export default class View {
     return this._element;
   }
 
+  bindInputChange(handler? : Function) {
+    const input: HTMLInputElement = this._element.querySelector('.js-input');
+    input.onchange = (e) => {
+      console.log('changed!!');
+      
+      handler(e);
+    }
+  }
+
   bindMovePin(handler?: Function) {    
     const pin: HTMLElement = this._element.querySelector('.js-slider-pin');
     const slider: HTMLElement = this._element;
@@ -94,8 +103,10 @@ export default class View {
     
   }
 
-  updateValue(value: number) {     
-    this._element.querySelector('.js-slider-value').textContent = String(value);    
+  updateValue(value: number) {    
+    const pxNum = value / (this._options.maxValue - this._options.minValue) * (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth)
+    this._element.querySelector('.js-slider-value').textContent = String(value);
+    (<HTMLElement>this._element.querySelector('.js-slider-pin')).style[this._options.isVertical ? 'bottom' : 'left'] = pxNum + 'px';
   }
 
   render(value: number) {
@@ -105,6 +116,7 @@ export default class View {
       <div class="slider-plugin__pin js-slider-pin">
         <div class="slider-plugin__value ${this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''} js-slider-value">${value}</div>
       </div>
+      <input type="number" class="slider-plugin__input js-input" value="${this._options.defaultValue}">
     </div>
     `);
     

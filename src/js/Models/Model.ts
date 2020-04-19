@@ -33,7 +33,7 @@ export default class Model {
   set value(newValue: number) {
     this._value = Math.ceil(newValue / this._options.step) * this._options.step;
     if (this._value > this._options.maxValue) this._value = this._options.maxValue;
-    if (this._value < this._options.minValue) this._value = this._options.minValue;
+    if (this._value < this._options.minValue) this._value = this._options.minValue;    
     this.onValueChange(this._value)
   }
 
