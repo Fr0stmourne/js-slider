@@ -13,11 +13,19 @@ export default class Controller {
     if (this.model.getPluginConfig().range) {
       const firstPinHandler = (percentage: number): void => {
         // (<number[]>this.model.value)[0] = this.model.getPluginConfig().maxValue * percentage
-        this.model.value = [this.model.getPluginConfig().maxValue * percentage, (this.model.value as number[])[1]];
+        this.model.value = [
+          this.model.getPluginConfig().minValue +
+            percentage * Math.abs(this.model.getPluginConfig().maxValue - this.model.getPluginConfig().minValue),
+          (this.model.value as number[])[1],
+        ];
         // console.log(this.model.value);
       };
       const secondPinHandler = (percentage: number): void => {
-        this.model.value = [(this.model.value as number[])[0], this.model.getPluginConfig().maxValue * percentage];
+        this.model.value = [
+          (this.model.value as number[])[0],
+          this.model.getPluginConfig().minValue +
+            percentage * Math.abs(this.model.getPluginConfig().maxValue - this.model.getPluginConfig().minValue),
+        ];
         // console.log(this.model.value);
       };
       this.view.bindMovePin([firstPinHandler, secondPinHandler]);

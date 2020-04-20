@@ -29,15 +29,22 @@ export default class View {
   bindMovePin(valueHandler?: Function | Function[]): void {
     const slider: HTMLElement = this._element;
 
-    const addPin = (pin: HTMLElement, handler?: Function): void => {
+    const addPin = (pin: HTMLElement, handler?: Function, pinShift?: number): void => {
       if (this._options.isVertical) {
+        const DEFAULT_PIN_SHIFT = 0;
         pin.onmousedown = (event): void => {
           event.preventDefault();
 
           const shiftY = event.clientY - pin.getBoundingClientRect().bottom;
 
           const onMouseMove = (e: MouseEvent): void => {
-            let newBottom = -(e.clientY - shiftY - slider.getBoundingClientRect().bottom);
+            let newBottom = -(
+              e.clientY -
+              shiftY -
+              slider.getBoundingClientRect().bottom +
+              // fix for vertical slider bug
+              (pinShift || DEFAULT_PIN_SHIFT)
+            );
 
             if (newBottom < 0) {
               newBottom = 0;
@@ -102,7 +109,7 @@ export default class View {
     if (this._options.range) {
       const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
-      addPin(firstPin, (valueHandler as Function[])[0]);
+      addPin(firstPin, (valueHandler as Function[])[0], 10);
       addPin(secondPin, (valueHandler as Function[])[1]);
     } else {
       const pin: HTMLElement = this._element.querySelector('.js-slider-pin');
@@ -166,10 +173,12 @@ export default class View {
 
       document.body.appendChild(this._element);
       const firstInitialVal =
-        (this._options.defaultValue[0] / (this._options.maxValue - this._options.minValue)) *
+        (Math.abs((this._options.defaultValue[0] as number) - this._options.minValue) /
+          Math.abs(this._options.maxValue - this._options.minValue)) *
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
       const secondInitialVal =
-        (this._options.defaultValue[1] / (this._options.maxValue - this._options.minValue)) *
+        (Math.abs((this._options.defaultValue[1] as number) - this._options.minValue) /
+          Math.abs(this._options.maxValue - this._options.minValue)) *
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
       document.body.removeChild(this._element);
 
