@@ -3,7 +3,7 @@ import Model from './Models/Model';
 import Controller from './Controller/Controller';
 declare global {
   interface JQuery {
-    slider: (options?: object) => void;
+    slider: (options?: object) => JQuery;
   }
 }
 
