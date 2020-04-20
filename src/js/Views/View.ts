@@ -64,6 +64,7 @@ export default class View {
         };
       } else {
         pin.onmousedown = (event): void => {
+          // debugger;
           event.preventDefault();
 
           const shiftX = event.clientX - pin.getBoundingClientRect().left;
@@ -101,7 +102,6 @@ export default class View {
     if (this._options.range) {
       const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
-      console.log(firstPin);
       addPin(firstPin, (valueHandler as Function[])[0]);
       addPin(secondPin, (valueHandler as Function[])[1]);
     } else {
@@ -111,11 +111,17 @@ export default class View {
   }
 
   updateValue(value: number | number[]): void {
+    // debugger;
     const getPxNum = (value: number): number => {
       return (
-        ((value as number) / (this._options.maxValue - this._options.minValue)) *
+        (Math.abs((value as number) - this._options.minValue) /
+          Math.abs(this._options.maxValue - this._options.minValue)) *
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth)
       );
+      // return (
+      //   ((value as number) / (this._options.maxValue - this._options.minValue)) *
+      //   (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth)
+      // );
     };
 
     if (this._options.range) {
@@ -189,7 +195,8 @@ export default class View {
       // used append-remove trick to calculate element width
       document.body.appendChild(this._element);
       const initialVal =
-        (this._options.defaultValue / (this._options.maxValue - this._options.minValue)) *
+        (Math.abs((this._options.defaultValue as number) - this._options.minValue) /
+          Math.abs(this._options.maxValue - this._options.minValue)) *
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
       document.body.removeChild(this._element);
       (this._element.querySelector('.js-slider-pin') as HTMLElement).style[

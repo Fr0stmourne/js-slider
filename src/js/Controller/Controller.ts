@@ -14,17 +14,18 @@ export default class Controller {
       const firstPinHandler = (percentage: number): void => {
         // (<number[]>this.model.value)[0] = this.model.getPluginConfig().maxValue * percentage
         this.model.value = [this.model.getPluginConfig().maxValue * percentage, (this.model.value as number[])[1]];
-        console.log(this.model.value);
+        // console.log(this.model.value);
       };
       const secondPinHandler = (percentage: number): void => {
         this.model.value = [(this.model.value as number[])[0], this.model.getPluginConfig().maxValue * percentage];
-        console.log(this.model.value);
+        // console.log(this.model.value);
       };
       this.view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
       this.view.bindMovePin((percentage: number): void => {
-        this.model.value = this.model.getPluginConfig().maxValue * percentage;
-        console.log(this.model.value);
+        model.value =
+          this.model.getPluginConfig().minValue +
+          percentage * Math.abs(this.model.getPluginConfig().maxValue - this.model.getPluginConfig().minValue);
       });
     }
 
@@ -38,8 +39,6 @@ export default class Controller {
     });
 
     this.model.bindSetValue((value: number | number[]) => {
-      console.log('trigger');
-
       this.view.updateValue(value);
     });
   }

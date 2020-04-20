@@ -8,10 +8,10 @@ declare global {
 }
 
 const testOptions1 = {
-  minValue: 0,
+  minValue: -30,
   maxValue: 100,
   step: 1,
-  defaultValue: 60,
+  defaultValue: 45,
 };
 
 const testOptions2 = {
@@ -48,9 +48,9 @@ $.fn.slider = function(options: object): JQuery {
 };
 
 $('#example-1').slider(testOptions1);
-$('#example-2').slider(testOptions2);
-$('#example-3').slider(testOptions3);
-$('#example-4').slider(testOptions4);
+// $('#example-2').slider(testOptions2);
+// $('#example-3').slider(testOptions3);
+// $('#example-4').slider(testOptions4);
 
 $(() => {
   // function change(val: number) {

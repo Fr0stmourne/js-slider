@@ -46,9 +46,13 @@ export default class Model {
       }
       this.onValueChange(this._value);
     } else {
+      console.log('newValue', newValue);
+
       this._value = Math.ceil((newValue as number) / this._options.step) * this._options.step;
       if (this._value > this._options.maxValue) this._value = this._options.maxValue;
       if (this._value < this._options.minValue) this._value = this._options.minValue;
+      console.log(this._value);
+
       this.onValueChange(this._value);
     }
   }
