@@ -21,3 +21,13 @@ button {
   width: 1px;
   white-space: nowrap;
 }
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 50px auto;
+
+  >div {
+    margin-bottom: 50px;
+  }
+}
