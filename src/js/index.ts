@@ -38,10 +38,10 @@ const testOptions4 = {
   isVertical: true,
 };
 
-$.fn.slider = function(options: object) {
+$.fn.slider = function(options: object): JQuery {
   const model = new Model(options);
   const view = new View(model.getPluginConfig());
-  const controller = new Controller(model, view);
+  new Controller(model, view);
   $(this).append(view.element);
 
   return this;
@@ -53,18 +53,16 @@ $('#example-3').slider(testOptions3);
 $('#example-4').slider(testOptions4);
 
 $(() => {
-  function change(val: number) {
-    (<any>$('#root-1 input')).val(String(val));
-    (<any>$('#root-1 input')).change();
-  }
-
-  function changeRange(values: number[]) {
-    (<any>$('#root input')).val(String(values.join(' ')));
-    (<any>$('#root input')).change();
-  }
-
+  // function change(val: number) {
+  //   $('#example-1 input' as any).val(String(val));
+  //   $('#example-1 input' as any).change();
+  // }
+  // function changeRange(values: number[]) {
+  //   $('#example-2 input' as any).val(String(values.join(' ')));
+  //   $('#example-2 input' as any).change();
+  // }
   // setTimeout(() => {
   //   change(11);
   //   changeRange([25, 70]);
-  // }, 1000)
+  // }, 1000);
 });

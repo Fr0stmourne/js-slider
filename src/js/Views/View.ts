@@ -1,7 +1,7 @@
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = markup.trim();
-  return <HTMLElement>wrapper.firstChild;
+  return wrapper.firstChild as HTMLElement;
 }
 
 export default class View {
@@ -17,30 +17,26 @@ export default class View {
     }
   }
 
-  get element() {
+  get element(): HTMLElement {
     return this._element;
   }
 
-  bindInputChange(handler?: Function) {
+  bindInputChange(handler?: Function): void {
     const input: HTMLInputElement = this._element.querySelector('.js-input');
-    input.onchange = e => {
-      console.log('changed!!');
-
-      handler(e);
-    };
+    input.onchange = (e): void => handler(e);
   }
 
-  bindMovePin(valueHandler?: Function | Function[]) {
+  bindMovePin(valueHandler?: Function | Function[]): void {
     const slider: HTMLElement = this._element;
 
     const addPin = (pin: HTMLElement, handler?: Function): void => {
       if (this._options.isVertical) {
-        pin.onmousedown = event => {
+        pin.onmousedown = (event): void => {
           event.preventDefault();
 
           const shiftY = event.clientY - pin.getBoundingClientRect().bottom;
 
-          const onMouseMove = (e: MouseEvent) => {
+          const onMouseMove = (e: MouseEvent): void => {
             let newBottom = -(e.clientY - shiftY - slider.getBoundingClientRect().bottom);
 
             if (newBottom < 0) {
@@ -58,7 +54,7 @@ export default class View {
             // pin.style.bottom = newBottom + 'px';
           };
 
-          const onMouseUp = (e: MouseEvent) => {
+          const onMouseUp = (): void => {
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
           };
@@ -67,12 +63,12 @@ export default class View {
           document.addEventListener('mouseup', onMouseUp);
         };
       } else {
-        pin.onmousedown = event => {
+        pin.onmousedown = (event): void => {
           event.preventDefault();
 
           const shiftX = event.clientX - pin.getBoundingClientRect().left;
 
-          const onMouseMove = (e: MouseEvent) => {
+          const onMouseMove = (e: MouseEvent): void => {
             let newLeft = e.clientX - shiftX - slider.getBoundingClientRect().left;
 
             if (newLeft < 0) {
@@ -91,7 +87,7 @@ export default class View {
             // pin.style.left = newLeft + 'px';
           };
 
-          const onMouseUp = (e: MouseEvent) => {
+          const onMouseUp = (): void => {
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
           };
@@ -106,46 +102,44 @@ export default class View {
       const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
       console.log(firstPin);
-      addPin(firstPin, (<Function[]>valueHandler)[0]);
-      addPin(secondPin, (<Function[]>valueHandler)[1]);
+      addPin(firstPin, (valueHandler as Function[])[0]);
+      addPin(secondPin, (valueHandler as Function[])[1]);
     } else {
       const pin: HTMLElement = this._element.querySelector('.js-slider-pin');
-      addPin(pin, <Function>valueHandler);
+      addPin(pin, valueHandler as Function);
     }
   }
 
-  updateValue(value: number | number[]) {
-    const getPxNum = (value: number) => {
+  updateValue(value: number | number[]): void {
+    const getPxNum = (value: number): number => {
       return (
-        (<number>value / (this._options.maxValue - this._options.minValue)) *
+        ((value as number) / (this._options.maxValue - this._options.minValue)) *
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth)
       );
     };
-    console.log('condition!', this._options.range);
 
     if (this._options.range) {
-      const pxNums = [getPxNum((<number[]>value)[0]), getPxNum((<number[]>value)[1])];
-      console.log('VALUES', value);
+      const pxNums = [getPxNum((value as number[])[0]), getPxNum((value as number[])[1])];
 
-      this._element.querySelector('.js-slider-pin-1 .js-slider-value').textContent = String((<number[]>value)[0]);
-      this._element.querySelector('.js-slider-pin-2 .js-slider-value').textContent = String((<number[]>value)[1]);
-      console.log('ДВИГАЮ НА', pxNums);
+      this._element.querySelector('.js-slider-pin-1 .js-slider-value').textContent = String((value as number[])[0]);
+      this._element.querySelector('.js-slider-pin-2 .js-slider-value').textContent = String((value as number[])[1]);
 
-      (<HTMLElement>this._element.querySelector('.js-slider-pin-1')).style[
+      (this._element.querySelector('.js-slider-pin-1') as HTMLElement).style[
         this._options.isVertical ? 'bottom' : 'left'
       ] = pxNums[0] + 'px';
-      (<HTMLElement>this._element.querySelector('.js-slider-pin-2')).style[
+      (this._element.querySelector('.js-slider-pin-2') as HTMLElement).style[
         this._options.isVertical ? 'bottom' : 'left'
       ] = pxNums[1] + 'px';
     } else {
-      const pxNum = getPxNum(<number>value);
+      const pxNum = getPxNum(value as number);
       this._element.querySelector('.js-slider-value').textContent = String(value);
-      (<HTMLElement>this._element.querySelector('.js-slider-pin')).style[this._options.isVertical ? 'bottom' : 'left'] =
-        pxNum + 'px';
+      (this._element.querySelector('.js-slider-pin') as HTMLElement).style[
+        this._options.isVertical ? 'bottom' : 'left'
+      ] = pxNum + 'px';
     }
   }
 
-  render(value: number | number[]) {
+  render(value: number | number[]): void {
     if (this._options.range) {
       this._element = render(`
       <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
@@ -153,12 +147,12 @@ export default class View {
       <div class="slider-plugin__pin js-slider-pin js-slider-pin-1">
         <div class="slider-plugin__value ${
           this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-        } js-slider-value">${(<number[]>value)[0]}</div>
+        } js-slider-value">${(value as number[])[0]}</div>
       </div>
       <div class="slider-plugin__pin slider-plugin__pin--second js-slider-pin-2">
         <div class="slider-plugin__value ${
           this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-        } js-slider-value">${(<number[]>value)[1]}</div>
+        } js-slider-value">${(value as number[])[1]}</div>
       </div>
       <input class="slider-plugin__input js-input" value="${this._options.defaultValue}">
     </div>
@@ -173,10 +167,10 @@ export default class View {
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
       document.body.removeChild(this._element);
 
-      (<HTMLElement>this._element.querySelector('.js-slider-pin-1')).style[
+      (this._element.querySelector('.js-slider-pin-1') as HTMLElement).style[
         this._options.isVertical ? 'bottom' : 'left'
       ] = firstInitialVal + 'px';
-      (<HTMLElement>this._element.querySelector('.js-slider-pin-2')).style[
+      (this._element.querySelector('.js-slider-pin-2') as HTMLElement).style[
         this._options.isVertical ? 'bottom' : 'left'
       ] = secondInitialVal + 'px';
     } else {
@@ -198,8 +192,9 @@ export default class View {
         (this._options.defaultValue / (this._options.maxValue - this._options.minValue)) *
         (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
       document.body.removeChild(this._element);
-      (<HTMLElement>this._element.querySelector('.js-slider-pin')).style[this._options.isVertical ? 'bottom' : 'left'] =
-        initialVal + 'px';
+      (this._element.querySelector('.js-slider-pin') as HTMLElement).style[
+        this._options.isVertical ? 'bottom' : 'left'
+      ] = initialVal + 'px';
     }
   }
 }

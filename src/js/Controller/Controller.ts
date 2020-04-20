@@ -11,18 +11,18 @@ export default class Controller {
     this.view.render(this.model.value);
 
     if (this.model.getPluginConfig().range) {
-      const firstPinHandler = (percentage: number) => {
+      const firstPinHandler = (percentage: number): void => {
         // (<number[]>this.model.value)[0] = this.model.getPluginConfig().maxValue * percentage
-        this.model.value = [this.model.getPluginConfig().maxValue * percentage, (<number[]>this.model.value)[1]];
+        this.model.value = [this.model.getPluginConfig().maxValue * percentage, (this.model.value as number[])[1]];
         console.log(this.model.value);
       };
-      const secondPinHandler = (percentage: number) => {
-        this.model.value = [(<number[]>this.model.value)[0], this.model.getPluginConfig().maxValue * percentage];
+      const secondPinHandler = (percentage: number): void => {
+        this.model.value = [(this.model.value as number[])[0], this.model.getPluginConfig().maxValue * percentage];
         console.log(this.model.value);
       };
       this.view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
-      this.view.bindMovePin((percentage: number) => {
+      this.view.bindMovePin((percentage: number): void => {
         this.model.value = this.model.getPluginConfig().maxValue * percentage;
         console.log(this.model.value);
       });
@@ -30,10 +30,10 @@ export default class Controller {
 
     this.view.bindInputChange((e: Event) => {
       if (this.model.getPluginConfig().range) {
-        const newVal = (<HTMLInputElement>e.target).value.split(' ').map(e => +e.trim());
+        const newVal = (e.target as HTMLInputElement).value.split(' ').map(e => +e.trim());
         model.value = newVal;
       } else {
-        model.value = +(<HTMLInputElement>e.target).value;
+        model.value = +(e.target as HTMLInputElement).value;
       }
     });
 
