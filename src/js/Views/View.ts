@@ -1,3 +1,5 @@
+import calculatePxNum from '../utils/calculatePxNum/calculatePxNum';
+
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = markup.trim();
@@ -10,11 +12,7 @@ export default class View {
 
   constructor(config: any) {
     this._options = config;
-    if (this._options.range) {
-      this.render([0, 5]);
-    } else {
-      this.render(0);
-    }
+    this.render(this._options.range ? [0, 5] : 0);
   }
 
   get element(): HTMLElement {
@@ -118,21 +116,22 @@ export default class View {
   }
 
   updateValue(value: number | number[]): void {
-    // debugger;
-    const getPxNum = (value: number): number => {
-      return (
-        (Math.abs((value as number) - this._options.minValue) /
-          Math.abs(this._options.maxValue - this._options.minValue)) *
-        (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth)
-      );
-      // return (
-      //   ((value as number) / (this._options.maxValue - this._options.minValue)) *
-      //   (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth)
-      // );
-    };
-
     if (this._options.range) {
-      const pxNums = [getPxNum((value as number[])[0]), getPxNum((value as number[])[1])];
+      // const pxNums = [getPxNum((value as number[])[0]), getPxNum((value as number[])[1])];
+      const pxNums = [
+        calculatePxNum(
+          (value as number[])[0],
+          this._options.minValue,
+          this._options.maxValue,
+          this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+        ),
+        calculatePxNum(
+          (value as number[])[1],
+          this._options.minValue,
+          this._options.maxValue,
+          this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+        ),
+      ];
 
       this._element.querySelector('.js-slider-pin-1 .js-slider-value').textContent = String((value as number[])[0]);
       this._element.querySelector('.js-slider-pin-2 .js-slider-value').textContent = String((value as number[])[1]);
@@ -144,7 +143,12 @@ export default class View {
         this._options.isVertical ? 'bottom' : 'left'
       ] = pxNums[1] + 'px';
     } else {
-      const pxNum = getPxNum(value as number);
+      const pxNum = calculatePxNum(
+        value as number,
+        this._options.minValue,
+        this._options.maxValue,
+        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+      );
       this._element.querySelector('.js-slider-value').textContent = String(value);
       (this._element.querySelector('.js-slider-pin') as HTMLElement).style[
         this._options.isVertical ? 'bottom' : 'left'
@@ -172,14 +176,18 @@ export default class View {
       `);
 
       document.body.appendChild(this._element);
-      const firstInitialVal =
-        (Math.abs((this._options.defaultValue[0] as number) - this._options.minValue) /
-          Math.abs(this._options.maxValue - this._options.minValue)) *
-        (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
-      const secondInitialVal =
-        (Math.abs((this._options.defaultValue[1] as number) - this._options.minValue) /
-          Math.abs(this._options.maxValue - this._options.minValue)) *
-        (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
+      const firstInitialVal = calculatePxNum(
+        this._options.defaultValue[0] as number,
+        this._options.minValue,
+        this._options.maxValue,
+        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+      );
+      const secondInitialVal = calculatePxNum(
+        this._options.defaultValue[1] as number,
+        this._options.minValue,
+        this._options.maxValue,
+        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+      );
       document.body.removeChild(this._element);
 
       (this._element.querySelector('.js-slider-pin-1') as HTMLElement).style[
@@ -203,10 +211,12 @@ export default class View {
 
       // used append-remove trick to calculate element width
       document.body.appendChild(this._element);
-      const initialVal =
-        (Math.abs((this._options.defaultValue as number) - this._options.minValue) /
-          Math.abs(this._options.maxValue - this._options.minValue)) *
-        (this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth);
+      const initialVal = calculatePxNum(
+        this._options.defaultValue as number,
+        this._options.minValue,
+        this._options.maxValue,
+        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+      );
       document.body.removeChild(this._element);
       (this._element.querySelector('.js-slider-pin') as HTMLElement).style[
         this._options.isVertical ? 'bottom' : 'left'

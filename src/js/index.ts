@@ -10,7 +10,7 @@ declare global {
 const testOptions1 = {
   minValue: -30,
   maxValue: 100,
-  step: 1,
+  step: 5,
   defaultValue: 45,
 };
 
@@ -24,10 +24,10 @@ const testOptions2 = {
 };
 
 const testOptions3 = {
-  minValue: -50,
-  maxValue: 100,
+  minValue: -500,
+  maxValue: -10,
   step: 5,
-  defaultValue: [-30, 90],
+  defaultValue: [-300, -20],
   range: true,
 };
 const testOptions4 = {

@@ -1,39 +1,40 @@
 import Model from '../Models/Model';
 import View from '../Views/View';
+import calculateValue from '../utils/calculateValue/calculateValue';
 
 export default class Controller {
   model: Model;
   view: View;
+  config: {
+    minValue: number;
+    maxValue: number;
+  };
 
   constructor(model: Model, view: View) {
     this.model = model;
     this.view = view;
     this.view.render(this.model.value);
 
+    this.config = this.model.getPluginConfig();
+
     if (this.model.getPluginConfig().range) {
       const firstPinHandler = (percentage: number): void => {
-        // (<number[]>this.model.value)[0] = this.model.getPluginConfig().maxValue * percentage
         this.model.value = [
-          this.model.getPluginConfig().minValue +
-            percentage * Math.abs(this.model.getPluginConfig().maxValue - this.model.getPluginConfig().minValue),
+          calculateValue(percentage, this.config.minValue, this.config.maxValue),
           (this.model.value as number[])[1],
         ];
-        // console.log(this.model.value);
       };
       const secondPinHandler = (percentage: number): void => {
         this.model.value = [
           (this.model.value as number[])[0],
-          this.model.getPluginConfig().minValue +
-            percentage * Math.abs(this.model.getPluginConfig().maxValue - this.model.getPluginConfig().minValue),
+          calculateValue(percentage, this.config.minValue, this.config.maxValue),
         ];
-        // console.log(this.model.value);
       };
+
       this.view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
       this.view.bindMovePin((percentage: number): void => {
-        model.value =
-          this.model.getPluginConfig().minValue +
-          percentage * Math.abs(this.model.getPluginConfig().maxValue - this.model.getPluginConfig().minValue);
+        model.value = calculateValue(percentage, this.config.minValue, this.config.maxValue);
       });
     }
 
