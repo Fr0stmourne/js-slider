@@ -38,6 +38,7 @@
     "eslint-config-prettier": "^6.7.0",
     "eslint-loader": "^3.0.2",
     "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-fsd": "^1.0.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "^23.1.1",
     "eslint-plugin-prettier": "^3.1.1",
