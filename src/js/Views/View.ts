@@ -38,24 +38,17 @@ export default class View {
   }
 
   bindMovePin(valueHandler?: Function | Function[]): void {
-    const slider: HTMLElement = this._element;
+    const slider: HTMLElement = this._elements.bar;
+    console.log(slider);
 
-    const addPin = (pin: HTMLElement, handler?: Function, pinShift?: number): void => {
+    const addPin = (pin: HTMLElement, handler?: Function): void => {
       if (this._options.isVertical) {
-        const DEFAULT_PIN_SHIFT = 0;
         pin.onmousedown = (event): void => {
           event.preventDefault();
-
           const shiftY = event.clientY - pin.getBoundingClientRect().bottom;
 
           const onMouseMove = (e: MouseEvent): void => {
-            let newBottom = -(
-              e.clientY -
-              shiftY -
-              slider.getBoundingClientRect().bottom +
-              // fix for vertical slider bug
-              (pinShift || DEFAULT_PIN_SHIFT)
-            );
+            let newBottom = -(e.clientY - shiftY - slider.getBoundingClientRect().bottom);
 
             if (newBottom < 0) {
               newBottom = 0;
@@ -120,7 +113,7 @@ export default class View {
     if (this._options.range) {
       const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
-      addPin(firstPin, (valueHandler as Function[])[0], 10);
+      addPin(firstPin, (valueHandler as Function[])[0]);
       addPin(secondPin, (valueHandler as Function[])[1]);
     } else {
       const pin: HTMLElement = this._element.querySelector('.js-slider-pin');
@@ -135,19 +128,20 @@ export default class View {
           (value as number[])[0],
           this._options.minValue,
           this._options.maxValue,
-          this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
         ),
         calculatePxNum(
           (value as number[])[1],
           this._options.minValue,
           this._options.maxValue,
-          this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
         ),
       ];
 
       this._elements.firstValue.textContent = String((value as number[])[0]);
       this._elements.secondValue.textContent = String((value as number[])[1]);
-
+      console.log('pxValue 1', pxNums[0]);
+      console.log('pxValue 2', pxNums[1]);
       movePin(this._elements.firstPin, pxNums[0], this._options.isVertical);
       movePin(this._elements.secondPin, pxNums[1], this._options.isVertical);
     } else {
@@ -155,7 +149,7 @@ export default class View {
         value as number,
         this._options.minValue,
         this._options.maxValue,
-        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
       );
       this._elements.firstValue.textContent = String(value);
       movePin(this._elements.firstPin, pxNum, this._options.isVertical);
@@ -194,22 +188,24 @@ export default class View {
         this._options.defaultValue[0] as number,
         this._options.minValue,
         this._options.maxValue,
-        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
       );
       const secondInitialVal = calculatePxNum(
         this._options.defaultValue[1] as number,
         this._options.minValue,
         this._options.maxValue,
-        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
       );
       document.body.removeChild(this._element);
+      console.log('initial px 1', firstInitialVal);
+      console.log('initial value 1', this._options.defaultValue[1]);
 
       movePin(this._elements.firstPin, firstInitialVal, this._options.isVertical);
       movePin(this._elements.secondPin, secondInitialVal, this._options.isVertical);
     } else {
       this._element = render(`
       <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
-        <div class="slider-plugin__bar"></div>
+        <div class="slider-plugin__bar js-slider-bar"></div>
         <div class="slider-plugin__pin js-slider-pin js-slider-pin-1">
           <div class="slider-plugin__value ${
             this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
@@ -231,7 +227,7 @@ export default class View {
         this._options.defaultValue as number,
         this._options.minValue,
         this._options.maxValue,
-        this._options.isVertical ? +this._element.clientHeight : +this._element.clientWidth,
+        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
       );
       document.body.removeChild(this._element);
 

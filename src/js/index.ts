@@ -15,19 +15,19 @@ const testOptions1 = {
 };
 
 const testOptions2 = {
-  minValue: -50,
+  minValue: -100,
   maxValue: 100,
   step: 2,
-  defaultValue: [-30, 88],
+  defaultValue: [-100, 100],
   isVertical: true,
   range: true,
 };
 
 const testOptions3 = {
-  minValue: -500,
-  maxValue: -10,
-  step: 5,
-  defaultValue: [-300, -20],
+  minValue: -50,
+  maxValue: 100,
+  step: 2,
+  defaultValue: [30, 80],
   range: true,
 };
 const testOptions4 = {
