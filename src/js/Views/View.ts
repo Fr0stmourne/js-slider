@@ -1,5 +1,6 @@
 import calculatePxNum from '../utils/calculatePxNum/calculatePxNum';
 import movePin from '../utils/movePin/movePin';
+import calculateValue from '../utils/calculateValue/calculateValue';
 
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');
@@ -56,12 +57,14 @@ export default class View {
           const sliderSize = this._options.isVertical ? slider.offsetHeight : slider.offsetWidth;
           if (newValue < 0) newValue = 0;
           const rightEdge = sliderSize;
-
           if (newValue > rightEdge) newValue = rightEdge;
 
           const percentage = (newValue / sliderSize).toFixed(2);
+          console.log(+percentage);
 
-          if (handler) handler(percentage);
+          const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
+
+          if (handler) handler(resultValue);
         };
 
         const onMouseUp = (): void => {
