@@ -56,7 +56,7 @@ export default class Model {
   }
 
   getPluginConfig(): any {
-    return this._options;
+    return { ...this._options };
   }
 
   bindSetValue(handler?: Function): void {

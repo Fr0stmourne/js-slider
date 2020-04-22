@@ -123,6 +123,10 @@ export default class View {
 
   updateValue(value: number | number[]): void {
     if (this._options.range) {
+      (value as number[]).forEach(el => {
+        if (el < this._options.minValue || el > this._options.maxValue)
+          throw new Error('value is not in [min, max] interval');
+      });
       const pxNums = [
         calculatePxNum(
           (value as number[])[0],
@@ -145,6 +149,8 @@ export default class View {
       movePin(this._elements.firstPin, pxNums[0], this._options.isVertical);
       movePin(this._elements.secondPin, pxNums[1], this._options.isVertical);
     } else {
+      if (value < this._options.minValue || value > this._options.maxValue)
+        throw new Error('value is not in [min, max] interval');
       const pxNum = calculatePxNum(
         value as number,
         this._options.minValue,
