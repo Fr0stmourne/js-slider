@@ -42,72 +42,36 @@ export default class View {
     console.log(slider);
 
     const addPin = (pin: HTMLElement, handler?: Function): void => {
-      if (this._options.isVertical) {
-        pin.onmousedown = (event): void => {
-          event.preventDefault();
-          const shiftY = event.clientY - pin.getBoundingClientRect().bottom;
+      pin.onmousedown = (event): void => {
+        event.preventDefault();
+        const shift = this._options.isVertical
+          ? event.clientY - pin.getBoundingClientRect().bottom
+          : event.clientX - pin.getBoundingClientRect().left;
 
-          const onMouseMove = (e: MouseEvent): void => {
-            let newBottom = -(e.clientY - shiftY - slider.getBoundingClientRect().bottom);
+        const onMouseMove = (e: MouseEvent): void => {
+          let newValue = this._options.isVertical
+            ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
+            : e.clientX - shift - slider.getBoundingClientRect().left;
 
-            if (newBottom < 0) {
-              newBottom = 0;
-            }
-            const rightEdge = slider.offsetHeight;
+          const sliderSize = this._options.isVertical ? slider.offsetHeight : slider.offsetWidth;
+          if (newValue < 0) newValue = 0;
+          const rightEdge = sliderSize;
 
-            if (newBottom > rightEdge) {
-              newBottom = rightEdge;
-            }
+          if (newValue > rightEdge) newValue = rightEdge;
 
-            const height = slider.clientHeight;
-            const percentage = (newBottom / height).toFixed(2);
-            if (handler) handler(percentage);
-            // pin.style.bottom = newBottom + 'px';
-          };
+          const percentage = (newValue / sliderSize).toFixed(2);
 
-          const onMouseUp = (): void => {
-            document.removeEventListener('mouseup', onMouseUp);
-            document.removeEventListener('mousemove', onMouseMove);
-          };
-
-          document.addEventListener('mousemove', onMouseMove);
-          document.addEventListener('mouseup', onMouseUp);
+          if (handler) handler(percentage);
         };
-      } else {
-        pin.onmousedown = (event): void => {
-          // debugger;
-          event.preventDefault();
 
-          const shiftX = event.clientX - pin.getBoundingClientRect().left;
-
-          const onMouseMove = (e: MouseEvent): void => {
-            let newLeft = e.clientX - shiftX - slider.getBoundingClientRect().left;
-
-            if (newLeft < 0) {
-              newLeft = 0;
-            }
-            const rightEdge = slider.offsetWidth;
-            if (newLeft > rightEdge) {
-              newLeft = rightEdge;
-            }
-
-            const width = slider.clientWidth;
-            const percentage = (newLeft / width).toFixed(2);
-
-            if (handler) handler(percentage);
-
-            // pin.style.left = newLeft + 'px';
-          };
-
-          const onMouseUp = (): void => {
-            document.removeEventListener('mouseup', onMouseUp);
-            document.removeEventListener('mousemove', onMouseMove);
-          };
-
-          document.addEventListener('mousemove', onMouseMove);
-          document.addEventListener('mouseup', onMouseUp);
+        const onMouseUp = (): void => {
+          document.removeEventListener('mouseup', onMouseUp);
+          document.removeEventListener('mousemove', onMouseMove);
         };
-      }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      };
     };
 
     if (this._options.range) {

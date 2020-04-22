@@ -9,12 +9,17 @@ const testOptions: any = {
   },
 };
 
-describe('calculateValue', () => {
+describe('View constructor', () => {
   test('should return HTMLElement instance as view.element', () => {
     const view = new View(testOptions.normal);
     expect(view.element).toBeInstanceOf(HTMLElement);
-  });
 
+    Object.values(view._elements).forEach(el => {
+      expect(el).toBeInstanceOf(HTMLElement);
+    });
+  });
+});
+describe('Update value()', () => {
   test('should correctly update pin value', () => {
     const view = new View(testOptions.normal);
     view.updateValue(100);
@@ -26,6 +31,7 @@ describe('calculateValue', () => {
     view.updateValue(54);
     expect(view._elements.firstValue.textContent).toBe('54');
   });
+
   test('should throw an error if the passed value is not correct', () => {
     const view = new View(testOptions.normal);
 
