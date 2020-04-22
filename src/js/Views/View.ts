@@ -29,7 +29,12 @@ export default class View {
 
   bindInputChange(handler?: Function): void {
     const input: HTMLInputElement = this._element.querySelector('.js-input');
-    input.onchange = (e): void => handler(e);
+    input.onchange = (e): void => {
+      const newValue: number | number[] = this._options.range
+        ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
+        : +(e.target as HTMLInputElement).value;
+      handler(newValue);
+    };
   }
 
   bindMovePin(valueHandler?: Function | Function[]): void {

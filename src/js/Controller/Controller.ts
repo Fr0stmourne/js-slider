@@ -38,13 +38,14 @@ export default class Controller {
       });
     }
 
-    this.view.bindInputChange((e: Event) => {
-      if (this.model.getPluginConfig().range) {
-        const newVal = (e.target as HTMLInputElement).value.split(' ').map(e => +e.trim());
-        model.value = newVal;
-      } else {
-        model.value = +(e.target as HTMLInputElement).value;
-      }
+    this.view.bindInputChange((newValue: number | number[]) => {
+      // if (this.model.getPluginConfig().range) {
+      //   const newVal = (e.target as HTMLInputElement).value.split(' ').map(e => +e.trim());
+      //   model.value = newVal;
+      // } else {
+      //   model.value = +(e.target as HTMLInputElement).value;
+      // }
+      model.value = newValue;
     });
 
     this.model.bindSetValue((value: number | number[]) => {

@@ -29,6 +29,7 @@ export default class Model {
   }
 
   set value(newValue: number | number[]) {
+    console.log('newValue', newValue);
     if (this._options.range) {
       (this._value as number[])[0] = Math.max(
         Math.ceil((newValue as number[])[0] / this._options.step) * this._options.step,
