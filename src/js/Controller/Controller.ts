@@ -1,6 +1,5 @@
 import Model from '../Models/Model';
 import View from '../Views/View';
-import calculateValue from '../utils/calculateValue/calculateValue';
 
 export default class Controller {
   model: Model;
