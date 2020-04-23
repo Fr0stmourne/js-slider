@@ -17,11 +17,12 @@ export default class View {
     secondPin?: HTMLElement;
     firstValue: HTMLElement;
     secondValue?: HTMLElement;
+    input: HTMLInputElement;
   };
 
   constructor(config: any) {
     this._options = config;
-    this.render(this._options.range ? [0, 5] : 0);
+    this.render(this._options.range ? [this._options.minValue, this._options.maxValue] : this._options.minValue);
   }
 
   get element(): HTMLElement {
@@ -29,7 +30,7 @@ export default class View {
   }
 
   bindInputChange(handler?: Function): void {
-    const input: HTMLInputElement = this._element.querySelector('.js-input');
+    const input: HTMLInputElement = this._elements.input;
     input.onchange = (e): void => {
       const newValue: number | number[] = this._options.range
         ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
@@ -40,7 +41,6 @@ export default class View {
 
   bindMovePin(valueHandler?: Function | Function[]): void {
     const slider: HTMLElement = this._elements.bar;
-    console.log(slider);
 
     const addPin = (pin: HTMLElement, handler?: Function): void => {
       pin.onmousedown = (event): void => {
@@ -60,8 +60,6 @@ export default class View {
           if (newValue > rightEdge) newValue = rightEdge;
 
           const percentage = (newValue / sliderSize).toFixed(2);
-          console.log(+percentage);
-
           const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
 
           if (handler) handler(resultValue);
@@ -94,6 +92,7 @@ export default class View {
         if (el < this._options.minValue || el > this._options.maxValue)
           throw new Error('value is not in [min, max] interval');
       });
+
       const pxNums = [
         calculatePxNum(
           (value as number[])[0],
@@ -111,8 +110,7 @@ export default class View {
 
       this._elements.firstValue.textContent = String((value as number[])[0]);
       this._elements.secondValue.textContent = String((value as number[])[1]);
-      console.log('pxValue 1', pxNums[0]);
-      console.log('pxValue 2', pxNums[1]);
+
       movePin(this._elements.firstPin, pxNums[0], this._options.isVertical);
       movePin(this._elements.secondPin, pxNums[1], this._options.isVertical);
     } else {
@@ -154,6 +152,7 @@ export default class View {
         secondPin: this._element.querySelector('.js-slider-pin-2'),
         firstValue: this._element.querySelector('.js-slider-pin-1 .js-slider-value'),
         secondValue: this._element.querySelector('.js-slider-pin-2 .js-slider-value'),
+        input: this._element.querySelector('.js-input'),
       };
 
       document.body.appendChild(this._element);
@@ -170,8 +169,6 @@ export default class View {
         this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
       );
       document.body.removeChild(this._element);
-      console.log('initial px 1', firstInitialVal);
-      console.log('initial value 1', this._options.defaultValue[1]);
 
       movePin(this._elements.firstPin, firstInitialVal, this._options.isVertical);
       movePin(this._elements.secondPin, secondInitialVal, this._options.isVertical);
@@ -192,6 +189,7 @@ export default class View {
         bar: this._element.querySelector('.js-slider-bar'),
         firstPin: this._element.querySelector('.js-slider-pin-1'),
         firstValue: this._element.querySelector('.js-slider-pin-1 .js-slider-value'),
+        input: this._element.querySelector('.js-input'),
       };
 
       // used append-remove trick to calculate element width
