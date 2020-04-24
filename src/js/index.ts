@@ -38,12 +38,12 @@ const testOptions4 = {
   isVertical: true,
 };
 
-$.fn.slider = function(options: object): JQuery {
+$.fn.slider = function(options: any): JQuery {
   const model = new Model(options);
   const view = new View(model.getPluginConfig());
   new Controller(model, view);
   $(this).append(view.element);
-
+  view.updateValue(options.defaultValue);
   return this;
 };
 
