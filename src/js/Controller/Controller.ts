@@ -2,10 +2,7 @@ import Model from '../Models/Model';
 import View from '../Views/View';
 
 export default class Controller {
-  model: Model;
-  view: View;
-
-  constructor(model: Model, view: View) {
+  constructor(public model: Model, public view: View) {
     this.model = model;
     this.view = view;
     this.view.render(this.model.value);
