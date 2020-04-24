@@ -125,6 +125,7 @@ export default class View {
       this._elements.firstValue.textContent = String(value);
       movePin(this._elements.firstPin, pxNum, this._options.isVertical);
     }
+    this._elements.input.value = String(value);
   }
 
   render(value: number | number[]): void {

@@ -185,6 +185,30 @@ describe('Update value()', () => {
       view.updateValue([-31, 940]);
     }).toThrow(Error);
   });
+
+  test('should update hidden input', () => {
+    const view = defaultView;
+    view.updateValue(50);
+    expect(view._elements.input.value).toBe('50');
+  });
+
+  test('should update hidden input: range', () => {
+    const view = rangeView;
+    view.updateValue([50, 70]);
+    expect(view._elements.input.value).toBe('50,70');
+  });
+
+  test('should update hidden input: vertical', () => {
+    const view = verticalView;
+    view.updateValue(50);
+    expect(view._elements.input.value).toBe('50');
+  });
+
+  test('should update hidden input: range vertical', () => {
+    const view = rangeVerticalView;
+    view.updateValue([50, 70]);
+    expect(view._elements.input.value).toBe('50,70');
+  });
 });
 
 describe('Bind move pin()', () => {
