@@ -8,9 +8,9 @@ declare global {
 }
 
 const testOptions1 = {
-  minValue: -32,
-  maxValue: 102,
-  step: 5,
+  minValue: -33,
+  maxValue: 103,
+  step: 2,
   defaultValue: 45,
 };
 
@@ -24,7 +24,7 @@ const testOptions2 = {
 };
 
 const testOptions3 = {
-  minValue: -50,
+  minValue: -33,
   maxValue: 100,
   step: 2,
   defaultValue: [30, 80],
