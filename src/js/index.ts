@@ -8,8 +8,8 @@ declare global {
 }
 
 const testOptions1 = {
-  minValue: -30,
-  maxValue: 100,
+  minValue: -32,
+  maxValue: 102,
   step: 5,
   defaultValue: 45,
 };
@@ -53,16 +53,39 @@ $('#example-3').slider(testOptions3);
 $('#example-4').slider(testOptions4);
 
 $(() => {
-  // function change(val: number) {
-  //   $('#example-1 input' as any).val(String(val));
-  //   $('#example-1 input' as any).change();
-  // }
-  // function changeRange(values: number[]) {
-  //   $('#example-2 input' as any).val(String(values.join(' ')));
-  //   $('#example-2 input' as any).change();
-  // }
+  function change(selector: string, val: number) {
+    $(`${selector} input` as any).val(String(val));
+    $(`${selector} input` as any).change();
+  }
+  function changeRange(values: number[]) {
+    $('#example-2 input' as any).val(String(values.join(' ')));
+    $('#example-2 input' as any).change();
+  }
   // setTimeout(() => {
   //   change(11);
   //   changeRange([25, 70]);
   // }, 1000);
+  // $('#control-1').fo
+
+  //   $('.test')
+  //     .find('.control-input')
+  //     .change(e => {
+  //       console.log($(e.target).val());
+  //       console.log(
+  //         $(e.target)
+  //           .parent()
+  //           .find('.example input')
+  //           .val(),
+  //       );
+  //       $(e.target)
+  //         .parent()
+  //         .children('.example input')
+  //         .val($(e.target).val())
+  //         .change();
+  //       $(e.target)
+  //         .parent()
+  //         .children('.example input')
+  //         .change();
+
+  //     });
 });

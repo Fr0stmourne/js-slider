@@ -4,6 +4,17 @@
   &-2,
   &-3,
   &-4 {
+    width: 100%;
     max-width: 300px;
+    margin-right: 20px;
+  }
+}
+
+.test {
+  display: flex;
+  align-items: flex-start;
+
+  input {
+    height: auto;
   }
 }
