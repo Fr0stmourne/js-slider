@@ -1,25 +1,25 @@
 import DefaultView from './DefaultView';
 import render from '../utils/render/render';
 
-class Pin extends DefaultView {
+export default class PinView extends DefaultView {
   pinNumber: number;
   isTooltipDisabled: boolean;
   value: number;
   isVertical: boolean;
   _elements: { pin: HTMLElement; tooltip: HTMLElement };
 
-  constructor(options: any) {
+  constructor(options: any, pinNumber: number) {
     super();
-    this.pinNumber = options.pinNumber;
+    this.pinNumber = pinNumber;
     this.isTooltipDisabled = options.isTooltipDisabled;
     this.isVertical = options.isVertical;
-    this.value = options.value;
+    this.value = options.defaultValue;
 
     this.render();
   }
 
-  updateValue(value: number): void {
-    this._movePin(value);
+  updateValue(pxNum: number, value: number): void {
+    this._movePin(pxNum);
     this._elements.tooltip.textContent = String(value);
   }
 

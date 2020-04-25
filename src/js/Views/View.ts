@@ -1,6 +1,8 @@
 import calculatePxNum from '../utils/calculatePxNum/calculatePxNum';
 import movePin from '../utils/movePin/movePin';
 import calculateValue from '../utils/calculateValue/calculateValue';
+import PinView from './PinView';
+import BarView from './BarView';
 
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');
@@ -81,7 +83,7 @@ export default class View {
       addPin(firstPin, (valueHandler as Function[])[0]);
       addPin(secondPin, (valueHandler as Function[])[1]);
     } else {
-      const pin: HTMLElement = this._element.querySelector('.js-slider-pin');
+      const pin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       addPin(pin, valueHandler as Function);
     }
   }
@@ -129,23 +131,42 @@ export default class View {
   }
 
   render(value: number | number[]): void {
-    if (this._options.range) {
-      this._element = render(`
-      <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
-      <div class="slider-plugin__bar js-slider-bar"></div>
-      <div class="slider-plugin__pin js-slider-pin js-slider-pin-1">
-        <div class="slider-plugin__value ${
-          this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-        } js-slider-value">${(value as number[])[0]}</div>
-      </div>
-      <div class="slider-plugin__pin slider-plugin__pin--second js-slider-pin-2">
-        <div class="slider-plugin__value ${
-          this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-        } js-slider-value">${(value as number[])[1]}</div>
-      </div>
+    this._element = render(
+      `
+    <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
       <input class="slider-plugin__input js-input" value="${this._options.defaultValue}">
     </div>
-      `);
+    `,
+    );
+    this._element.append(new BarView().element);
+    this._element.append(new PinView(this._options, 1).element);
+    if (this._options.range) {
+      this._element.append(new PinView(this._options, 2).element);
+    }
+
+    if (this._options.range) {
+      //   this._element = render(`
+      //   <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
+      //   <div class="slider-plugin__bar js-slider-bar"></div>
+      //   <div class="slider-plugin__pin js-slider-pin js-slider-pin-1">
+      //     <div class="slider-plugin__value ${
+      //       this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
+      //     } js-slider-value">${(value as number[])[0]}</div>
+      //   </div>
+      //   <div class="slider-plugin__pin slider-plugin__pin--second js-slider-pin-2">
+      //     <div class="slider-plugin__value ${
+      //       this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
+      //     } js-slider-value">${(value as number[])[1]}</div>
+      //   </div>
+      //   <input class="slider-plugin__input js-input" value="${this._options.defaultValue}">
+      // </div>
+      //   `);
+
+      // const first = new PinView(this._options, 1);
+      // const pin = new PinView(this._options, 1);
+
+      // this._element.append(bar.element as Node);
+      // this._element.append(pin.element as Node);
 
       this._elements = {
         bar: this._element.querySelector('.js-slider-bar'),
@@ -174,18 +195,6 @@ export default class View {
       movePin(this._elements.firstPin, firstInitialVal, this._options.isVertical);
       movePin(this._elements.secondPin, secondInitialVal, this._options.isVertical);
     } else {
-      this._element = render(`
-      <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
-        <div class="slider-plugin__bar js-slider-bar"></div>
-        <div class="slider-plugin__pin js-slider-pin js-slider-pin-1">
-          <div class="slider-plugin__value ${
-            this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-          } js-slider-value">${value}</div>
-        </div>
-        <input type="number" class="slider-plugin__input js-input" value="${this._options.defaultValue}">
-      </div>
-      `);
-
       this._elements = {
         bar: this._element.querySelector('.js-slider-bar'),
         firstPin: this._element.querySelector('.js-slider-pin-1'),

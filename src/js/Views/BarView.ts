@@ -4,6 +4,7 @@ import render from '../utils/render/render';
 export default class BarView extends DefaultView {
   constructor() {
     super();
+    this.render();
   }
 
   render() {
