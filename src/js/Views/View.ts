@@ -24,7 +24,7 @@ export default class View {
 
   constructor(config: any) {
     this._options = config;
-    this.render(this._options.range ? [this._options.minValue, this._options.maxValue] : this._options.minValue);
+    this.render();
   }
 
   get element(): HTMLElement {
@@ -130,7 +130,7 @@ export default class View {
     this._elements.input.value = String(value);
   }
 
-  render(value: number | number[]): void {
+  render(): void {
     this._element = render(
       `
     <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
@@ -144,75 +144,40 @@ export default class View {
       this._element.append(new PinView(this._options, 2).element);
     }
 
+    this._elements = {
+      bar: this._element.querySelector('.js-slider-bar'),
+      firstPin: this._element.querySelector('.js-slider-pin-1'),
+      firstValue: this._element.querySelector('.js-slider-pin-1 .js-slider-value'),
+      input: this._element.querySelector('.js-input'),
+    };
+
     if (this._options.range) {
-      //   this._element = render(`
-      //   <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
-      //   <div class="slider-plugin__bar js-slider-bar"></div>
-      //   <div class="slider-plugin__pin js-slider-pin js-slider-pin-1">
-      //     <div class="slider-plugin__value ${
-      //       this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-      //     } js-slider-value">${(value as number[])[0]}</div>
-      //   </div>
-      //   <div class="slider-plugin__pin slider-plugin__pin--second js-slider-pin-2">
-      //     <div class="slider-plugin__value ${
-      //       this._options.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-      //     } js-slider-value">${(value as number[])[1]}</div>
-      //   </div>
-      //   <input class="slider-plugin__input js-input" value="${this._options.defaultValue}">
-      // </div>
-      //   `);
+      this._elements.secondPin = this._element.querySelector('.js-slider-pin-2');
+      this._elements.secondValue = this._element.querySelector('.js-slider-pin-2 .js-slider-value');
+    }
 
-      // const first = new PinView(this._options, 1);
-      // const pin = new PinView(this._options, 1);
+    document.body.appendChild(this._element);
+    const firstInitialVal = calculatePxNum(
+      this._options.defaultValue[0] as number,
+      this._options.minValue,
+      this._options.maxValue,
+      this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
+    );
 
-      // this._element.append(bar.element as Node);
-      // this._element.append(pin.element as Node);
+    let secondInitialVal;
 
-      this._elements = {
-        bar: this._element.querySelector('.js-slider-bar'),
-        firstPin: this._element.querySelector('.js-slider-pin-1'),
-        secondPin: this._element.querySelector('.js-slider-pin-2'),
-        firstValue: this._element.querySelector('.js-slider-pin-1 .js-slider-value'),
-        secondValue: this._element.querySelector('.js-slider-pin-2 .js-slider-value'),
-        input: this._element.querySelector('.js-input'),
-      };
-
-      document.body.appendChild(this._element);
-      const firstInitialVal = calculatePxNum(
-        this._options.defaultValue[0] as number,
-        this._options.minValue,
-        this._options.maxValue,
-        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-      );
-      const secondInitialVal = calculatePxNum(
+    if (this._options.range) {
+      secondInitialVal = calculatePxNum(
         this._options.defaultValue[1] as number,
         this._options.minValue,
         this._options.maxValue,
         this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
       );
-      document.body.removeChild(this._element);
-
-      movePin(this._elements.firstPin, firstInitialVal, this._options.isVertical);
-      movePin(this._elements.secondPin, secondInitialVal, this._options.isVertical);
-    } else {
-      this._elements = {
-        bar: this._element.querySelector('.js-slider-bar'),
-        firstPin: this._element.querySelector('.js-slider-pin-1'),
-        firstValue: this._element.querySelector('.js-slider-pin-1 .js-slider-value'),
-        input: this._element.querySelector('.js-input'),
-      };
-
-      // used append-remove trick to calculate element width
-      document.body.appendChild(this._element);
-      const initialVal = calculatePxNum(
-        this._options.defaultValue as number,
-        this._options.minValue,
-        this._options.maxValue,
-        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-      );
-      document.body.removeChild(this._element);
-
-      movePin(this._elements.firstPin, initialVal, this._options.isVertical);
     }
+
+    movePin(this._elements.firstPin, firstInitialVal, this._options.isVertical);
+    if (secondInitialVal) movePin(this._elements.secondPin, secondInitialVal, this._options.isVertical);
+
+    document.body.removeChild(this._element);
   }
 }

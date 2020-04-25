@@ -5,7 +5,7 @@ export default class Controller {
   constructor(public model: Model, public view: View) {
     this.model = model;
     this.view = view;
-    this.view.render(this.model.value);
+    this.view.render();
 
     if (this.model.getPluginConfig().range) {
       const firstPinHandler = (newValue: number): void => {

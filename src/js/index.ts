@@ -61,35 +61,14 @@ $(() => {
     $(`${selector} input` as any).val(String(val));
     $(`${selector} input` as any).change();
   }
-  function changeRange(values: number[]) {
-    $('#example-2 input' as any).val(String(values.join(' ')));
-    $('#example-2 input' as any).change();
+  function changeRange(selector: string, values: number[]) {
+    $(`${selector} input` as any).val(String(values.join(',')));
+    $(`${selector} input` as any).change();
   }
-  // setTimeout(() => {
-  //   change(11);
-  //   changeRange([25, 70]);
-  // }, 1000);
-  // $('#control-1').fo
-
-  //   $('.test')
-  //     .find('.control-input')
-  //     .change(e => {
-  //       console.log($(e.target).val());
-  //       console.log(
-  //         $(e.target)
-  //           .parent()
-  //           .find('.example input')
-  //           .val(),
-  //       );
-  //       $(e.target)
-  //         .parent()
-  //         .children('.example input')
-  //         .val($(e.target).val())
-  //         .change();
-  //       $(e.target)
-  //         .parent()
-  //         .children('.example input')
-  //         .change();
-
-  //     });
+  setTimeout(() => {
+    change('#example-1', 11);
+    change('#example-4', 11);
+    changeRange('#example-2', [25, 70]);
+    changeRange('#example-3', [25, 70]);
+  }, 1000);
 });
