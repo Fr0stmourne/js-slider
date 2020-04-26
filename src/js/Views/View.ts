@@ -1,9 +1,9 @@
 import calculatePxNum from '../utils/calculatePxNum/calculatePxNum';
-import movePin from '../utils/movePin/movePin';
 import calculateValue from '../utils/calculateValue/calculateValue';
 import PinView from './PinView';
 import BarView from './BarView';
 import InputView from './InputView';
+import ScaleView from './ScaleView';
 
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');
@@ -22,7 +22,7 @@ export default class View {
     secondValue?: HTMLElement;
     input: HTMLInputElement;
   };
-  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView };
+  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView; scale: ScaleView };
 
   constructor(config: any) {
     this._options = config;
@@ -43,54 +43,26 @@ export default class View {
     };
   }
 
-  bindMovePin(valueHandler?: Function | Function[]): void {
-    const slider: HTMLElement = this._elements.bar;
-
-    const addPin = (pin: HTMLElement, handler?: Function): void => {
-      pin.onmousedown = (event): void => {
-        event.preventDefault();
-        const shift = this._options.isVertical
-          ? event.clientY - pin.getBoundingClientRect().bottom
-          : event.clientX - pin.getBoundingClientRect().left;
-
-        const onMouseMove = (e: MouseEvent): void => {
-          let newValue = this._options.isVertical
-            ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
-            : e.clientX - shift - slider.getBoundingClientRect().left;
-
-          const sliderSize = this._options.isVertical ? slider.offsetHeight : slider.offsetWidth;
-          if (newValue < 0) newValue = 0;
-          const rightEdge = sliderSize;
-          if (newValue > rightEdge) newValue = rightEdge;
-
-          const percentage = (newValue / sliderSize).toFixed(2);
-          const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
-
-          if (handler) handler(resultValue);
-        };
-
-        const onMouseUp = (): void => {
-          document.removeEventListener('mouseup', onMouseUp);
-          document.removeEventListener('mousemove', onMouseMove);
-        };
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-      };
-    };
-
+  bindScaleClick(handler?: Function): void {
     if (this._options.range) {
-      const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
-      const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
-      addPin(firstPin, (valueHandler as Function[])[0]);
-      addPin(secondPin, (valueHandler as Function[])[1]);
+      const rangeHandler = (value: number): void => {
+        const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
+        const FIRST_PIN = 0;
+        const SECOND_PIN = 1;
+        pinValues[
+          Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
+            ? FIRST_PIN
+            : SECOND_PIN
+        ] = value;
+        handler(pinValues);
+      };
+      (this._objects.scale.onOptionClick as Function) = rangeHandler;
     } else {
-      const pin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
-      addPin(pin, valueHandler as Function);
+      (this._objects.scale.onOptionClick as Function) = handler;
     }
   }
 
-  newBindMovePin(valueHandler?: Function | Function[]): void {
+  bindMovePin(valueHandler?: Function | Function[]): void {
     const slider: HTMLElement = this._objects.bar.element;
 
     const addPin = (pin: PinView, handler?: Function): void => {
@@ -142,48 +114,6 @@ export default class View {
 
   updateValue(value: number | number[]): void {
     if (this._options.range) {
-      (value as number[]).forEach(el => {
-        if (el < this._options.minValue || el > this._options.maxValue)
-          throw new Error('value is not in [min, max] interval');
-      });
-
-      const pxNums = [
-        calculatePxNum(
-          (value as number[])[0],
-          this._options.minValue,
-          this._options.maxValue,
-          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-        ),
-        calculatePxNum(
-          (value as number[])[1],
-          this._options.minValue,
-          this._options.maxValue,
-          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-        ),
-      ];
-
-      this._elements.firstValue.textContent = String((value as number[])[0]);
-      this._elements.secondValue.textContent = String((value as number[])[1]);
-
-      movePin(this._elements.firstPin, pxNums[0], this._options.isVertical);
-      movePin(this._elements.secondPin, pxNums[1], this._options.isVertical);
-    } else {
-      if (value < this._options.minValue || value > this._options.maxValue)
-        throw new Error('value is not in [min, max] interval');
-      const pxNum = calculatePxNum(
-        value as number,
-        this._options.minValue,
-        this._options.maxValue,
-        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-      );
-      this._elements.firstValue.textContent = String(value);
-      movePin(this._elements.firstPin, pxNum, this._options.isVertical);
-    }
-    this._elements.input.value = String(value);
-  }
-
-  NewUpdateValue(value: number | number[]): void {
-    if (this._options.range) {
       const pins = [1, 2];
       const pxNums = pins.map((el, idx) =>
         calculatePxNum(
@@ -195,12 +125,7 @@ export default class View {
       );
 
       this._objects.firstPin.updateValue(pxNums[0], (value as number[])[0]);
-      // this._objects.firstPin.updateValue(100, (value as number[])[0]);
       this._objects.secondPin.updateValue(pxNums[1], (value as number[])[1]);
-      // this._objects.secondPin.updateValue(200, (value as number[])[1]);
-      // const pxNums = pinNums.map(num => calculatePxNum())
-
-      // TODO !!!
     } else {
       const pxNum = calculatePxNum(
         value as number,
@@ -225,13 +150,22 @@ export default class View {
       bar: new BarView(),
       firstPin: new PinView(this._options, 1),
       input: new InputView(this._options.defaultValue),
+      scale: new ScaleView(this._options),
     };
 
     if (this._options.range) {
       this._objects.secondPin = new PinView(this._options, 2);
     }
     Object.values(this._objects).forEach(node => {
-      this._element.append(node.element);
+      if (node !== this._objects.scale) this._element.append(node.element);
     });
+
+    this._objects.bar.element.append(this._objects.scale.element);
+
+    // this._element.append(this._objects.bar.element);
+    // this._objects.bar.element.append(this._objects.firstPin.element);
+    // if (this._objects.secondPin) this._objects.bar.element.append(this._objects.secondPin.element);
+    // this._objects.bar.element.append(this._objects.input.element);
+    // this._element.append(this._objects.scale.element);
   }
 }

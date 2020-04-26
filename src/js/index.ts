@@ -43,7 +43,7 @@ $.fn.slider = function(options: any): JQuery {
   new Controller(model, view);
   this.append(view.element);
   // view.updateValue(options.defaultValue);
-  view.NewUpdateValue(options.defaultValue);
+  view.updateValue(options.defaultValue);
   return this;
 };
 
@@ -54,19 +54,19 @@ $('#example-4').slider(testOptions4);
 
 // $('#example-1').newSlider(testOptions1);
 
-// $(() => {
-//   function change(selector: string, val: number) {
-//     $(`${selector} input` as any).val(String(val));
-//     $(`${selector} input` as any).change();
-//   }
-//   function changeRange(selector: string, values: number[]) {
-//     $(`${selector} input` as any).val(String(values.join(',')));
-//     $(`${selector} input` as any).change();
-//   }
-//   setTimeout(() => {
-//     change('#example-1', 11);
-//     change('#example-4', 11);
-//     changeRange('#example-2', [25, 70]);
-//     changeRange('#example-3', [25, 70]);
-//   }, 1000);
-// });
+$(() => {
+  function change(selector: string, val: number) {
+    $(`${selector} input` as any).val(String(val));
+    $(`${selector} input` as any).change();
+  }
+  function changeRange(selector: string, values: number[]) {
+    $(`${selector} input` as any).val(String(values.join(',')));
+    $(`${selector} input` as any).change();
+  }
+  // setTimeout(() => {
+  //   change('#example-1', 11);
+  //   change('#example-4', 11);
+  //   changeRange('#example-2', [25, 70]);
+  //   changeRange('#example-3', [25, 70]);
+  // }, 1000);
+});

@@ -1,10 +1,14 @@
 .slider-plugin {
   position: relative;
   // max-width: 300px;
+  font-family: 'Roboto';
+  font-size: 14px;
   width: 100%;
 
   &--vertical {
     width: 5px;
+    display: flex;
+
 
     .slider-plugin__bar {
       height: 300px;
@@ -19,8 +23,22 @@
     }
 
     .slider-plugin__value {
-      left: 25px;
+      // left: 25px;
+      transform: translate(50%, -100%);
       top: 20px;
+    }
+
+    .slider-plugin__scale {
+      position: absolute;
+      flex-direction: column;
+      height: 100%;
+      margin-left: -35px;
+      margin-top: 0;
+      padding-top: 0;
+    }
+
+    .slider-plugin__input {
+      margin-left: 20px;
     }
 
   }
@@ -43,6 +61,21 @@
     background-color: red;
   }
 
+  &__scale {
+    padding-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    &-option {
+      cursor: pointer;
+    }
+  }
+
+  &__input {
+    margin-top: 20px;
+  }
+
   &__value {
     min-width: 20px;
     padding: 5px;
@@ -62,7 +95,7 @@
   }
 
   &__input {
-    // display: none;
+    display: none;
   }
 
 }

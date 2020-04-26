@@ -8,7 +8,7 @@ export default class InputView extends DefaultView {
     this.render();
   }
 
-  setValue(value: number[] | number) {
+  setValue(value: number[] | number): void {
     (this._element as HTMLInputElement).value = String(value);
   }
 

@@ -30,9 +30,9 @@ export default class Controller {
         this.model.value = [(this.model.value as number[])[0], newValue];
       };
 
-      this.view.newBindMovePin([firstPinHandler, secondPinHandler]);
+      this.view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
-      this.view.newBindMovePin((newValue: number): void => {
+      this.view.bindMovePin((newValue: number): void => {
         model.value = newValue;
       });
     }
@@ -42,7 +42,11 @@ export default class Controller {
     });
 
     this.model.bindSetValue((value: number | number[]) => {
-      this.view.NewUpdateValue(value);
+      this.view.updateValue(value);
+    });
+
+    this.view.bindScaleClick((value: number | number[]) => {
+      model.value = value;
     });
   }
 }
