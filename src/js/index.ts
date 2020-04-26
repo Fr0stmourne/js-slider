@@ -1,5 +1,4 @@
 import View from './Views/View';
-import NewView from './Views/newView';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
 declare global {
@@ -22,7 +21,6 @@ const testOptions2 = {
   step: 2,
   defaultValue: [-100, 100],
   isVertical: true,
-  range: true,
 };
 
 const testOptions3 = {
@@ -30,7 +28,6 @@ const testOptions3 = {
   maxValue: 100,
   step: 2,
   defaultValue: [30, 80],
-  range: true,
 };
 const testOptions4 = {
   minValue: 0,
@@ -56,19 +53,19 @@ $('#example-4').slider(testOptions4);
 
 // $('#example-1').newSlider(testOptions1);
 
-$(() => {
-  function change(selector: string, val: number) {
-    $(`${selector} input` as any).val(String(val));
-    $(`${selector} input` as any).change();
-  }
-  function changeRange(selector: string, values: number[]) {
-    $(`${selector} input` as any).val(String(values.join(',')));
-    $(`${selector} input` as any).change();
-  }
-  setTimeout(() => {
-    change('#example-1', 11);
-    change('#example-4', 11);
-    changeRange('#example-2', [25, 70]);
-    changeRange('#example-3', [25, 70]);
-  }, 1000);
-});
+// $(() => {
+//   function change(selector: string, val: number) {
+//     $(`${selector} input` as any).val(String(val));
+//     $(`${selector} input` as any).change();
+//   }
+//   function changeRange(selector: string, values: number[]) {
+//     $(`${selector} input` as any).val(String(values.join(',')));
+//     $(`${selector} input` as any).change();
+//   }
+//   setTimeout(() => {
+//     change('#example-1', 11);
+//     change('#example-4', 11);
+//     changeRange('#example-2', [25, 70]);
+//     changeRange('#example-3', [25, 70]);
+//   }, 1000);
+// });

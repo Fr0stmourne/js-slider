@@ -1,8 +1,8 @@
 export default class Model {
   _options: {
     defaultValue: number | number[];
-    range?: boolean;
     step: number;
+    range: boolean;
     minValue: number;
     maxValue: number;
     isTooltipDisabled?: boolean;
@@ -13,6 +13,7 @@ export default class Model {
   constructor(options: any) {
     this._options = options;
     this._value = this._options.defaultValue;
+    this._options.range = Array.isArray(this._options.defaultValue);
   }
 
   get value(): number | number[] {
