@@ -35,6 +35,7 @@ const testOptions1 = {
   maxValue: 103,
   step: 2,
   defaultValue: 75,
+  scaleOptionsNum: 5,
 };
 
 $.fn.slider = function(options: any): JQuery {

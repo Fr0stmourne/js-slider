@@ -19,7 +19,7 @@ export default class PinView extends DefaultView {
   }
 
   get value(): number {
-    return +this._elements.tooltip.textContent;
+    return +this._elements.tooltip.textContent.trim();
   }
 
   updateValue(pxNum: number, value: number): void {

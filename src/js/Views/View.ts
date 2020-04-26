@@ -22,7 +22,7 @@ export default class View {
     secondValue?: HTMLElement;
     input: HTMLInputElement;
   };
-  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView; scale: ScaleView };
+  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView; scale?: ScaleView };
 
   constructor(config: any) {
     this._options = config;
@@ -44,21 +44,23 @@ export default class View {
   }
 
   bindScaleClick(handler?: Function): void {
-    if (this._options.range) {
-      const rangeHandler = (value: number): void => {
-        const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
-        const FIRST_PIN = 0;
-        const SECOND_PIN = 1;
-        pinValues[
-          Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
-            ? FIRST_PIN
-            : SECOND_PIN
-        ] = value;
-        handler(pinValues);
-      };
-      (this._objects.scale.onOptionClick as Function) = rangeHandler;
-    } else {
-      (this._objects.scale.onOptionClick as Function) = handler;
+    if (this._objects.scale) {
+      if (this._options.range) {
+        const rangeHandler = (value: number): void => {
+          const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
+          const FIRST_PIN = 0;
+          const SECOND_PIN = 1;
+          pinValues[
+            Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
+              ? FIRST_PIN
+              : SECOND_PIN
+          ] = value;
+          handler(pinValues);
+        };
+        (this._objects.scale.onOptionClick as Function) = rangeHandler;
+      } else {
+        (this._objects.scale.onOptionClick as Function) = handler;
+      }
     }
   }
 
@@ -99,15 +101,9 @@ export default class View {
     };
 
     if (this._options.range) {
-      // TODO
-      // const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
-      // const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
-      // addPin(firstPin, (valueHandler as Function[])[0]);
-      // addPin(secondPin, (valueHandler as Function[])[1]);
       addPin(this._objects.firstPin, (valueHandler as Function[])[0]);
       addPin(this._objects.secondPin, (valueHandler as Function[])[1]);
     } else {
-      // const pin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       addPin(this._objects.firstPin, valueHandler as Function);
     }
   }
@@ -150,8 +146,11 @@ export default class View {
       bar: new BarView(),
       firstPin: new PinView(this._options, 1),
       input: new InputView(this._options.defaultValue),
-      scale: new ScaleView(this._options),
     };
+
+    if (this._options.scaleOptionsNum) {
+      this._objects.scale = new ScaleView(this._options);
+    }
 
     if (this._options.range) {
       this._objects.secondPin = new PinView(this._options, 2);
@@ -160,7 +159,7 @@ export default class View {
       if (node !== this._objects.scale) this._element.append(node.element);
     });
 
-    this._objects.bar.element.append(this._objects.scale.element);
+    if (this._objects.scale) this._objects.bar.element.append(this._objects.scale.element);
 
     // this._element.append(this._objects.bar.element);
     // this._objects.bar.element.append(this._objects.firstPin.element);

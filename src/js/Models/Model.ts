@@ -6,6 +6,7 @@ export default class Model {
     minValue: number;
     maxValue: number;
     isTooltipDisabled?: boolean;
+    scaleOptionsNum: number;
   };
   _value: number | number[];
   onValueChange: Function;
