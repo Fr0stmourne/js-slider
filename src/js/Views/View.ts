@@ -3,6 +3,7 @@ import movePin from '../utils/movePin/movePin';
 import calculateValue from '../utils/calculateValue/calculateValue';
 import PinView from './PinView';
 import BarView from './BarView';
+import InputView from './InputView';
 
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');
@@ -21,7 +22,7 @@ export default class View {
     secondValue?: HTMLElement;
     input: HTMLInputElement;
   };
-  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView };
+  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView };
 
   constructor(config: any) {
     this._options = config;
@@ -33,13 +34,13 @@ export default class View {
   }
 
   bindInputChange(handler?: Function): void {
-    // const input: HTMLInputElement = this._elements.input;
-    // input.onchange = (e): void => {
-    //   const newValue: number | number[] = this._options.range
-    //     ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
-    //     : +(e.target as HTMLInputElement).value;
-    //   handler(newValue);
-    // };
+    const input: InputView = this._objects.input;
+    input.element.onchange = (e): void => {
+      const newValue: number | number[] = this._options.range
+        ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
+        : +(e.target as HTMLInputElement).value;
+      handler(newValue);
+    };
   }
 
   bindMovePin(valueHandler?: Function | Function[]): void {
@@ -209,19 +210,21 @@ export default class View {
       );
       this._objects.firstPin.updateValue(pxNum, value as number);
     }
+
+    this._objects.input.setValue(value);
   }
 
   render(): void {
     this._element = render(
       `
     <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
-      <input class="slider-plugin__input js-input" value="${this._options.defaultValue}">
     </div>
     `,
     );
     this._objects = {
       bar: new BarView(),
       firstPin: new PinView(this._options, 1),
+      input: new InputView(this._options.defaultValue),
     };
 
     if (this._options.range) {
