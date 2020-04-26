@@ -173,25 +173,25 @@ describe('Update value()', () => {
   test('should update hidden input.element', () => {
     const view = defaultView;
     view.updateValue(50);
-    expect(view._objects.input.element.value).toBe('50');
+    expect((view._objects.input.element as HTMLInputElement).value).toBe('50');
   });
 
   test('should update hidden input.element: range', () => {
     const view = rangeView;
     view.updateValue([50, 70]);
-    expect(view._objects.input.element.value).toBe('50,70');
+    expect((view._objects.input.element as HTMLInputElement).value).toBe('50,70');
   });
 
   test('should update hidden input.element: vertical', () => {
     const view = verticalView;
     view.updateValue(50);
-    expect(view._objects.input.element.value).toBe('50');
+    expect((view._objects.input.element as HTMLInputElement).value).toBe('50');
   });
 
   test('should update hidden input.element: range vertical', () => {
     const view = rangeVerticalView;
     view.updateValue([50, 70]);
-    expect(view._objects.input.element.value).toBe('50,70');
+    expect((view._objects.input.element as HTMLInputElement).value).toBe('50,70');
   });
 });
 

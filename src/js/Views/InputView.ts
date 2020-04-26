@@ -2,9 +2,10 @@ import DefaultView from './DefaultView';
 import render from '../utils/render/render';
 
 export default class InputView extends DefaultView {
-  constructor(public defaultValue: number) {
+  _value: number;
+  constructor(defaultValue: number) {
     super();
-    this.defaultValue = defaultValue;
+    this._value = defaultValue;
     this.render();
   }
 
@@ -15,7 +16,7 @@ export default class InputView extends DefaultView {
   render(): void {
     this._element = render(
       `
-      <input class="slider-plugin__input js-input" value="${this.defaultValue}">
+      <input class="slider-plugin__input js-input" value="${this._value}">
       `,
     );
   }
