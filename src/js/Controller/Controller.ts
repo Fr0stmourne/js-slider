@@ -23,7 +23,14 @@ export default class Controller {
     // }
 
     if (this.model.getPluginConfig().range) {
-      //
+      const firstPinHandler = (newValue: number): void => {
+        this.model.value = [newValue, (this.model.value as number[])[1]];
+      };
+      const secondPinHandler = (newValue: number): void => {
+        this.model.value = [(this.model.value as number[])[0], newValue];
+      };
+
+      this.view.newBindMovePin([firstPinHandler, secondPinHandler]);
     } else {
       this.view.newBindMovePin((newValue: number): void => {
         model.value = newValue;

@@ -20,7 +20,6 @@ export default class PinView extends DefaultView {
 
   updateValue(pxNum: number, value: number): void {
     this._movePin(pxNum);
-    console.log(value);
 
     this._elements.tooltip.textContent = String(value);
   }

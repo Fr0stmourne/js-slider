@@ -100,8 +100,6 @@ export default class View {
           : event.clientX - pin.element.getBoundingClientRect().left;
 
         const onMouseMove = (e: MouseEvent): void => {
-          console.log('переделка');
-
           let newValue = this._options.isVertical
             ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
             : e.clientX - shift - slider.getBoundingClientRect().left;
@@ -133,6 +131,8 @@ export default class View {
       // const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
       // addPin(firstPin, (valueHandler as Function[])[0]);
       // addPin(secondPin, (valueHandler as Function[])[1]);
+      addPin(this._objects.firstPin, (valueHandler as Function[])[0]);
+      addPin(this._objects.secondPin, (valueHandler as Function[])[1]);
     } else {
       // const pin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
       addPin(this._objects.firstPin, valueHandler as Function);
@@ -181,22 +181,23 @@ export default class View {
     this._elements.input.value = String(value);
   }
 
-  NewUpdateValue(value: number | number[]) {
+  NewUpdateValue(value: number | number[]): void {
     if (this._options.range) {
-      const pxNums = [
+      const pins = [1, 2];
+      const pxNums = pins.map((el, idx) =>
         calculatePxNum(
-          (value as number[])[0],
+          (value as number[])[idx],
           this._options.minValue,
           this._options.maxValue,
-          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
+          this._options.isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
         ),
-        calculatePxNum(
-          (value as number[])[1],
-          this._options.minValue,
-          this._options.maxValue,
-          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-        ),
-      ];
+      );
+
+      this._objects.firstPin.updateValue(pxNums[0], (value as number[])[0]);
+      // this._objects.firstPin.updateValue(100, (value as number[])[0]);
+      this._objects.secondPin.updateValue(pxNums[1], (value as number[])[1]);
+      // this._objects.secondPin.updateValue(200, (value as number[])[1]);
+      // const pxNums = pinNums.map(num => calculatePxNum())
 
       // TODO !!!
     } else {

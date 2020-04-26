@@ -48,9 +48,9 @@ $.fn.slider = function(options: any): JQuery {
 };
 
 $('#example-1').slider(testOptions1);
-// $('#example-2').slider(testOptions2);
-// $('#example-3').slider(testOptions3);
-// $('#example-4').slider(testOptions4);
+$('#example-2').slider(testOptions2);
+$('#example-3').slider(testOptions3);
+$('#example-4').slider(testOptions4);
 
 // $('#example-1').newSlider(testOptions1);
 
