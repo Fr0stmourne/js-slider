@@ -8,13 +8,6 @@ declare global {
   }
 }
 
-const testOptions1 = {
-  minValue: -33,
-  maxValue: 103,
-  step: 2,
-  defaultValue: 45,
-};
-
 const testOptions2 = {
   minValue: -100,
   maxValue: 100,
@@ -37,19 +30,27 @@ const testOptions4 = {
   isVertical: true,
 };
 
+const testOptions1 = {
+  minValue: -33,
+  maxValue: 103,
+  step: 2,
+  defaultValue: 75,
+};
+
 $.fn.slider = function(options: any): JQuery {
   const model = new Model(options);
   const view = new View(model.getPluginConfig());
   new Controller(model, view);
-  $(this).append(view.element);
-  view.updateValue(options.defaultValue);
+  this.append(view.element);
+  // view.updateValue(options.defaultValue);
+  view.NewUpdateValue(options.defaultValue);
   return this;
 };
 
 $('#example-1').slider(testOptions1);
-$('#example-2').slider(testOptions2);
-$('#example-3').slider(testOptions3);
-$('#example-4').slider(testOptions4);
+// $('#example-2').slider(testOptions2);
+// $('#example-3').slider(testOptions3);
+// $('#example-4').slider(testOptions4);
 
 // $('#example-1').newSlider(testOptions1);
 

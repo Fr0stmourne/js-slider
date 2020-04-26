@@ -21,6 +21,7 @@ export default class View {
     secondValue?: HTMLElement;
     input: HTMLInputElement;
   };
+  _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView };
 
   constructor(config: any) {
     this._options = config;
@@ -32,13 +33,13 @@ export default class View {
   }
 
   bindInputChange(handler?: Function): void {
-    const input: HTMLInputElement = this._elements.input;
-    input.onchange = (e): void => {
-      const newValue: number | number[] = this._options.range
-        ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
-        : +(e.target as HTMLInputElement).value;
-      handler(newValue);
-    };
+    // const input: HTMLInputElement = this._elements.input;
+    // input.onchange = (e): void => {
+    //   const newValue: number | number[] = this._options.range
+    //     ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
+    //     : +(e.target as HTMLInputElement).value;
+    //   handler(newValue);
+    // };
   }
 
   bindMovePin(valueHandler?: Function | Function[]): void {
@@ -88,6 +89,56 @@ export default class View {
     }
   }
 
+  newBindMovePin(valueHandler?: Function | Function[]): void {
+    const slider: HTMLElement = this._objects.bar.element;
+
+    const addPin = (pin: PinView, handler?: Function): void => {
+      pin.element.onmousedown = (event): void => {
+        event.preventDefault();
+        const shift = this._options.isVertical
+          ? event.clientY - pin.element.getBoundingClientRect().bottom
+          : event.clientX - pin.element.getBoundingClientRect().left;
+
+        const onMouseMove = (e: MouseEvent): void => {
+          console.log('переделка');
+
+          let newValue = this._options.isVertical
+            ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
+            : e.clientX - shift - slider.getBoundingClientRect().left;
+
+          const sliderSize = this._options.isVertical ? slider.offsetHeight : slider.offsetWidth;
+          if (newValue < 0) newValue = 0;
+          const rightEdge = sliderSize;
+          if (newValue > rightEdge) newValue = rightEdge;
+
+          const percentage = (newValue / sliderSize).toFixed(2);
+          const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
+
+          if (handler) handler(resultValue);
+        };
+
+        const onMouseUp = (): void => {
+          document.removeEventListener('mouseup', onMouseUp);
+          document.removeEventListener('mousemove', onMouseMove);
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      };
+    };
+
+    if (this._options.range) {
+      // TODO
+      // const firstPin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
+      // const secondPin: HTMLElement = this._element.querySelector('.js-slider-pin-2');
+      // addPin(firstPin, (valueHandler as Function[])[0]);
+      // addPin(secondPin, (valueHandler as Function[])[1]);
+    } else {
+      // const pin: HTMLElement = this._element.querySelector('.js-slider-pin-1');
+      addPin(this._objects.firstPin, valueHandler as Function);
+    }
+  }
+
   updateValue(value: number | number[]): void {
     if (this._options.range) {
       (value as number[]).forEach(el => {
@@ -130,6 +181,35 @@ export default class View {
     this._elements.input.value = String(value);
   }
 
+  NewUpdateValue(value: number | number[]) {
+    if (this._options.range) {
+      const pxNums = [
+        calculatePxNum(
+          (value as number[])[0],
+          this._options.minValue,
+          this._options.maxValue,
+          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
+        ),
+        calculatePxNum(
+          (value as number[])[1],
+          this._options.minValue,
+          this._options.maxValue,
+          this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
+        ),
+      ];
+
+      // TODO !!!
+    } else {
+      const pxNum = calculatePxNum(
+        value as number,
+        this._options.minValue,
+        this._options.maxValue,
+        this._options.isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
+      );
+      this._objects.firstPin.updateValue(pxNum, value as number);
+    }
+  }
+
   render(): void {
     this._element = render(
       `
@@ -138,46 +218,16 @@ export default class View {
     </div>
     `,
     );
-    this._element.append(new BarView().element);
-    this._element.append(new PinView(this._options, 1).element);
-    if (this._options.range) {
-      this._element.append(new PinView(this._options, 2).element);
-    }
-
-    this._elements = {
-      bar: this._element.querySelector('.js-slider-bar'),
-      firstPin: this._element.querySelector('.js-slider-pin-1'),
-      firstValue: this._element.querySelector('.js-slider-pin-1 .js-slider-value'),
-      input: this._element.querySelector('.js-input'),
+    this._objects = {
+      bar: new BarView(),
+      firstPin: new PinView(this._options, 1),
     };
 
     if (this._options.range) {
-      this._elements.secondPin = this._element.querySelector('.js-slider-pin-2');
-      this._elements.secondValue = this._element.querySelector('.js-slider-pin-2 .js-slider-value');
+      this._objects.secondPin = new PinView(this._options, 2);
     }
-
-    document.body.appendChild(this._element);
-    const firstInitialVal = calculatePxNum(
-      this._options.defaultValue[0] as number,
-      this._options.minValue,
-      this._options.maxValue,
-      this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-    );
-
-    let secondInitialVal;
-
-    if (this._options.range) {
-      secondInitialVal = calculatePxNum(
-        this._options.defaultValue[1] as number,
-        this._options.minValue,
-        this._options.maxValue,
-        this._options.isVertical ? +this._elements.bar.clientHeight : +this._elements.bar.clientWidth,
-      );
-    }
-
-    movePin(this._elements.firstPin, firstInitialVal, this._options.isVertical);
-    if (secondInitialVal) movePin(this._elements.secondPin, secondInitialVal, this._options.isVertical);
-
-    document.body.removeChild(this._element);
+    Object.values(this._objects).forEach(node => {
+      this._element.append(node.element);
+    });
   }
 }
