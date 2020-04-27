@@ -9,8 +9,13 @@ export default class InputView extends DefaultView {
     this.render();
   }
 
-  setValue(value: number[] | number): void {
+  set value(value: number[] | number) {
     (this._element as HTMLInputElement).value = String(value);
+  }
+
+  get value(): number | number[] {
+    const inputVal = (this._element as HTMLInputElement).value;
+    return !Number.isNaN(+inputVal) ? +inputVal : inputVal.split(',').map(el => +el);
   }
 
   render(): void {

@@ -132,7 +132,7 @@ export default class View {
       this._objects.firstPin.updateValue(pxNum, value as number);
     }
 
-    this._objects.input.setValue(value);
+    this._objects.input.value = value;
   }
 
   render(): void {
