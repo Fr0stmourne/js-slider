@@ -1,5 +1,5 @@
-import DefaultView from './DefaultView';
-import render from '../utils/render/render';
+import DefaultView from '../DefaultView/DefaultView';
+import render from '../../../utils/render/render';
 
 const DEFAULT_OPTIONS_NUM = 5;
 
@@ -17,8 +17,11 @@ export default class ScaleView extends DefaultView {
     this.render();
   }
 
-  setValue(value: number[] | number): void {
-    (this._element as HTMLInputElement).value = String(value);
+  _calculateMilestone(index: number, scaleOptionsNum: number) {
+    return (
+      this._options.minValue +
+      Math.round((index * (this._options.maxValue - this._options.minValue)) / (scaleOptionsNum - 1))
+    );
   }
 
   onOptionClick(value: number): void {
@@ -31,8 +34,10 @@ export default class ScaleView extends DefaultView {
       .fill(null)
       .map(
         (el, index) =>
-          `<div class="slider-plugin__scale-option js-option">${this._options.minValue +
-            Math.round((index * (this._options.maxValue - this._options.minValue)) / (scaleOptionsNum - 1))}</div>`,
+          `<div class="slider-plugin__scale-option js-option">${this._calculateMilestone(
+            index,
+            scaleOptionsNum,
+          )}</div>`,
       );
     this._element = render(
       `

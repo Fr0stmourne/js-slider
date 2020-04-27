@@ -1,5 +1,5 @@
-import DefaultView from './DefaultView';
-import render from '../utils/render/render';
+import DefaultView from '../DefaultView/DefaultView';
+import render from '../../../utils/render/render';
 
 export default class BarView extends DefaultView {
   constructor() {

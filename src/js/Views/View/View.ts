@@ -1,9 +1,9 @@
-import calculatePxNum from '../utils/calculatePxNum/calculatePxNum';
-import calculateValue from '../utils/calculateValue/calculateValue';
-import PinView from './PinView';
-import BarView from './BarView';
-import InputView from './InputView';
-import ScaleView from './ScaleView';
+import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
+import calculateValue from '../../utils/calculateValue/calculateValue';
+import PinView from '../subviews/PinView/PinView';
+import BarView from '../subviews/BarView/BarView';
+import InputView from '../subviews/InputView/InputView';
+import ScaleView from '../subviews/ScaleView/ScaleView';
 
 function render(markup: string): HTMLElement {
   const wrapper = document.createElement('div');

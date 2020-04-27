@@ -1,4 +1,4 @@
-import View from './Views/View';
+import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
 declare global {
@@ -43,7 +43,6 @@ $.fn.slider = function(options: any): JQuery {
   const view = new View(model.getPluginConfig());
   new Controller(model, view);
   this.append(view.element);
-  // view.updateValue(options.defaultValue);
   view.updateValue(options.defaultValue);
   return this;
 };

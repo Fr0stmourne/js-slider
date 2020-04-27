@@ -1,5 +1,5 @@
 import Controller from './Controller';
-import View from '../Views/View';
+import View from '../Views/View/View';
 import Model from '../Models/Model';
 
 jest.mock('../Views/View');
