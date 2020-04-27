@@ -55,18 +55,30 @@ $('#example-4').slider(testOptions4);
 // $('#example-1').newSlider(testOptions1);
 
 $(() => {
-  function change(selector: string, val: number): void {
-    $(`${selector} input`).val(String(val));
-    $(`${selector} input`).change();
+  function change(el: HTMLElement, val: number): void {
+    $(el).val(String(val));
+    $(el).change();
   }
-  function changeRange(selector: string, values: number[]): void {
-    $(`${selector} input`).val(String(values.join(',')));
-    $(`${selector} input`).change();
+  function changeRange(el: HTMLElement, values: number[]): void {
+    $(el).val(String(values.join(',')));
+    $(el).change();
   }
-  // setTimeout(() => {
-  //   change('#example-1', 11);
-  //   change('#example-4', 11);
-  //   changeRange('#example-2', [25, 70]);
-  //   changeRange('#example-3', [25, 70]);
-  // }, 1000);
+
+  function handleChange(e: Event): void {
+    const newValue = +(e.target as HTMLInputElement).value;
+    change((e.target as HTMLElement).closest('.test').querySelector('.example input'), newValue);
+  }
+
+  function handleRangeChange(e: Event): void {
+    const newValue = (e.target as HTMLInputElement).value.split(',').map(el => +el.trim());
+    changeRange((e.target as HTMLElement).closest('.test').querySelector('.example input'), newValue);
+  }
+
+  document.querySelectorAll('.js-control-input-range').forEach(input => {
+    input.addEventListener('change', handleRangeChange);
+  });
+
+  document.querySelectorAll('.js-control-input').forEach(input => {
+    input.addEventListener('change', handleChange);
+  });
 });
