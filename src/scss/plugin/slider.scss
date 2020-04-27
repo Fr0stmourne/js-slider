@@ -1,6 +1,5 @@
 .slider-plugin {
   position: relative;
-  // max-width: 300px;
   font-family: 'Roboto';
   font-size: 14px;
   width: 100%;
@@ -23,7 +22,6 @@
     }
 
     .slider-plugin__value {
-      // left: 25px;
       transform: translate(50%, -100%);
       top: 20px;
     }

@@ -55,13 +55,13 @@ $('#example-4').slider(testOptions4);
 // $('#example-1').newSlider(testOptions1);
 
 $(() => {
-  function change(selector: string, val: number) {
-    $(`${selector} input` as any).val(String(val));
-    $(`${selector} input` as any).change();
+  function change(selector: string, val: number): void {
+    $(`${selector} input`).val(String(val));
+    $(`${selector} input`).change();
   }
-  function changeRange(selector: string, values: number[]) {
-    $(`${selector} input` as any).val(String(values.join(',')));
-    $(`${selector} input` as any).change();
+  function changeRange(selector: string, values: number[]): void {
+    $(`${selector} input`).val(String(values.join(',')));
+    $(`${selector} input`).change();
   }
   // setTimeout(() => {
   //   change('#example-1', 11);

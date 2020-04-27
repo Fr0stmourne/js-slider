@@ -37,9 +37,6 @@ function testHandler(): number {
 }
 
 let defaultView: View, verticalView: View, rangeView: View, rangeVerticalView: View;
-// let verticalView: View;
-// let rangeView: View;
-// let rangeVerticalView: View;
 
 describe('View constructor', () => {
   beforeAll(() => {

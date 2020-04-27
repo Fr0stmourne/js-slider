@@ -7,7 +7,7 @@ export default class BarView extends DefaultView {
     this.render();
   }
 
-  render() {
+  render(): void {
     this._element = render(
       `
       <div class="slider-plugin__bar js-slider-bar"></div>

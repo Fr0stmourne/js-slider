@@ -160,11 +160,5 @@ export default class View {
     });
 
     if (this._objects.scale) this._objects.bar.element.append(this._objects.scale.element);
-
-    // this._element.append(this._objects.bar.element);
-    // this._objects.bar.element.append(this._objects.firstPin.element);
-    // if (this._objects.secondPin) this._objects.bar.element.append(this._objects.secondPin.element);
-    // this._objects.bar.element.append(this._objects.input.element);
-    // this._element.append(this._objects.scale.element);
   }
 }

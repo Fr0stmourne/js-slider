@@ -7,21 +7,6 @@ export default class Controller {
     this.view = view;
     this.view.render();
 
-    // if (this.model.getPluginConfig().range) {
-    //   const firstPinHandler = (newValue: number): void => {
-    //     this.model.value = [newValue, (this.model.value as number[])[1]];
-    //   };
-    //   const secondPinHandler = (newValue: number): void => {
-    //     this.model.value = [(this.model.value as number[])[0], newValue];
-    //   };
-
-    //   this.view.bindMovePin([firstPinHandler, secondPinHandler]);
-    // } else {
-    //   this.view.bindMovePin((newValue: number): void => {
-    //     model.value = newValue;
-    //   });
-    // }
-
     if (this.model.getPluginConfig().range) {
       const firstPinHandler = (newValue: number): void => {
         this.model.value = [newValue, (this.model.value as number[])[1]];
