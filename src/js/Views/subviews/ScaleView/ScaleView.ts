@@ -17,14 +17,14 @@ export default class ScaleView extends DefaultView {
     this.render();
   }
 
-  _calculateMilestone(index: number, scaleOptionsNum: number) {
+  _calculateMilestone(index: number, scaleOptionsNum: number): number {
     return (
       this._options.minValue +
       Math.round((index * (this._options.maxValue - this._options.minValue)) / (scaleOptionsNum - 1))
     );
   }
 
-  onOptionClick(value: number): void {
+  onOptionClick(_value: number): void {
     //
   }
 
