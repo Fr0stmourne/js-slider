@@ -19,3 +19,8 @@
     height: auto;
   }
 }
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+}

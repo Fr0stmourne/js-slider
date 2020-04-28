@@ -133,6 +133,13 @@ export default class View {
     }
 
     this._objects.input.value = value;
+    // try {
+    //   const evt = document.createEvent('HTMLEvents');
+    //   evt.initEvent('change', false, true);
+    //   this._objects.input.element.dispatchEvent(evt);
+    // } catch (e) {
+    //   console.log(e);
+    // }
   }
 
   render(): void {

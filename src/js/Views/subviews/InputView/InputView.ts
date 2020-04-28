@@ -10,10 +10,11 @@ export default class InputView extends DefaultView {
   }
 
   set value(value: number[] | number) {
-    (this._element as HTMLInputElement).value = String(value);
+    const input = this._element as HTMLInputElement;
+    input.value = String(value);
 
     const evt = document.createEvent('HTMLEvents');
-    evt.initEvent('change', false, true);
+    evt.initEvent('blur', false, true);
     this._element.dispatchEvent(evt);
   }
 

@@ -1,11 +1,19 @@
+/* eslint-disable */
+
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
+import 'webpack-jquery-ui';
 declare global {
   interface JQuery {
     slider: (options?: object) => JQuery;
-    newSlider: (options?: object) => JQuery;
+    colorize: any;
   }
+
+  interface JQueryStatic {
+    widget: any;
+  }
+
 }
 
 const testOptions2 = {
@@ -36,6 +44,7 @@ const testOptions1 = {
   step: 2,
   defaultValue: 75,
   scaleOptionsNum: 5,
+  // isTooltipDisabled: true,
 };
 
 $.fn.slider = function(options: any): JQuery {
@@ -47,12 +56,23 @@ $.fn.slider = function(options: any): JQuery {
   return this;
 };
 
+// defaultOpt:  {
+//   minValue: 0,
+//   maxValue: 103,
+//   step: 1,
+//   defaultValue: 50,
+//   scaleOptionsNum: 5,
+//   isTooltipDisabled: false,
+// },
+
+//
+
+//
+
 $('#example-1').slider(testOptions1);
 $('#example-2').slider(testOptions2);
 $('#example-3').slider(testOptions3);
 $('#example-4').slider(testOptions4);
-
-// $('#example-1').newSlider(testOptions1);
 
 $(() => {
   function change(el: HTMLElement, val: number): void {
@@ -74,6 +94,14 @@ $(() => {
     changeRange((e.target as HTMLElement).closest('.test').querySelector('.example input'), newValue);
   }
 
+  function handleControlPanelChange(e: Event): void {
+    const target = (e.target as HTMLInputElement)
+    const element = target.closest('.control-panel');
+    const inputState = {
+      isTooltipDisabled: target.value
+    }
+  }
+
   document.querySelectorAll('.js-control-input-range').forEach(input => {
     (input as HTMLInputElement).value = (input
       .closest('.test')
@@ -91,12 +119,13 @@ $(() => {
   //
   function handleInitialChange(e: Event): void {
     const target = e.target as HTMLInputElement;
-    console.log('trigger');
-
     (target.closest('.test').querySelector('.control-panel input') as HTMLInputElement).value = target.value;
   }
 
   document.querySelectorAll('.example input').forEach(input => {
-    input.addEventListener('change', handleInitialChange);
+    input.addEventListener('blur', handleInitialChange);
   });
+// document.querySelectorAll('.control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
+//   input.addEventListener('change',handleControlPanelChange)
+// })
 });
