@@ -117,7 +117,6 @@ $(() => {
   function handleControlPanelChange(e: Event, initialOptions: any): void {
     const target = (e.target as HTMLInputElement)
     const element = target.closest('.control-panel');
-    console.log((element.querySelector('.js-max-value') as HTMLInputElement).value === '');
 
     const inputs = {
       isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
@@ -139,10 +138,7 @@ $(() => {
 
     const slider = target.closest('.test').querySelector('.example');
     slider.textContent = '';
-    console.log(initialOptions, inputsState);
-    
-    console.log({...initialOptions, ...inputsState});
-                    
+
     $(slider).slider({...initialOptions, ...inputsState})
     bindListeners() 
   }
