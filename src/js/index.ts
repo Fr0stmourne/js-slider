@@ -75,10 +75,28 @@ $(() => {
   }
 
   document.querySelectorAll('.js-control-input-range').forEach(input => {
+    (input as HTMLInputElement).value = (input
+      .closest('.test')
+      .querySelector('.example input') as HTMLInputElement).value;
     input.addEventListener('change', handleRangeChange);
   });
 
   document.querySelectorAll('.js-control-input').forEach(input => {
+    (input as HTMLInputElement).value = (input
+      .closest('.test')
+      .querySelector('.example input') as HTMLInputElement).value;
     input.addEventListener('change', handleChange);
+  });
+
+  //
+  function handleInitialChange(e: Event): void {
+    const target = e.target as HTMLInputElement;
+    console.log('trigger');
+
+    (target.closest('.test').querySelector('.control-panel input') as HTMLInputElement).value = target.value;
+  }
+
+  document.querySelectorAll('.example input').forEach(input => {
+    input.addEventListener('change', handleInitialChange);
   });
 });

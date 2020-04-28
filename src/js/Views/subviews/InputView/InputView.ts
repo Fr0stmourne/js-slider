@@ -11,6 +11,10 @@ export default class InputView extends DefaultView {
 
   set value(value: number[] | number) {
     (this._element as HTMLInputElement).value = String(value);
+
+    const evt = document.createEvent('HTMLEvents');
+    evt.initEvent('change', false, true);
+    this._element.dispatchEvent(evt);
   }
 
   get value(): number | number[] {
