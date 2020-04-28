@@ -19,7 +19,6 @@ export default class Model {
       ? [...(this._options.defaultValue as number[])]
       : this._options.defaultValue;
     this._options.range = Array.isArray(this._options.defaultValue);
-    console.log(this._options);
   }
 
   get value(): number | number[] {

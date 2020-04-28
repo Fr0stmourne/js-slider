@@ -93,17 +93,28 @@ $(() => {
   function handleControlPanelChange(e: Event, initialOptions: any): void {
     const target = (e.target as HTMLInputElement)
     const element = target.closest('.control-panel');
+    console.log((element.querySelector('.js-max-value') as HTMLInputElement).value === '');
+    
+
     const inputState = {
-      isTooltipDisabled: (element.querySelector('.js-tooltip-checkbox') as HTMLInputElement).checked
+      isTooltipDisabled: (element.querySelector('.js-tooltip-checkbox') as HTMLInputElement).checked,
+      step: +(element.querySelector('.js-step') as HTMLInputElement).value || initialOptions.step,
+      minValue: (element.querySelector('.js-min-value') as HTMLInputElement).value !== '' ? +(element.querySelector('.js-min-value') as HTMLInputElement).value : initialOptions.minValue,
+      maxValue: (element.querySelector('.js-max-value') as HTMLInputElement).value !== '' ? +(element.querySelector('.js-max-value') as HTMLInputElement).value : initialOptions.maxValue
     }
 
     const slider = target.closest('.test').querySelector('.example');
     slider.textContent = '';
+    console.log(initialOptions, inputState);
+    
+    console.log({...initialOptions, ...inputState});
+    
     $(slider).slider({...initialOptions, ...inputState})
     bindListeners() 
   }
 
   function bindListeners() {
+    
     document.querySelectorAll('.js-control-input-range').forEach(input => {
       (input as HTMLInputElement).value = (input
         .closest('.test')
@@ -126,7 +137,7 @@ $(() => {
       input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions1))
     })
     document.querySelectorAll('.test-2 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
-      input.addEventListener('change',(e) => handleControlPanelChange(e, Object.freeze(testOptions2)))
+      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions2))
     })
     document.querySelectorAll('.test-3 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
       input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions3))
