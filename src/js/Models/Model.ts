@@ -26,9 +26,10 @@ export default class Model {
   }
 
   set value(newValue: number | number[]) {
+    console.log(newValue as number, Math.ceil(this._options.minValue / this._options.step) * this._options.step);
     if (this._options.range) {
       (this._value as number[])[0] = Math.max(
-        (newValue as number[])[0] < this._options.minValue + this._options.step
+        (newValue as number[])[0] === this._options.minValue
           ? Math.floor((newValue as number[])[0] / this._options.step) * this._options.step
           : Math.ceil((newValue as number[])[0] / this._options.step) * this._options.step,
         this._options.minValue,
@@ -45,7 +46,7 @@ export default class Model {
       }
     } else {
       this._value =
-        (newValue as number) < this._options.minValue + this._options.step
+        (newValue as number) === this._options.minValue
           ? Math.floor((newValue as number) / this._options.step) * this._options.step
           : Math.ceil((newValue as number) / this._options.step) * this._options.step;
       if (this._value > this._options.maxValue) this._value = this._options.maxValue;

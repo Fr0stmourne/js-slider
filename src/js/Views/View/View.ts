@@ -84,7 +84,7 @@ export default class View {
           const rightEdge = sliderSize;
           if (newValue > rightEdge) newValue = rightEdge;
 
-          const percentage = (newValue / sliderSize).toFixed(2);
+          const percentage = newValue / sliderSize;
           const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
 
           if (handler) handler(resultValue);

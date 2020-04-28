@@ -11,12 +11,22 @@ declare global {
 
 }
 
-const testOptions2 = {
-  minValue: -100,
+const DEFAULT_CONFIG = {
+  minValue: 0,
   maxValue: 100,
-  step: 2,
-  defaultValue: [-100, 100],
+  step: 1,
+  defaultValue: 50,
+  scaleOptionsNum: 5,
+  isTooltipDisabled: false,
+};
+
+const testOptions2 = {
+  minValue: -101,
+  maxValue: 100,
+  step: 8,
+  defaultValue: [-50, 50],
   isVertical: true,
+  scaleOptionsNum: 5,
 };
 
 const testOptions3 = {
@@ -24,6 +34,7 @@ const testOptions3 = {
   maxValue: 100,
   step: 2,
   defaultValue: [30, 80],
+  scaleOptionsNum: 5,
 };
 const testOptions4 = {
   minValue: 0,
@@ -31,24 +42,37 @@ const testOptions4 = {
   step: 7,
   defaultValue: 45,
   isVertical: true,
+  scaleOptionsNum: 5,
 };
 
 const testOptions1 = {
   minValue: -33,
   maxValue: 103,
-  step: 2,
+  step: 5,
   defaultValue: 75,
   scaleOptionsNum: 5,
   // isTooltipDisabled: true,
 };
 
 $.fn.slider = function(options: any): JQuery {
-  const optionsCopy = {...options};
-  const model = new Model(optionsCopy);
+
+  function validateOptions(options: any) {
+    return {
+      minValue: options.minValue || DEFAULT_CONFIG.minValue,
+      maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
+      step: options.step || DEFAULT_CONFIG.step,
+      defaultValue: options.defaultValue || DEFAULT_CONFIG.defaultValue,
+      scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
+      isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
+    }
+  }
+
+  const validatedOptions = validateOptions({...options});
+  const model = new Model(validatedOptions);
   const view = new View(model.getPluginConfig());
   new Controller(model, view);
   this.append(view.element);
-  view.updateValue(optionsCopy.defaultValue);
+  view.updateValue(model.getPluginConfig().defaultValue);
   return this;
 };
 
@@ -94,22 +118,32 @@ $(() => {
     const target = (e.target as HTMLInputElement)
     const element = target.closest('.control-panel');
     console.log((element.querySelector('.js-max-value') as HTMLInputElement).value === '');
+
+    const inputs = {
+      isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
+      step: element.querySelector('.js-step') as HTMLInputElement,
+      minValue: element.querySelector('.js-min-value') as HTMLInputElement,
+      maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
+      scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
+
+    }
     
 
-    const inputState = {
-      isTooltipDisabled: (element.querySelector('.js-tooltip-checkbox') as HTMLInputElement).checked,
-      step: +(element.querySelector('.js-step') as HTMLInputElement).value || initialOptions.step,
-      minValue: (element.querySelector('.js-min-value') as HTMLInputElement).value !== '' ? +(element.querySelector('.js-min-value') as HTMLInputElement).value : initialOptions.minValue,
-      maxValue: (element.querySelector('.js-max-value') as HTMLInputElement).value !== '' ? +(element.querySelector('.js-max-value') as HTMLInputElement).value : initialOptions.maxValue
+    const inputsState = {
+      isTooltipDisabled: inputs.isTooltipDisabled.checked,
+      step: inputs.step.value || initialOptions.step,
+      minValue: inputs.minValue.value !== '' ? +inputs.minValue.value : initialOptions.minValue,
+      maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : initialOptions.maxValue,
+      scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : initialOptions.scaleOptionsNum,
     }
 
     const slider = target.closest('.test').querySelector('.example');
     slider.textContent = '';
-    console.log(initialOptions, inputState);
+    console.log(initialOptions, inputsState);
     
-    console.log({...initialOptions, ...inputState});
-    
-    $(slider).slider({...initialOptions, ...inputState})
+    console.log({...initialOptions, ...inputsState});
+                    
+    $(slider).slider({...initialOptions, ...inputsState})
     bindListeners() 
   }
 
