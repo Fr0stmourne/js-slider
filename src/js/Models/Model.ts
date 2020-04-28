@@ -10,11 +10,16 @@ export default class Model {
   };
   _value: number | number[];
   onValueChange: Function;
+  _initialValue: any;
 
   constructor(options: any) {
     this._options = options;
-    this._value = this._options.defaultValue;
+    this._initialValue = this._options.defaultValue;
+    this._value = Array.isArray(this._initialValue)
+      ? [...(this._options.defaultValue as number[])]
+      : this._options.defaultValue;
     this._options.range = Array.isArray(this._options.defaultValue);
+    console.log(this._options);
   }
 
   get value(): number | number[] {

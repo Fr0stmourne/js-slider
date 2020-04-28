@@ -7,11 +7,6 @@ import 'webpack-jquery-ui';
 declare global {
   interface JQuery {
     slider: (options?: object) => JQuery;
-    colorize: any;
-  }
-
-  interface JQueryStatic {
-    widget: any;
   }
 
 }
@@ -48,11 +43,12 @@ const testOptions1 = {
 };
 
 $.fn.slider = function(options: any): JQuery {
-  const model = new Model(options);
+  const optionsCopy = {...options};
+  const model = new Model(optionsCopy);
   const view = new View(model.getPluginConfig());
   new Controller(model, view);
   this.append(view.element);
-  view.updateValue(options.defaultValue);
+  view.updateValue(optionsCopy.defaultValue);
   return this;
 };
 
@@ -94,19 +90,17 @@ $(() => {
     changeRange((e.target as HTMLElement).closest('.test').querySelector('.example input'), newValue);
   }
 
-  function handleControlPanelChange(e: Event): void {
+  function handleControlPanelChange(e: Event, initialOptions: any): void {
     const target = (e.target as HTMLInputElement)
     const element = target.closest('.control-panel');
     const inputState = {
       isTooltipDisabled: (element.querySelector('.js-tooltip-checkbox') as HTMLInputElement).checked
     }
 
-    console.log(inputState);
     const slider = target.closest('.test').querySelector('.example');
     slider.textContent = '';
-    $(slider).slider({...testOptions1, ...inputState})
-    bindListeners()
-    
+    $(slider).slider({...initialOptions, ...inputState})
+    bindListeners() 
   }
 
   function bindListeners() {
@@ -128,8 +122,17 @@ $(() => {
       input.addEventListener('blur', handleInitialChange);
     });
   
-    document.querySelectorAll('.control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
-      input.addEventListener('change',handleControlPanelChange)
+    document.querySelectorAll('.test-1 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
+      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions1))
+    })
+    document.querySelectorAll('.test-2 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
+      input.addEventListener('change',(e) => handleControlPanelChange(e, Object.freeze(testOptions2)))
+    })
+    document.querySelectorAll('.test-3 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
+      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions3))
+    })
+    document.querySelectorAll('.test-4 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
+      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions4))
     })
   }
 

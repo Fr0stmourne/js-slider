@@ -2,8 +2,8 @@ import DefaultView from '../DefaultView/DefaultView';
 import render from '../../../utils/render/render';
 
 export default class InputView extends DefaultView {
-  _value: number;
-  constructor(defaultValue: number) {
+  _value: number | number[];
+  constructor(defaultValue: number | number[]) {
     super();
     this._value = defaultValue;
     this.render();
