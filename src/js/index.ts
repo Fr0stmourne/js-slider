@@ -1,5 +1,5 @@
-/* eslint-disable */
-
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable fsd/no-function-declaration-in-event-listener */
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
@@ -8,7 +8,6 @@ declare global {
   interface JQuery {
     slider: (options?: object) => JQuery;
   }
-
 }
 
 const DEFAULT_CONFIG = {
@@ -55,8 +54,7 @@ const testOptions1 = {
 };
 
 $.fn.slider = function(options: any): JQuery {
-
-  function validateOptions(options: any) {
+  function validateOptions(options: any): object {
     return {
       minValue: options.minValue || DEFAULT_CONFIG.minValue,
       maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
@@ -64,11 +62,11 @@ $.fn.slider = function(options: any): JQuery {
       defaultValue: options.defaultValue || DEFAULT_CONFIG.defaultValue,
       scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
       isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
-      isVertical: options.isVertical || DEFAULT_CONFIG.isVertical
-    }
+      isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
+    };
   }
 
-  const validatedOptions = validateOptions({...options});
+  const validatedOptions = validateOptions({ ...options });
   const model = new Model(validatedOptions);
   const view = new View(model.getPluginConfig());
   new Controller(model, view);
@@ -102,8 +100,13 @@ $(() => {
     changeRange((e.target as HTMLElement).closest('.test').querySelector('.example input'), newValue);
   }
 
+  function handleInitialChange(e: Event): void {
+    const target = e.target as HTMLInputElement;
+    (target.closest('.test').querySelector('.control-panel input') as HTMLInputElement).value = target.value;
+  }
+
   function handleControlPanelChange(e: Event, initialOptions: any): void {
-    const target = (e.target as HTMLInputElement)
+    const target = e.target as HTMLInputElement;
     const element = target.closest('.control-panel');
 
     const inputs = {
@@ -112,34 +115,32 @@ $(() => {
       minValue: element.querySelector('.js-min-value') as HTMLInputElement,
       maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
       scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
-
-    }
-    
+    };
 
     const inputsState = {
       isTooltipDisabled: inputs.isTooltipDisabled.checked,
       step: inputs.step.value || initialOptions.step,
       minValue: inputs.minValue.value !== '' ? +inputs.minValue.value : initialOptions.minValue,
       maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : initialOptions.maxValue,
-      scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : initialOptions.scaleOptionsNum,
-    }
+      scaleOptionsNum:
+        inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : initialOptions.scaleOptionsNum,
+    };
 
     const slider = target.closest('.test').querySelector('.example');
     slider.textContent = '';
 
-    $(slider).slider({...initialOptions, ...inputsState})
-    bindListeners() 
+    $(slider).slider({ ...initialOptions, ...inputsState });
+    bindListeners();
   }
 
-  function bindListeners() {
-    
+  function bindListeners(): void {
     document.querySelectorAll('.js-control-input-range').forEach(input => {
       (input as HTMLInputElement).value = (input
         .closest('.test')
         .querySelector('.example input') as HTMLInputElement).value;
       input.addEventListener('change', handleRangeChange);
     });
-  
+
     document.querySelectorAll('.js-control-input').forEach(input => {
       (input as HTMLInputElement).value = (input
         .closest('.test')
@@ -150,30 +151,28 @@ $(() => {
     document.querySelectorAll('.example input').forEach(input => {
       input.addEventListener('blur', handleInitialChange);
     });
-  
-    document.querySelectorAll('.test-1 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
-      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions1))
-    })
-    document.querySelectorAll('.test-2 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
-      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions2))
-    })
-    document.querySelectorAll('.test-3 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
-      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions3))
-    })
-    document.querySelectorAll('.test-4 .control-panel input:not(.js-control-input):not(.js-control-input-range)').forEach(input => {
-      input.addEventListener('change',(e) => handleControlPanelChange(e, testOptions4))
-    })
-  }
 
-
-
-  //
-  function handleInitialChange(e: Event): void {
-    const target = e.target as HTMLInputElement;
-    (target.closest('.test').querySelector('.control-panel input') as HTMLInputElement).value = target.value;
+    document
+      .querySelectorAll('.test-1 .control-panel input:not(.js-control-input):not(.js-control-input-range)')
+      .forEach(input => {
+        input.addEventListener('change', e => handleControlPanelChange(e, testOptions1));
+      });
+    document
+      .querySelectorAll('.test-2 .control-panel input:not(.js-control-input):not(.js-control-input-range)')
+      .forEach(input => {
+        input.addEventListener('change', e => handleControlPanelChange(e, testOptions2));
+      });
+    document
+      .querySelectorAll('.test-3 .control-panel input:not(.js-control-input):not(.js-control-input-range)')
+      .forEach(input => {
+        input.addEventListener('change', e => handleControlPanelChange(e, testOptions3));
+      });
+    document
+      .querySelectorAll('.test-4 .control-panel input:not(.js-control-input):not(.js-control-input-range)')
+      .forEach(input => {
+        input.addEventListener('change', e => handleControlPanelChange(e, testOptions4));
+      });
   }
 
   bindListeners();
-
-
 });
