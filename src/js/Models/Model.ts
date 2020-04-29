@@ -10,7 +10,7 @@ export default class Model {
   };
   _value: number | number[];
   onValueChange: Function;
-  _initialValue: any;
+  _initialValue: number | number[];
 
   constructor(options: any) {
     this._options = options;

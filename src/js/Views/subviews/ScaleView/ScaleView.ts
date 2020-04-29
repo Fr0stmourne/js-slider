@@ -1,8 +1,6 @@
 import DefaultView from '../DefaultView/DefaultView';
 import render from '../../../utils/render/render';
 
-const DEFAULT_OPTIONS_NUM = 5;
-
 export default class ScaleView extends DefaultView {
   _options: {
     minValue: number;
@@ -13,7 +11,7 @@ export default class ScaleView extends DefaultView {
   constructor(options: any) {
     super();
     this._options = options;
-    this._options.scaleOptionsNum = options.scaleOptionsNum || DEFAULT_OPTIONS_NUM;
+    this._options.scaleOptionsNum = options.scaleOptionsNum;
     this.render();
   }
 
