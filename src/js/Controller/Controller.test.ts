@@ -49,12 +49,12 @@ describe('Controller constructor', () => {
     expect(view.bindInputChange).toHaveBeenCalled();
   });
 
-  test('should bind onValueChange handler to the model', () => {
+  test('should bind _onValueChange handler to the model', () => {
     const view = new View(testOptions.normal);
     const model = new Model(testOptions.normal);
-    expect(model.onValueChange).not.toBeInstanceOf(Function);
+    expect(model._onValueChange).not.toBeInstanceOf(Function);
 
     new Controller(model, view);
-    expect(model.onValueChange).toBeInstanceOf(Function);
+    expect(model._onValueChange).toBeInstanceOf(Function);
   });
 });

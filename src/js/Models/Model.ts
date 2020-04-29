@@ -9,7 +9,7 @@ export default class Model {
     scaleOptionsNum: number;
   };
   _value: number | number[];
-  onValueChange: Function;
+  _onValueChange: Function;
   _initialValue: number | number[];
 
   constructor(options: any) {
@@ -51,7 +51,7 @@ export default class Model {
       if (this._value > this._options.maxValue) this._value = this._options.maxValue;
       if (this._value < this._options.minValue) this._value = this._options.minValue;
     }
-    if (this.onValueChange) this.onValueChange(this._value);
+    if (this._onValueChange) this._onValueChange(this._value);
   }
 
   getPluginConfig(): any {
@@ -59,6 +59,6 @@ export default class Model {
   }
 
   bindSetValue(handler?: Function): void {
-    this.onValueChange = handler;
+    this._onValueChange = handler;
   }
 }

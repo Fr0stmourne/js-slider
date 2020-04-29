@@ -97,9 +97,9 @@ describe('bindSetValue()', () => {
     }
 
     defaultModel.bindSetValue(testHandler);
-    expect(defaultModel.onValueChange).toEqual(testHandler);
+    expect(defaultModel._onValueChange).toEqual(testHandler);
 
     rangeModel.bindSetValue(testHandler);
-    expect(rangeModel.onValueChange).toEqual(testHandler);
+    expect(rangeModel._onValueChange).toEqual(testHandler);
   });
 });
