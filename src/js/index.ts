@@ -18,6 +18,7 @@ const DEFAULT_CONFIG = {
   defaultValue: 50,
   scaleOptionsNum: 5,
   isTooltipDisabled: false,
+  isVertical: false,
 };
 
 const testOptions2 = {
@@ -51,7 +52,6 @@ const testOptions1 = {
   step: 5,
   defaultValue: 75,
   scaleOptionsNum: 5,
-  // isTooltipDisabled: true,
 };
 
 $.fn.slider = function(options: any): JQuery {
@@ -64,6 +64,7 @@ $.fn.slider = function(options: any): JQuery {
       defaultValue: options.defaultValue || DEFAULT_CONFIG.defaultValue,
       scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
       isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
+      isVertical: options.isVertical || DEFAULT_CONFIG.isVertical
     }
   }
 
@@ -75,19 +76,6 @@ $.fn.slider = function(options: any): JQuery {
   view.updateValue(model.getPluginConfig().defaultValue);
   return this;
 };
-
-// defaultOpt:  {
-//   minValue: 0,
-//   maxValue: 103,
-//   step: 1,
-//   defaultValue: 50,
-//   scaleOptionsNum: 5,
-//   isTooltipDisabled: false,
-// },
-
-//
-
-//
 
 $('#example-1').slider(testOptions1);
 $('#example-2').slider(testOptions2);
