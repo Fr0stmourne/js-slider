@@ -5,6 +5,7 @@ const options = {
   maxValue: 100,
   step: 5,
   defaultValue: 45,
+  scaleOptionsNum: 5,
 };
 
 const optionsWithParameter = {
@@ -27,6 +28,8 @@ describe('ScaleView', () => {
     const scaleWithParam = new ScaleView(optionsWithParameter);
 
     test('default case', () => {
+      console.log(scale.element);
+
       expect(scale.element.querySelectorAll('.js-option').length).toBe(5);
     });
 
