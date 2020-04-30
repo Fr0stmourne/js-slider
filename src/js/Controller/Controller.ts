@@ -6,7 +6,10 @@ export default class Controller {
     this.model = model;
     this.view = view;
     this.view.render();
+    this.connect();
+  }
 
+  connect(): void {
     if (this.model.getPluginConfig().range) {
       const firstPinHandler = (newValue: number): void => {
         this.model.value = [newValue, (this.model.value as number[])[1]];
@@ -18,12 +21,12 @@ export default class Controller {
       this.view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
       this.view.bindMovePin((newValue: number): void => {
-        model.value = newValue;
+        this.model.value = newValue;
       });
     }
 
     this.view.bindInputChange((newValue: number | number[]) => {
-      model.value = newValue;
+      this.model.value = newValue;
     });
 
     this.model.bindSetValue((value: number | number[]) => {
@@ -31,7 +34,7 @@ export default class Controller {
     });
 
     this.view.bindScaleClick((value: number | number[]) => {
-      model.value = value;
+      this.model.value = value;
     });
   }
 }
