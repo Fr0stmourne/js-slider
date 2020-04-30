@@ -136,9 +136,10 @@ export default class View {
   }
 
   render(): void {
+    const VERTICAL_MODIFIER = 'slider-plugin--vertical';
     this._element = render(
       `
-    <div class="slider-plugin js-slider ${this._options.isVertical ? 'slider-plugin--vertical' : ''}">
+    <div class="slider-plugin js-slider ${this._options.isVertical ? VERTICAL_MODIFIER : ''}">
     </div>
     `,
     );
