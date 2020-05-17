@@ -114,7 +114,7 @@ module.exports = {
             options: {
               sourceMap: true,
               config: {
-                path: `${PATHS.src}/js/postcss.config.js`,
+                path: `./postcss.config.js`,
               },
             },
           },
