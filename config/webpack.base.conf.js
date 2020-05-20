@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 const path = require('path');
 const fs = require('fs');
+const glob = require('glob');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -13,8 +16,7 @@ const PATHS = {
   assets: 'assets/',
 };
 
-// const PAGES_DIR = `${PATHS.src}/pug/pages/`;
-// const PAGES = fs.readdirSync(PAGES_DIR).filter(fileName => fileName.endsWith('.pug'));
+const PAGES = glob.sync(`${__dirname}/../src/pages/**/*.html`);
 
 module.exports = {
   // BASE config
@@ -136,11 +138,13 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: `${PATHS.assets}css/[name].css`,
     }),
-    new HtmlWebpackPlugin({
-      hash: false,
-      template: `${PATHS.src}/index.html`,
-      filename: './index.html',
-    }),
+    ...PAGES.map(
+      page =>
+        new HtmlWebpackPlugin({
+          template: `.${page.split('..')[1]}`,
+          filename: `${page.split('/').slice(-1)[0]}`,
+        }),
+    ),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jquery: 'jquery',
@@ -150,29 +154,10 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       {
-        from: `${PATHS.src}/img`,
-        to: `${PATHS.assets}img`,
-      },
-      {
         from: `${PATHS.src}/fonts`,
         to: `${PATHS.assets}fonts`,
       },
-      // {
-      //   from: `${PATHS.src}/pug/components`,
-      //   to: `${PATHS.assets}components`,
-      // },
-      // {
-      //   test: /.+\.(png|svg|jpg)/,
-      //   to: `${PATHS.assets}img`,
-      // },
     ]),
-    // ...PAGES.map(
-    //   page =>
-    //     new HtmlWebpackPlugin({
-    //       template: `${PAGES_DIR}/${page}`,
-    //       filename: `./${page.replace(/\.pug/, '.html')}`,
-    //     }),
-    // ),
     new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
   ],
 };
