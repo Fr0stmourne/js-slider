@@ -15,13 +15,6 @@ export default class ScaleView extends DefaultView {
     this.render();
   }
 
-  _calculateMilestone(index: number, scaleOptionsNum: number): number {
-    return (
-      this._options.minValue +
-      Math.round((index * (this._options.maxValue - this._options.minValue)) / (scaleOptionsNum - 1))
-    );
-  }
-
   onOptionClick(_value: number): void {
     //
   }
@@ -52,5 +45,12 @@ export default class ScaleView extends DefaultView {
     this._element.querySelectorAll('.js-option').forEach(el => {
       el.addEventListener('click', handleOptionClick);
     });
+  }
+
+  _calculateMilestone(index: number, scaleOptionsNum: number): number {
+    return (
+      this._options.minValue +
+      Math.round((index * (this._options.maxValue - this._options.minValue)) / (scaleOptionsNum - 1))
+    );
   }
 }
