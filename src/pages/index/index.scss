@@ -1,0 +1,33 @@
+.index {
+  &__example {
+    width: 100%;
+    max-width: 300px;
+    margin-right: 20px;
+  }
+
+  &__test {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    input {
+      height: auto;
+    }
+  }
+
+  &__control-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 50px auto;
+
+    .index__test {
+      margin-bottom: 50px;
+    }
+  }
+
+}
