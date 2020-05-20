@@ -91,6 +91,15 @@ function handleControlPanelChange(e: Event, initialOptions: any): void {
   bindListeners();
 }
 
+function makeChangeHandler(options: any): EventListener {
+  return (e: Event): void => handleControlPanelChange(e, options);
+}
+
+const defaultHandler = makeChangeHandler(testOptionsDefault);
+const verticalRangeHandler = makeChangeHandler(testOptionsVerticalRange);
+const rangeHandler = makeChangeHandler(testOptionsRange);
+const verticalHandler = makeChangeHandler(testOptionsVertical);
+
 function bindListeners(): void {
   document.querySelectorAll('.js-control-input-range').forEach(input => {
     (input as HTMLInputElement).value = (input
@@ -111,16 +120,16 @@ function bindListeners(): void {
   });
 
   document.querySelectorAll('.js-test-default .js-secondary').forEach(input => {
-    input.addEventListener('change', e => handleControlPanelChange(e, testOptionsDefault));
+    input.addEventListener('change', defaultHandler);
   });
   document.querySelectorAll('.js-test-vr .js-secondary').forEach(input => {
-    input.addEventListener('change', e => handleControlPanelChange(e, testOptionsVerticalRange));
+    input.addEventListener('change', verticalRangeHandler);
   });
   document.querySelectorAll('.js-test-r .js-secondary').forEach(input => {
-    input.addEventListener('change', e => handleControlPanelChange(e, testOptionsRange));
+    input.addEventListener('change', rangeHandler);
   });
   document.querySelectorAll('.js-test-v .js-secondary').forEach(input => {
-    input.addEventListener('change', e => handleControlPanelChange(e, testOptionsVertical));
+    input.addEventListener('change', verticalHandler);
   });
 }
 
