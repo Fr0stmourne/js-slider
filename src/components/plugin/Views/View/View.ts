@@ -1,3 +1,4 @@
+import Options from '../../types';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateValue from '../../utils/calculateValue/calculateValue';
 import PinView from '../subviews/PinView/PinView';
@@ -13,7 +14,7 @@ function render(markup: string): HTMLElement {
 
 export default class View {
   _element: HTMLElement;
-  _options: any;
+  _options: Options;
   _elements: {
     bar: HTMLElement;
     firstPin: HTMLElement;
@@ -24,7 +25,7 @@ export default class View {
   };
   _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView; scale?: ScaleView };
 
-  constructor(config: any) {
+  constructor(config: Options) {
     this._options = config;
     this.render();
   }

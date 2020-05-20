@@ -1,12 +1,12 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable fsd/no-function-declaration-in-event-listener */
+import 'webpack-jquery-ui';
+
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
-import 'webpack-jquery-ui';
+import Options from './types';
 declare global {
   interface JQuery {
-    slider: (options?: object) => JQuery;
+    slider: (options?: Options) => JQuery;
   }
 }
 
@@ -20,8 +20,8 @@ const DEFAULT_CONFIG = {
   isVertical: false,
 };
 
-$.fn.slider = function(options: any): JQuery {
-  function validateOptions(options: any): object {
+$.fn.slider = function(options: Options): JQuery {
+  function validateOptions(options: Options): Options {
     return {
       minValue: options.minValue || DEFAULT_CONFIG.minValue,
       maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,

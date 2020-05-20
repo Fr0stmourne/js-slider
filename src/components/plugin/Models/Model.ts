@@ -1,18 +1,12 @@
+import Options from '../types';
+
 export default class Model {
-  _options: {
-    defaultValue: number | number[];
-    step: number;
-    range: boolean;
-    minValue: number;
-    maxValue: number;
-    isTooltipDisabled?: boolean;
-    scaleOptionsNum: number;
-  };
+  _options: Options;
   _value: number | number[];
   _onValueChange: Function;
   _initialValue: number | number[];
 
-  constructor(options: any) {
+  constructor(options: Options) {
     this._options = options;
     this._initialValue = this._options.defaultValue;
     this._value = Array.isArray(this._initialValue)
@@ -54,7 +48,7 @@ export default class Model {
     if (this._onValueChange) this._onValueChange(this._value);
   }
 
-  getPluginConfig(): any {
+  getPluginConfig(): Options {
     return { ...this._options };
   }
 

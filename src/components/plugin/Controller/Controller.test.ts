@@ -1,10 +1,11 @@
-import Controller from './Controller';
 import View from '../Views/View/View';
 import Model from '../Models/Model';
+import Options from '../types';
+import Controller from './Controller';
 
 jest.mock('../Views/View/View');
 
-const testOptions: any = {
+const testOptions: { normal: Options; range: Options } = {
   normal: {
     minValue: -30,
     maxValue: 100,
@@ -17,7 +18,6 @@ const testOptions: any = {
     maxValue: 100,
     step: 2,
     defaultValue: [6, 64],
-    range: true,
   },
 };
 

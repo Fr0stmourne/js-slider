@@ -1,17 +1,12 @@
+import Options from '../../../types';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class ScaleView extends DefaultView {
-  _options: {
-    minValue: number;
-    maxValue: number;
-    isVertical?: boolean;
-    scaleOptionsNum?: number;
-  };
-  constructor(options: any) {
+  _options: Options;
+  constructor(options: Options) {
     super();
     this._options = options;
-    this._options.scaleOptionsNum = options.scaleOptionsNum;
     this.render();
   }
 

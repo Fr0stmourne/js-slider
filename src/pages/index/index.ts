@@ -1,4 +1,7 @@
-const testOptionsDefault = {
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import Options from '../../components/plugin/types';
+
+const testOptionsDefault: Options = {
   minValue: -33,
   maxValue: 103,
   step: 5,
@@ -6,7 +9,7 @@ const testOptionsDefault = {
   scaleOptionsNum: 5,
 };
 
-const testOptionsVerticalRange = {
+const testOptionsVerticalRange: Options = {
   minValue: -101,
   maxValue: 100,
   step: 8,
@@ -15,14 +18,14 @@ const testOptionsVerticalRange = {
   scaleOptionsNum: 5,
 };
 
-const testOptionsRange = {
+const testOptionsRange: Options = {
   minValue: -33,
   maxValue: 100,
   step: 2,
   defaultValue: [30, 80],
   scaleOptionsNum: 5,
 };
-const testOptionsVertical = {
+const testOptionsVertical: Options = {
   minValue: 0,
   maxValue: 100,
   step: 7,
@@ -63,7 +66,7 @@ function handleSliderChange(e: Event): void {
   (target.closest('.js-test').querySelector('.js-control-panel input') as HTMLInputElement).value = target.value;
 }
 
-function handleControlPanelChange(e: Event, initialOptions: any): void {
+function handleControlPanelChange(e: Event, initialOptions: Options): void {
   const target = e.target as HTMLInputElement;
   const element = target.closest('.js-control-panel');
 
@@ -75,9 +78,9 @@ function handleControlPanelChange(e: Event, initialOptions: any): void {
     scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
   };
 
-  const inputsState = {
+  const inputsState: Options = {
     isTooltipDisabled: inputs.isTooltipDisabled.checked,
-    step: inputs.step.value || initialOptions.step,
+    step: +inputs.step.value || +initialOptions.step,
     minValue: inputs.minValue.value !== '' ? +inputs.minValue.value : initialOptions.minValue,
     maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : initialOptions.maxValue,
     scaleOptionsNum:
@@ -91,7 +94,7 @@ function handleControlPanelChange(e: Event, initialOptions: any): void {
   bindListeners();
 }
 
-function makeChangeHandler(options: any): EventListener {
+function makeChangeHandler(options: Options): EventListener {
   return (e: Event): void => handleControlPanelChange(e, options);
 }
 

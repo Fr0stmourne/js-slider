@@ -1,6 +1,7 @@
+import Options from '../types';
 import Model from './Model';
 
-const testOptions: any = {
+const testOptions: { normal: Options; range: Options } = {
   normal: {
     minValue: -30,
     maxValue: 100,
@@ -13,7 +14,6 @@ const testOptions: any = {
     maxValue: 100,
     step: 2,
     defaultValue: [6, 64],
-    range: true,
   },
 };
 

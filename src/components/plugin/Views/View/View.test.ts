@@ -1,6 +1,7 @@
+import Options from '../../types';
 import View from './View';
 
-const testOptions: any = {
+const testOptions: { normal: Options; vertical: Options; range: Options; rangeVertical: Options } = {
   normal: {
     minValue: -30,
     maxValue: 100,
