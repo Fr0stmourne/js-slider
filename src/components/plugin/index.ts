@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: Options = {
   minValue: 0,
   maxValue: 100,
   step: 1,
