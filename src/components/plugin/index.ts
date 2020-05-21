@@ -4,6 +4,7 @@ import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
 import Options from './types';
+
 declare global {
   interface JQuery {
     slider: (options?: Options) => JQuery;
