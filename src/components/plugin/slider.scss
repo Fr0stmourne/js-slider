@@ -8,7 +8,6 @@
     width: 5px;
     display: flex;
 
-
     .slider-plugin__bar {
       height: 300px;
       width: 100%;
@@ -38,7 +37,6 @@
     .slider-plugin__input {
       margin-left: 20px;
     }
-
   }
 
   &__bar {
@@ -95,5 +93,4 @@
   &__input {
     display: none;
   }
-
 }
