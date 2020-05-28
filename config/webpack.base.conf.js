@@ -103,8 +103,7 @@ module.exports = {
         test: /\.s(a|c)ss$/,
         exclude: /\.module.(s(a|c)ss)$/,
         use: [
-          'style-loader',
-          MiniCssExtractPlugin.loader,
+          this.mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader?url=false',
             options: {
