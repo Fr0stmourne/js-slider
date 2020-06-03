@@ -1,9 +1,9 @@
-import 'webpack-jquery-ui';
-
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
 import Options from './types';
+
+import './slider.scss';
 
 declare global {
   interface JQuery {

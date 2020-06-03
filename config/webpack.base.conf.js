@@ -1,22 +1,36 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
 const path = require('path');
-const fs = require('fs');
-const glob = require('glob');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const glob = require('glob');
 
 const PATHS = {
   src: path.join(__dirname, '../src'),
   dist: path.join(__dirname, '../dist'),
-  assets: 'assets/',
 };
 
-const PAGES = glob.sync(`${__dirname}/../src/pages/**/*.html`);
+const PAGES = glob.sync(`${PATHS.src}/pages/**/*.html`);
+const PAGE_SCRIPTS = glob.sync(`${PATHS.src}/pages/**/*.ts`);
+
+function getEntrypoints(scripts) {
+  const result = {};
+  scripts.forEach(scriptPath => {
+    const scriptName = scriptPath.slice(scriptPath.indexOf('src/pages'));
+    const styleName = scriptName.replace(/\.ts/, '.scss');
+    result[
+      `${scriptPath
+        .split('/')
+        .slice(-1)[0]
+        .replace(/\.ts/, '')}`
+    ] = [`${__dirname}/../${scriptName}`, `${__dirname}/../${styleName}`];
+  });
+
+  return result;
+}
+
+console.log(PAGE_SCRIPTS);
+
 
 module.exports = {
   // BASE config
@@ -24,13 +38,38 @@ module.exports = {
     paths: PATHS,
   },
   entry: {
-    app: ['@babel/polyfill', PATHS.src],
+    utils: [`${__dirname}/../src/utils/scaffoldings.scss`, `${__dirname}/../src/utils/fonts.scss`],
+    plugin: `${__dirname}/../src/components/plugin/index.ts`,
+    ...getEntrypoints(PAGE_SCRIPTS),
   },
   output: {
-    filename: `${PATHS.assets}js/[name].js`,
+    filename: `[name].js`,
     path: PATHS.dist,
     publicPath: '/',
   },
+  stats: {
+    entrypoints: false,
+    children: false,
+  },
+  optimization: {
+    minimize: true,
+    runtimeChunk: { name: 'common' },
+    splitChunks: {
+      cacheGroups: {
+        default: false,
+        commons: {
+          test: /\.jsx?$/,
+          chunks: 'all',
+          minChunks: 2,
+          name: 'common',
+          enforce: true,
+        },
+      },
+    },
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  }, 
   mode: 'base',
   module: {
     rules: [
@@ -41,29 +80,30 @@ module.exports = {
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
+        loader: 'ts-loader'
       },
       {
         test: /\.js$/,
-        loader: ['babel-loader', 'eslint-loader'],
+        loader: this.mode === 'development' ? ['babel-loader', 'eslint-loader'] : 'babel-loader',
         exclude: '/node_modules/',
+        include: path.resolve(__dirname, '../src'),
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
+        test: /\.(jpeg|jpg|png|gif|svg)$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
+          esModule: false,
+          publicPath: './',
+          outputPath: './',
         },
       },
       {
-        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
+          esModule: false,
         },
       },
       {
@@ -71,37 +111,7 @@ module.exports = {
         use: [this.mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.module\.s(a|c)ss$/,
-        use: [
-          this.mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
-          // MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-              modules: true,
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              config: {
-                path: `${PATHS.src}/js/postcss.config.js`,
-              },
-            },
-          },
-          {
-            loader: 'sass-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-        ],
-      },
-      {
         test: /\.s(a|c)ss$/,
-        exclude: /\.module.(s(a|c)ss)$/,
         use: [
           this.mode === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader,
           {
@@ -129,21 +139,10 @@ module.exports = {
       },
     ],
   },
-  resolve: {
-    extensions: ['.js', '.jsx', '.scss', '.ts', '.tsx'],
-  },
   plugins: [
-    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: `${PATHS.assets}css/[name].css`,
+      filename: `[name].css`,
     }),
-    ...PAGES.map(
-      page =>
-        new HtmlWebpackPlugin({
-          template: `.${page.split('..')[1]}`,
-          filename: `${page.split('/').slice(-1)[0]}`,
-        }),
-    ),
     new webpack.ProvidePlugin({
       $: 'jquery',
       jquery: 'jquery',
@@ -151,12 +150,14 @@ module.exports = {
       'window.jQuery': 'jquery',
       'window.$': 'jquery',
     }),
-    new CopyWebpackPlugin([
-      {
-        from: `${PATHS.src}/fonts`,
-        to: `${PATHS.assets}fonts`,
-      },
-    ]),
-    new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
+    ...PAGES.map(pagePath => {
+      const pageName = pagePath.split('/').slice(-1)[0];
+      return new HtmlWebpackPlugin({
+        template: `${__dirname}/../${pagePath.slice(pagePath.indexOf('src/pages'))}`,
+        hash: true,
+        chunks: ['common', pageName.replace(/\.html/, '')],
+        filename: pageName,
+      });
+    }),
   ],
 };
