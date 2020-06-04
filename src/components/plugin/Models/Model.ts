@@ -22,7 +22,9 @@ export default class Model {
   set value(newValue: number | number[]) {
     if (this._options.range) {
       (this._value as number[])[0] = Math.max(
-        (newValue as number[])[0] === this._options.minValue
+        (newValue as number[])[0] <
+          ((Math.ceil(this._options.minValue / this._options.step) * this._options.step - this._options.minValue) / 2 ||
+            this._options.step / 2)
           ? Math.floor((newValue as number[])[0] / this._options.step) * this._options.step
           : Math.ceil((newValue as number[])[0] / this._options.step) * this._options.step,
         this._options.minValue,
