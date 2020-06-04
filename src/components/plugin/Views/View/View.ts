@@ -45,23 +45,14 @@ export default class View {
   }
 
   bindScaleClick(handler?: Function): void {
+    let handleScaleClick;
     if (this._objects.scale) {
       if (this._options.range) {
-        const rangeHandler = (value: number): void => {
-          const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
-          const FIRST_PIN = 0;
-          const SECOND_PIN = 1;
-          pinValues[
-            Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
-              ? FIRST_PIN
-              : SECOND_PIN
-          ] = value;
-          handler(pinValues);
-        };
-        (this._objects.scale.onOptionClick as Function) = rangeHandler;
+        handleScaleClick = (value: number): void => this.applyToCorrectPin(value, handler);
       } else {
-        (this._objects.scale.onOptionClick as Function) = handler;
+        handleScaleClick = handler;
       }
+      (this._objects.scale.onOptionClick as Function) = handleScaleClick;
     }
   }
 
