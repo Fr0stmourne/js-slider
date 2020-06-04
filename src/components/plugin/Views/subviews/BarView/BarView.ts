@@ -7,11 +7,21 @@ export default class BarView extends DefaultView {
     this.render();
   }
 
+  onBarClick(e: Event) {
+    //
+  }
+
   render(): void {
     this._element = render(
       `
       <div class="slider-plugin__bar js-slider-bar"></div>
       `,
     );
+
+    const handleBarClick = (e: Event): void => {
+      this.onBarClick(e);
+    };
+
+    this._element.addEventListener('click', handleBarClick);
   }
 }

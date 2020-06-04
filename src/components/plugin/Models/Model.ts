@@ -38,8 +38,15 @@ export default class Model {
         ];
       }
     } else {
+      console.log(
+        newValue as number,
+        (Math.ceil(this._options.minValue / this._options.step) * this._options.step - this._options.minValue) / 2,
+      );
+
       this._value =
-        (newValue as number) === this._options.minValue
+        (newValue as number) <
+        ((Math.ceil(this._options.minValue / this._options.step) * this._options.step - this._options.minValue) / 2 ||
+          this._options.step / 2)
           ? Math.floor((newValue as number) / this._options.step) * this._options.step
           : Math.ceil((newValue as number) / this._options.step) * this._options.step;
       if (this._value > this._options.maxValue) this._value = this._options.maxValue;

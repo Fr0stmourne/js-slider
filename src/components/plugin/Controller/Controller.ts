@@ -36,5 +36,9 @@ export default class Controller {
     this.view.bindScaleClick((value: number | number[]) => {
       this.model.value = value;
     });
+
+    this.view.bindBarClick((value: number) => {
+      this.model.value = value;
+    })
   }
 }

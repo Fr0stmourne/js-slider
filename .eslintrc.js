@@ -12,7 +12,6 @@ module.exports = {
     "prettier",
     "jest",
     "babel",
-    "react"
   ],
   extends: [
     "plugin:fsd/all",
@@ -21,7 +20,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     "plugin:prettier/recommended",
     "plugin:jest/recommended",
-    "prettier/react",
     "prettier/@typescript-eslint",
   ],
 };

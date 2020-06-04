@@ -87,6 +87,7 @@ export default class View {
 
           const percentage = newValue / sliderSize;
           const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
+          console.log(resultValue);
 
           if (handler) handler(resultValue);
         };
@@ -107,6 +108,27 @@ export default class View {
     } else {
       addPin(this._objects.firstPin, valueHandler as Function);
     }
+  }
+
+  bindBarClick(handler?: Function): void {
+    let handleBarClick;
+    if (this._options.range) {
+      //TODO
+    } else {
+      handleBarClick = (e: Event): void => {
+        const offset = this._options.isVertical
+          ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
+            (e.target as HTMLElement).getBoundingClientRect().height
+          : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+
+        const newValue = calculateValue(offset, this._options.minValue, this._options.maxValue);
+        console.log(newValue);
+
+        if (handler) handler(newValue);
+      };
+    }
+
+    (this._objects.bar.onBarClick as Function) = handleBarClick;
   }
 
   updateValue(value: number | number[]): void {
