@@ -140,6 +140,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new CopyWebpackPlugin([{ from: `${PATHS.src}/images`, to: PATHS.dist }]),
     new MiniCssExtractPlugin({
       filename: `[name].css`,
     }),
