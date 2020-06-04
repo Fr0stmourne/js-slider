@@ -65,6 +65,18 @@ export default class View {
     }
   }
 
+  applyToCorrectPin(value: number, handler?: Function): void {
+    const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
+    const FIRST_PIN = 0;
+    const SECOND_PIN = 1;
+    pinValues[
+      Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
+        ? FIRST_PIN
+        : SECOND_PIN
+    ] = value;
+    handler(pinValues);
+  }
+
   bindMovePin(valueHandler?: Function | Function[]): void {
     const slider: HTMLElement = this._objects.bar.element;
 
@@ -113,7 +125,16 @@ export default class View {
   bindBarClick(handler?: Function): void {
     let handleBarClick;
     if (this._options.range) {
-      //TODO
+      handleBarClick = (e: Event): void => {
+        const offset = this._options.isVertical
+          ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
+            (e.target as HTMLElement).getBoundingClientRect().height
+          : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+
+        const newValue = calculateValue(offset, this._options.minValue, this._options.maxValue);
+
+        this.applyToCorrectPin(newValue, handler);
+      };
     } else {
       handleBarClick = (e: Event): void => {
         const offset = this._options.isVertical
@@ -122,7 +143,6 @@ export default class View {
           : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
         const newValue = calculateValue(offset, this._options.minValue, this._options.maxValue);
-        console.log(newValue);
 
         if (handler) handler(newValue);
       };

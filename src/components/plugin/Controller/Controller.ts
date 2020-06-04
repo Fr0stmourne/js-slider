@@ -37,8 +37,8 @@ export default class Controller {
       this.model.value = value;
     });
 
-    this.view.bindBarClick((value: number) => {
+    this.view.bindBarClick((value: number | number[]) => {
       this.model.value = value;
-    })
+    });
   }
 }
