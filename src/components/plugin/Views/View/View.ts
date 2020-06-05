@@ -48,7 +48,7 @@ export default class View {
     let handleScaleClick;
     if (this._objects.scale) {
       if (this._options.range) {
-        handleScaleClick = (value: number): void => this.applyToCorrectPin(value, handler);
+        handleScaleClick = (value: number): number => this.applyToCorrectPin(value, handler);
       } else {
         handleScaleClick = handler;
       }
@@ -56,16 +56,17 @@ export default class View {
     }
   }
 
-  applyToCorrectPin(value: number, handler?: Function): void {
+  applyToCorrectPin(value: number, handler?: Function): number {
     const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
     const FIRST_PIN = 0;
     const SECOND_PIN = 1;
-    pinValues[
+    const chosenPin =
       Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
         ? FIRST_PIN
-        : SECOND_PIN
-    ] = value;
+        : SECOND_PIN;
+    pinValues[chosenPin] = value;
     handler(pinValues);
+    return chosenPin;
   }
 
   bindMovePin(valueHandler?: Function | Function[]): void {
@@ -90,7 +91,6 @@ export default class View {
 
           const percentage = newValue / sliderSize;
           const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
-          console.log(resultValue);
 
           if (handler) handler(resultValue);
         };

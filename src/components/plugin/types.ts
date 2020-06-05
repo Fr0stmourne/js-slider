@@ -8,3 +8,7 @@ export default interface Options {
   isVertical?: boolean;
   range?: boolean;
 }
+
+// export interface ViewState {
+
+// }

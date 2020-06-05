@@ -138,3 +138,5 @@ function bindListeners(): void {
 }
 
 bindListeners();
+
+$('.js-example-default').slider('log');

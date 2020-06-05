@@ -7,7 +7,7 @@ import './slider.scss';
 
 declare global {
   interface JQuery {
-    slider: (options?: Options) => JQuery;
+    slider: (options?: Options | string) => JQuery;
   }
 }
 
@@ -21,24 +21,52 @@ const DEFAULT_CONFIG: Options = {
   isVertical: false,
 };
 
-$.fn.slider = function(options: Options): JQuery {
-  function validateOptions(options: Options): Options {
-    return {
-      minValue: options.minValue || DEFAULT_CONFIG.minValue,
-      maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
-      step: options.step || DEFAULT_CONFIG.step,
-      defaultValue: options.defaultValue || DEFAULT_CONFIG.defaultValue,
-      scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
-      isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
-      isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
-    };
+const state: any = {
+  model: null,
+  view: null,
+};
+
+$.fn.slider = function(methodOrOptions: Options | string, ...params): any {
+  interface API {
+    log(): void;
+    init(): void;
+    update(value: number | number[]): void;
   }
 
-  const validatedOptions = validateOptions({ ...options });
-  const model = new Model(validatedOptions);
-  const view = new View(model.getPluginConfig());
-  new Controller(model, view);
-  this.append(view.element);
-  view.updateValue(model.getPluginConfig().defaultValue);
-  return this;
+  const pluginAPI: API = {
+    log(): void {
+      console.log('test API');
+      return this;
+    },
+    update(value: number | number[]): void {},
+    init(): JQuery {
+      function validateOptions(options: Options): Options {
+        return {
+          minValue: options.minValue || DEFAULT_CONFIG.minValue,
+          maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
+          step: options.step || DEFAULT_CONFIG.step,
+          defaultValue: options.defaultValue || DEFAULT_CONFIG.defaultValue,
+          scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
+          isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
+          isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
+        };
+      }
+
+      const validatedOptions = validateOptions({ ...(methodOrOptions as Options) });
+      const model = new Model(validatedOptions);
+      const view = new View(model.getPluginConfig());
+      new Controller(model, view);
+      this.append(view.element);
+      view.updateValue(model.getPluginConfig().defaultValue);
+      return this;
+    },
+  };
+
+  if (pluginAPI[methodOrOptions as keyof API]) {
+    return pluginAPI[methodOrOptions as keyof API].apply(this, Array.prototype.slice.call(params, 1));
+  } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
+    return pluginAPI.init.apply(this, params);
+  } else {
+    $.error('Method ' + methodOrOptions + ' does not exist on $.slider');
+  }
 };
