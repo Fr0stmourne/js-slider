@@ -13,33 +13,39 @@ export default class Controller {
     const { model, view } = this;
     if (model.getState().range) {
       const firstPinHandler = (newValue: number): void => {
-        model.value = [newValue, (model.value as number[])[1]];
+        const currentState = model.getState();
+        model.setState({ ...currentState, value: [newValue, (currentState.value as number[])[1]] });
       };
       const secondPinHandler = (newValue: number): void => {
-        model.value = [(model.value as number[])[0], newValue];
+        const currentState = model.getState();
+        model.setState({ ...currentState, value: [(currentState.value as number[])[0], newValue] });
       };
 
       view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
       view.bindMovePin((newValue: number): void => {
-        model.value = newValue;
+        const currentState = model.getState();
+        model.setState({ ...currentState, value: newValue });
       });
     }
 
     view.bindInputChange((newValue: number | number[]) => {
-      model.value = newValue;
+      const currentState = model.getState();
+      model.setState({ ...currentState, value: newValue });
     });
 
-    model.bindSetValue((value: number | number[]) => {
+    model.bindSetState((value: number | number[]) => {
       view.updateValue(value);
     });
 
     view.bindScaleClick((value: number | number[]) => {
-      model.value = value;
+      const currentState = model.getState();
+      model.setState({ ...currentState, value });
     });
 
     view.bindBarClick((value: number | number[]) => {
-      model.value = value;
+      const currentState = model.getState();
+      model.setState({ ...currentState, value });
     });
   }
 }

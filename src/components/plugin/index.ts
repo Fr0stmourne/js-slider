@@ -21,6 +21,24 @@ const DEFAULT_CONFIG: Options = {
   isVertical: false,
 };
 
+function getModelState(options: Options): ModelState {
+  return {
+    minValue: options.minValue || DEFAULT_CONFIG.minValue,
+    maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
+    step: options.step || DEFAULT_CONFIG.step,
+    value: options.defaultValue || DEFAULT_CONFIG.defaultValue,
+    range: Array.isArray(options.defaultValue || DEFAULT_CONFIG.defaultValue),
+  };
+}
+
+function getViewState(options: Options): ViewState {
+  return {
+    scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
+    isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
+    isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
+  };
+}
+
 $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
   interface API {
     log(): void;
@@ -28,26 +46,12 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
     updateValue(value: number | number[]): void;
   }
 
-  // const state: {
-  //   model: ModelState;
-  //   view: ViewState;
-  // } = {
-  //   model: null,
-  //   view: null,
-  // };
-
   const pluginAPI: API = {
     log(): void {
       console.log('test API');
       return this;
     },
-    updateValue(value: number | number[]): void {
-      // console.log(state.model);
-      // const { range } = state.model;
-      // if (range && Array.isArray(value)) {
-      //   throw new Error('New value type must be number, not number[]');
-      // }
-    },
+    updateValue(value: number | number[]): void {},
     init(): JQuery {
       const viewState = getViewState({ ...(methodOrOptions as Options) });
       const modelState = getModelState({ ...(methodOrOptions as Options) });
@@ -59,24 +63,6 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
       return this;
     },
   };
-
-  function getModelState(options: Options): ModelState {
-    return {
-      minValue: options.minValue || DEFAULT_CONFIG.minValue,
-      maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
-      step: options.step || DEFAULT_CONFIG.step,
-      value: options.defaultValue || DEFAULT_CONFIG.defaultValue,
-      range: Array.isArray(options.defaultValue || DEFAULT_CONFIG.defaultValue),
-    };
-  }
-
-  function getViewState(options: Options): ViewState {
-    return {
-      scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
-      isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
-      isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
-    };
-  }
 
   if (pluginAPI[methodOrOptions as keyof API]) {
     return pluginAPI[methodOrOptions as keyof API].apply(this, Array.prototype.slice.call(params, 1));

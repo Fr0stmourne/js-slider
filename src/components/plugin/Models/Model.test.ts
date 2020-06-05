@@ -85,7 +85,7 @@
 //   });
 // });
 
-// describe('bindSetValue()', () => {
+// describe('bindSetState()', () => {
 //   beforeAll(() => {
 //     defaultModel = new Model(testOptions.normal);
 //     rangeModel = new Model(testOptions.range);
@@ -96,10 +96,10 @@
 //       console.log(123);
 //     }
 
-//     defaultModel.bindSetValue(testHandler);
+//     defaultModel.bindSetState(testHandler);
 //     expect(defaultModel._onValueChange).toEqual(testHandler);
 
-//     rangeModel.bindSetValue(testHandler);
+//     rangeModel.bindSetState(testHandler);
 //     expect(rangeModel._onValueChange).toEqual(testHandler);
 //   });
 // });

@@ -1,60 +1,60 @@
 import { ModelState } from '../types';
 
 export default class Model {
-  _options: ModelState;
-  _value: number | number[];
-  _onValueChange: Function;
-  _initialValue: number | number[];
+  _onStateChange: Function;
+  state: ModelState;
 
   constructor(modelState: ModelState) {
-    this._options = modelState;
-    this._initialValue = this._options.value;
-    this._value = Array.isArray(this._initialValue) ? [...(this._options.value as number[])] : this._options.value;
+    this.state = modelState;
   }
 
-  get value(): number | number[] {
-    return this._value;
-  }
-
-  set value(newValue: number | number[]) {
-    const { range, minValue, step, maxValue } = this._options;
+  validateValue(newValue: number | number[]): number | number[] {
+    const { range, minValue, step, maxValue, value } = this.state;
+    let validatedValue;
     if (range) {
-      (this._value as number[])[0] = Math.max(
+      const firstValue = Math.max(
         (newValue as number[])[0] < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
           ? Math.floor((newValue as number[])[0] / step) * step
           : Math.ceil((newValue as number[])[0] / step) * step,
         minValue,
       );
-      (this._value as number[])[1] = Math.min(Math.ceil((newValue as number[])[1] / step) * step, maxValue);
-      if ((this._value as number[])[0] > (this._value as number[])[1]) {
-        this._value = [
-          Math.max((this._value as number[])[1], minValue),
-          Math.min((this._value as number[])[0], maxValue),
-        ];
+
+      const secondValue = Math.min(Math.ceil((newValue as number[])[1] / step) * step, maxValue);
+      if ((value as number[])[0] > (value as number[])[1]) {
+        validatedValue = [Math.max((value as number[])[1], minValue), Math.min((value as number[])[0], maxValue)];
       }
+
+      validatedValue = [firstValue, secondValue];
     } else {
-      this._value =
+      validatedValue =
         (newValue as number) < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
           ? Math.floor((newValue as number) / step) * step
           : Math.ceil((newValue as number) / step) * step;
-      if (this._value > maxValue) this._value = maxValue;
-      if (this._value < minValue) this._value = minValue;
+      if (validatedValue > maxValue) validatedValue = maxValue;
+      if (validatedValue < minValue) validatedValue = minValue;
     }
-    if (this._onValueChange) this._onValueChange(this._value);
+
+    return validatedValue;
   }
 
   getState(): ModelState {
-    return { ...this._options };
+    return { ...this.state };
   }
 
-  setState(modelState: ModelState) {
-    this._options = {
-      ...this._options,
+  setState(modelState: ModelState): void {
+    const validatedState = {
+      ...this.state,
       ...modelState,
+      value: this.validateValue(modelState.value),
     };
+    this.state = {
+      ...this.state,
+      ...validatedState,
+    };
+    if (this._onStateChange) this._onStateChange(this.state.value);
   }
 
-  bindSetValue(handler?: Function): void {
-    this._onValueChange = handler;
+  bindSetState(handler?: Function): void {
+    this._onStateChange = handler;
   }
 }
