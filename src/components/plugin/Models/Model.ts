@@ -8,10 +8,8 @@ export default class Model {
 
   constructor(modelState: ModelState) {
     this._options = modelState;
-    this._initialValue = this._options.defaultValue;
-    this._value = Array.isArray(this._initialValue)
-      ? [...(this._options.defaultValue as number[])]
-      : this._options.defaultValue;
+    this._initialValue = this._options.value;
+    this._value = Array.isArray(this._initialValue) ? [...(this._options.value as number[])] : this._options.value;
   }
 
   get value(): number | number[] {
@@ -45,8 +43,15 @@ export default class Model {
     if (this._onValueChange) this._onValueChange(this._value);
   }
 
-  getPluginConfig(): ModelState {
+  getState(): ModelState {
     return { ...this._options };
+  }
+
+  setState(modelState: ModelState) {
+    this._options = {
+      ...this._options,
+      ...modelState,
+    };
   }
 
   bindSetValue(handler?: Function): void {

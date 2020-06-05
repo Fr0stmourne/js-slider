@@ -19,7 +19,7 @@ export interface ModelState {
   minValue: number;
   maxValue: number;
   step: number;
-  defaultValue: number | number[];
+  value: number | number[];
   range?: boolean;
 }
 

@@ -181,10 +181,10 @@ export default class View {
   render(): void {
     const VERTICAL_MODIFIER = 'slider-plugin--vertical';
     const { isVertical, scaleOptionsNum, isTooltipDisabled } = this._viewOptions;
-    const { defaultValue, minValue, maxValue, range } = this._modelOptions;
+    const { value, minValue, maxValue, range } = this._modelOptions;
     this._element = render(
       `
-    <div class="slider-plugin js-slider ${this._viewOptions.isVertical ? VERTICAL_MODIFIER : ''}">
+    <div class="slider-plugin js-slider ${isVertical ? VERTICAL_MODIFIER : ''}">
     </div>
     `,
     );
@@ -192,12 +192,12 @@ export default class View {
       pinNumber: 1,
       isTooltipDisabled,
       isVertical,
-      value: (range ? (defaultValue as number[])[0] : defaultValue) as number,
+      value: (range ? (value as number[])[0] : value) as number,
     };
     this._objects = {
       bar: new BarView(),
       firstPin: new PinView(firstPinData),
-      input: new InputView(defaultValue),
+      input: new InputView(value),
     };
 
     if (scaleOptionsNum) {
@@ -215,7 +215,7 @@ export default class View {
         pinNumber: 2,
         isTooltipDisabled,
         isVertical,
-        value: (defaultValue as number[])[1],
+        value: (value as number[])[1],
       };
       this._objects.secondPin = new PinView(secondPinData);
     }

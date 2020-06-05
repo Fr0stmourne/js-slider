@@ -11,7 +11,7 @@ export default class Controller {
 
   connect(): void {
     const { model, view } = this;
-    if (model.getPluginConfig().range) {
+    if (model.getState().range) {
       const firstPinHandler = (newValue: number): void => {
         model.value = [newValue, (model.value as number[])[1]];
       };

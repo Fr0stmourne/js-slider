@@ -73,15 +73,15 @@
 //   });
 // });
 
-// describe('getPluginConfig()', () => {
+// describe('getState()', () => {
 //   beforeAll(() => {
 //     defaultModel = new Model(testOptions.normal);
 //     rangeModel = new Model(testOptions.range);
 //   });
 
 //   test('should return options object', () => {
-//     expect(defaultModel.getPluginConfig()).toEqual(testOptions.normal);
-//     expect(rangeModel.getPluginConfig()).toEqual(testOptions.range);
+//     expect(defaultModel.getState()).toEqual(testOptions.normal);
+//     expect(rangeModel.getState()).toEqual(testOptions.range);
 //   });
 // });
 
