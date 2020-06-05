@@ -1,18 +1,17 @@
-import Options from '../types';
+import { ModelState } from '../types';
 
 export default class Model {
-  _options: Options;
+  _options: ModelState;
   _value: number | number[];
   _onValueChange: Function;
   _initialValue: number | number[];
 
-  constructor(options: Options) {
-    this._options = options;
+  constructor(modelState: ModelState) {
+    this._options = modelState;
     this._initialValue = this._options.defaultValue;
     this._value = Array.isArray(this._initialValue)
       ? [...(this._options.defaultValue as number[])]
       : this._options.defaultValue;
-    this._options.range = Array.isArray(this._options.defaultValue);
   }
 
   get value(): number | number[] {
@@ -57,7 +56,7 @@ export default class Model {
     if (this._onValueChange) this._onValueChange(this._value);
   }
 
-  getPluginConfig(): Options {
+  getPluginConfig(): ModelState {
     return { ...this._options };
   }
 

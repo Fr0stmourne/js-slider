@@ -1,4 +1,4 @@
-import Options from '../../../types';
+import { Options, PinData } from '../../../types';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
@@ -9,12 +9,12 @@ export default class PinView extends DefaultView {
   isVertical: boolean;
   _elements: { pin: HTMLElement; tooltip: HTMLElement };
 
-  constructor(options: Options, pinNumber: number) {
+  constructor(options: PinData) {
     super();
-    this.pinNumber = pinNumber;
+    this.pinNumber = options.pinNumber;
     this.isTooltipDisabled = options.isTooltipDisabled;
     this.isVertical = options.isVertical;
-    this._value = options.defaultValue as number;
+    this._value = options.value as number;
 
     this.render();
   }

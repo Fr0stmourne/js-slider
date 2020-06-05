@@ -1,12 +1,18 @@
-import Options from '../../../types';
+import { Options, ScaleData } from '../../../types';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class ScaleView extends DefaultView {
-  _options: Options;
-  constructor(options: Options) {
+  scaleOptionsNum: number;
+  isVertical: boolean;
+  minValue: number;
+  maxValue: number;
+  constructor(options: ScaleData) {
     super();
-    this._options = options;
+    this.scaleOptionsNum = options.scaleOptionsNum;
+    this.isVertical = options.isVertical;
+    this.minValue = options.minValue;
+    this.maxValue = options.maxValue;
     this.render();
   }
 
@@ -15,20 +21,16 @@ export default class ScaleView extends DefaultView {
   }
 
   render(): void {
-    const scaleOptionsNum = this._options.scaleOptionsNum;
+    const { scaleOptionsNum, isVertical } = this;
     const options = new Array(scaleOptionsNum)
       .fill(null)
       .map(
-        (el, index) =>
-          `<div class="slider-plugin__scale-option js-option">${this._calculateMilestone(
-            index,
-            scaleOptionsNum,
-          )}</div>`,
+        (el, index) => `<div class="slider-plugin__scale-option js-option">${this._calculateMilestone(index)}</div>`,
       );
     this._element = render(
       `
       <div class="slider-plugin__scale js-scale">
-        ${this._options.isVertical ? options.reverse().join('') : options.join('')}
+        ${isVertical ? options.reverse().join('') : options.join('')}
       </div>
       `,
     );
@@ -45,10 +47,8 @@ export default class ScaleView extends DefaultView {
     });
   }
 
-  _calculateMilestone(index: number, scaleOptionsNum: number): number {
-    return (
-      this._options.minValue +
-      Math.round((index * (this._options.maxValue - this._options.minValue)) / (scaleOptionsNum - 1))
-    );
+  _calculateMilestone(index: number): number {
+    const { minValue, maxValue, scaleOptionsNum } = this;
+    return minValue + Math.round((index * (maxValue - minValue)) / (scaleOptionsNum - 1));
   }
 }

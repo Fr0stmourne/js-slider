@@ -1,4 +1,4 @@
-import Options from '../../types';
+import { ViewState, ModelState, PinData, ScaleData } from '../../types';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateValue from '../../utils/calculateValue/calculateValue';
 import PinView from '../subviews/PinView/PinView';
@@ -14,7 +14,8 @@ function render(markup: string): HTMLElement {
 
 export default class View {
   _element: HTMLElement;
-  _options: Options;
+  _viewOptions: ViewState;
+  _modelOptions: ModelState;
   _elements: {
     bar: HTMLElement;
     firstPin: HTMLElement;
@@ -25,8 +26,9 @@ export default class View {
   };
   _objects: { bar: BarView; firstPin: PinView; secondPin?: PinView; input: InputView; scale?: ScaleView };
 
-  constructor(config: Options) {
-    this._options = config;
+  constructor(viewState: ViewState, modelState: ModelState) {
+    this._viewOptions = viewState;
+    this._modelOptions = modelState;
     this.render();
   }
 
@@ -37,7 +39,7 @@ export default class View {
   bindInputChange(handler?: Function): void {
     const input: InputView = this._objects.input;
     input.element.onchange = (e): void => {
-      const newValue: number | number[] = this._options.range
+      const newValue: number | number[] = this._modelOptions.range
         ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
         : +(e.target as HTMLInputElement).value;
       handler(newValue);
@@ -47,7 +49,7 @@ export default class View {
   bindScaleClick(handler?: Function): void {
     let handleScaleClick;
     if (this._objects.scale) {
-      if (this._options.range) {
+      if (this._modelOptions.range) {
         handleScaleClick = (value: number): number => this.applyToCorrectPin(value, handler);
       } else {
         handleScaleClick = handler;
@@ -75,22 +77,22 @@ export default class View {
     const addPin = (pin: PinView, handler?: Function): void => {
       pin.element.onmousedown = (event): void => {
         event.preventDefault();
-        const shift = this._options.isVertical
+        const shift = this._viewOptions.isVertical
           ? event.clientY - pin.element.getBoundingClientRect().bottom
           : event.clientX - pin.element.getBoundingClientRect().left;
 
         const onMouseMove = (e: MouseEvent): void => {
-          let newValue = this._options.isVertical
+          let newValue = this._viewOptions.isVertical
             ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
             : e.clientX - shift - slider.getBoundingClientRect().left;
 
-          const sliderSize = this._options.isVertical ? slider.offsetHeight : slider.offsetWidth;
+          const sliderSize = this._viewOptions.isVertical ? slider.offsetHeight : slider.offsetWidth;
           if (newValue < 0) newValue = 0;
           const rightEdge = sliderSize;
           if (newValue > rightEdge) newValue = rightEdge;
 
           const percentage = newValue / sliderSize;
-          const resultValue = calculateValue(+percentage, this._options.minValue, this._options.maxValue);
+          const resultValue = calculateValue(+percentage, this._modelOptions.minValue, this._modelOptions.maxValue);
 
           if (handler) handler(resultValue);
         };
@@ -105,7 +107,7 @@ export default class View {
       };
     };
 
-    if (this._options.range) {
+    if (this._modelOptions.range) {
       addPin(this._objects.firstPin, (valueHandler as Function[])[0]);
       addPin(this._objects.secondPin, (valueHandler as Function[])[1]);
     } else {
@@ -115,25 +117,25 @@ export default class View {
 
   bindBarClick(handler?: Function): void {
     let handleBarClick;
-    if (this._options.range) {
+    if (this._modelOptions.range) {
       handleBarClick = (e: Event): void => {
-        const offset = this._options.isVertical
+        const offset = this._viewOptions.isVertical
           ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
             (e.target as HTMLElement).getBoundingClientRect().height
           : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
-        const newValue = calculateValue(offset, this._options.minValue, this._options.maxValue);
+        const newValue = calculateValue(offset, this._modelOptions.minValue, this._modelOptions.maxValue);
 
         this.applyToCorrectPin(newValue, handler);
       };
     } else {
       handleBarClick = (e: Event): void => {
-        const offset = this._options.isVertical
+        const offset = this._viewOptions.isVertical
           ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
             (e.target as HTMLElement).getBoundingClientRect().height
           : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
-        const newValue = calculateValue(offset, this._options.minValue, this._options.maxValue);
+        const newValue = calculateValue(offset, this._modelOptions.minValue, this._modelOptions.maxValue);
 
         if (handler) handler(newValue);
       };
@@ -143,14 +145,16 @@ export default class View {
   }
 
   updateValue(value: number | number[]): void {
-    if (this._options.range) {
+    if (this._modelOptions.range) {
       const pins = [1, 2];
       const pxNums = pins.map((el, idx) =>
         calculatePxNum(
           (value as number[])[idx],
-          this._options.minValue,
-          this._options.maxValue,
-          this._options.isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
+          this._modelOptions.minValue,
+          this._modelOptions.maxValue,
+          this._viewOptions.isVertical
+            ? +this._objects.bar.element.clientHeight
+            : +this._objects.bar.element.clientWidth,
         ),
       );
 
@@ -159,9 +163,9 @@ export default class View {
     } else {
       const pxNum = calculatePxNum(
         value as number,
-        this._options.minValue,
-        this._options.maxValue,
-        this._options.isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
+        this._modelOptions.minValue,
+        this._modelOptions.maxValue,
+        this._viewOptions.isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
       );
       this._objects.firstPin.updateValue(pxNum, value as number);
     }
@@ -171,24 +175,44 @@ export default class View {
 
   render(): void {
     const VERTICAL_MODIFIER = 'slider-plugin--vertical';
+    const { isVertical, scaleOptionsNum, isTooltipDisabled } = this._viewOptions;
+    const { defaultValue, minValue, maxValue, range } = this._modelOptions;
     this._element = render(
       `
-    <div class="slider-plugin js-slider ${this._options.isVertical ? VERTICAL_MODIFIER : ''}">
+    <div class="slider-plugin js-slider ${this._viewOptions.isVertical ? VERTICAL_MODIFIER : ''}">
     </div>
     `,
     );
+    const firstPinData: PinData = {
+      pinNumber: 1,
+      isTooltipDisabled,
+      isVertical,
+      value: (range ? (defaultValue as number[])[0] : defaultValue) as number,
+    };
     this._objects = {
       bar: new BarView(),
-      firstPin: new PinView(this._options, 1),
-      input: new InputView(this._options.defaultValue),
+      firstPin: new PinView(firstPinData),
+      input: new InputView(this._modelOptions.defaultValue),
     };
 
-    if (this._options.scaleOptionsNum) {
-      this._objects.scale = new ScaleView(this._options);
+    if (this._viewOptions.scaleOptionsNum) {
+      const scaleData: ScaleData = {
+        scaleOptionsNum: scaleOptionsNum,
+        isVertical,
+        minValue,
+        maxValue,
+      };
+      this._objects.scale = new ScaleView(scaleData);
     }
 
-    if (this._options.range) {
-      this._objects.secondPin = new PinView(this._options, 2);
+    if (this._modelOptions.range) {
+      const secondPinData: PinData = {
+        pinNumber: 2,
+        isTooltipDisabled,
+        isVertical,
+        value: (defaultValue as number[])[1],
+      };
+      this._objects.secondPin = new PinView(secondPinData);
     }
     Object.values(this._objects).forEach(node => {
       if (node !== this._objects.scale) this._element.append(node.element);

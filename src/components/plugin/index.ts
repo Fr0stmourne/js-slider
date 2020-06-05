@@ -1,7 +1,7 @@
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
-import Options from './types';
+import { Options, ModelState, ViewState } from './types';
 
 import './slider.scss';
 
@@ -21,7 +21,10 @@ const DEFAULT_CONFIG: Options = {
   isVertical: false,
 };
 
-const state: any = {
+const state: {
+  model: ModelState;
+  view: ViewState;
+} = {
   model: null,
   view: null,
 };
@@ -52,9 +55,27 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params): any {
         };
       }
 
+      function setAppState(options: Options): void {
+        state.model = {
+          minValue: options.minValue || DEFAULT_CONFIG.minValue,
+          maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
+          step: options.step || DEFAULT_CONFIG.step,
+          defaultValue: options.defaultValue || DEFAULT_CONFIG.defaultValue,
+          range: Array.isArray(options.defaultValue || DEFAULT_CONFIG.defaultValue),
+        };
+
+        state.view = {
+          scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
+          isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
+          isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
+        };
+      }
+
+      setAppState({ ...(methodOrOptions as Options) });
+
       const validatedOptions = validateOptions({ ...(methodOrOptions as Options) });
-      const model = new Model(validatedOptions);
-      const view = new View(model.getPluginConfig());
+      const model = new Model(state.model);
+      const view = new View(state.view, state.model);
       new Controller(model, view);
       this.append(view.element);
       view.updateValue(model.getPluginConfig().defaultValue);
