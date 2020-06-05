@@ -19,39 +19,28 @@ export default class Model {
   }
 
   set value(newValue: number | number[]) {
-    if (this._options.range) {
+    const { range, minValue, step, maxValue } = this._options;
+    if (range) {
       (this._value as number[])[0] = Math.max(
-        (newValue as number[])[0] <
-          ((Math.ceil(this._options.minValue / this._options.step) * this._options.step - this._options.minValue) / 2 ||
-            this._options.step / 2)
-          ? Math.floor((newValue as number[])[0] / this._options.step) * this._options.step
-          : Math.ceil((newValue as number[])[0] / this._options.step) * this._options.step,
-        this._options.minValue,
+        (newValue as number[])[0] < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
+          ? Math.floor((newValue as number[])[0] / step) * step
+          : Math.ceil((newValue as number[])[0] / step) * step,
+        minValue,
       );
-      (this._value as number[])[1] = Math.min(
-        Math.ceil((newValue as number[])[1] / this._options.step) * this._options.step,
-        this._options.maxValue,
-      );
+      (this._value as number[])[1] = Math.min(Math.ceil((newValue as number[])[1] / step) * step, maxValue);
       if ((this._value as number[])[0] > (this._value as number[])[1]) {
         this._value = [
-          Math.max((this._value as number[])[1], this._options.minValue),
-          Math.min((this._value as number[])[0], this._options.maxValue),
+          Math.max((this._value as number[])[1], minValue),
+          Math.min((this._value as number[])[0], maxValue),
         ];
       }
     } else {
-      console.log(
-        newValue as number,
-        (Math.ceil(this._options.minValue / this._options.step) * this._options.step - this._options.minValue) / 2,
-      );
-
       this._value =
-        (newValue as number) <
-        ((Math.ceil(this._options.minValue / this._options.step) * this._options.step - this._options.minValue) / 2 ||
-          this._options.step / 2)
-          ? Math.floor((newValue as number) / this._options.step) * this._options.step
-          : Math.ceil((newValue as number) / this._options.step) * this._options.step;
-      if (this._value > this._options.maxValue) this._value = this._options.maxValue;
-      if (this._value < this._options.minValue) this._value = this._options.minValue;
+        (newValue as number) < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
+          ? Math.floor((newValue as number) / step) * step
+          : Math.ceil((newValue as number) / step) * step;
+      if (this._value > maxValue) this._value = maxValue;
+      if (this._value < minValue) this._value = minValue;
     }
     if (this._onValueChange) this._onValueChange(this._value);
   }

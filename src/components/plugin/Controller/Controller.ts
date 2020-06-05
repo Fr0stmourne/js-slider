@@ -10,35 +10,36 @@ export default class Controller {
   }
 
   connect(): void {
-    if (this.model.getPluginConfig().range) {
+    const { model, view } = this;
+    if (model.getPluginConfig().range) {
       const firstPinHandler = (newValue: number): void => {
-        this.model.value = [newValue, (this.model.value as number[])[1]];
+        model.value = [newValue, (model.value as number[])[1]];
       };
       const secondPinHandler = (newValue: number): void => {
-        this.model.value = [(this.model.value as number[])[0], newValue];
+        model.value = [(model.value as number[])[0], newValue];
       };
 
-      this.view.bindMovePin([firstPinHandler, secondPinHandler]);
+      view.bindMovePin([firstPinHandler, secondPinHandler]);
     } else {
-      this.view.bindMovePin((newValue: number): void => {
-        this.model.value = newValue;
+      view.bindMovePin((newValue: number): void => {
+        model.value = newValue;
       });
     }
 
-    this.view.bindInputChange((newValue: number | number[]) => {
-      this.model.value = newValue;
+    view.bindInputChange((newValue: number | number[]) => {
+      model.value = newValue;
     });
 
-    this.model.bindSetValue((value: number | number[]) => {
-      this.view.updateValue(value);
+    model.bindSetValue((value: number | number[]) => {
+      view.updateValue(value);
     });
 
-    this.view.bindScaleClick((value: number | number[]) => {
-      this.model.value = value;
+    view.bindScaleClick((value: number | number[]) => {
+      model.value = value;
     });
 
-    this.view.bindBarClick((value: number | number[]) => {
-      this.model.value = value;
+    view.bindBarClick((value: number | number[]) => {
+      model.value = value;
     });
   }
 }

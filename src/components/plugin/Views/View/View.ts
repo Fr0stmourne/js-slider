@@ -73,26 +73,28 @@ export default class View {
 
   bindMovePin(valueHandler?: Function | Function[]): void {
     const slider: HTMLElement = this._objects.bar.element;
+    const { isVertical } = this._viewOptions;
+    const { minValue, maxValue, range } = this._modelOptions;
 
     const addPin = (pin: PinView, handler?: Function): void => {
       pin.element.onmousedown = (event): void => {
         event.preventDefault();
-        const shift = this._viewOptions.isVertical
+        const shift = isVertical
           ? event.clientY - pin.element.getBoundingClientRect().bottom
           : event.clientX - pin.element.getBoundingClientRect().left;
 
         const onMouseMove = (e: MouseEvent): void => {
-          let newValue = this._viewOptions.isVertical
+          let newValue = isVertical
             ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
             : e.clientX - shift - slider.getBoundingClientRect().left;
 
-          const sliderSize = this._viewOptions.isVertical ? slider.offsetHeight : slider.offsetWidth;
+          const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
           if (newValue < 0) newValue = 0;
           const rightEdge = sliderSize;
           if (newValue > rightEdge) newValue = rightEdge;
 
           const percentage = newValue / sliderSize;
-          const resultValue = calculateValue(+percentage, this._modelOptions.minValue, this._modelOptions.maxValue);
+          const resultValue = calculateValue(+percentage, minValue, maxValue);
 
           if (handler) handler(resultValue);
         };
@@ -107,7 +109,7 @@ export default class View {
       };
     };
 
-    if (this._modelOptions.range) {
+    if (range) {
       addPin(this._objects.firstPin, (valueHandler as Function[])[0]);
       addPin(this._objects.secondPin, (valueHandler as Function[])[1]);
     } else {
@@ -117,25 +119,28 @@ export default class View {
 
   bindBarClick(handler?: Function): void {
     let handleBarClick;
-    if (this._modelOptions.range) {
+    const { isVertical } = this._viewOptions;
+    const { minValue, maxValue, range } = this._modelOptions;
+
+    if (range) {
       handleBarClick = (e: Event): void => {
-        const offset = this._viewOptions.isVertical
+        const offset = isVertical
           ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
             (e.target as HTMLElement).getBoundingClientRect().height
           : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
-        const newValue = calculateValue(offset, this._modelOptions.minValue, this._modelOptions.maxValue);
+        const newValue = calculateValue(offset, minValue, maxValue);
 
         this.applyToCorrectPin(newValue, handler);
       };
     } else {
       handleBarClick = (e: Event): void => {
-        const offset = this._viewOptions.isVertical
+        const offset = isVertical
           ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
             (e.target as HTMLElement).getBoundingClientRect().height
           : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
-        const newValue = calculateValue(offset, this._modelOptions.minValue, this._modelOptions.maxValue);
+        const newValue = calculateValue(offset, minValue, maxValue);
 
         if (handler) handler(newValue);
       };
@@ -145,16 +150,16 @@ export default class View {
   }
 
   updateValue(value: number | number[]): void {
-    if (this._modelOptions.range) {
+    const { isVertical } = this._viewOptions;
+    const { minValue, maxValue, range } = this._modelOptions;
+    if (range) {
       const pins = [1, 2];
       const pxNums = pins.map((el, idx) =>
         calculatePxNum(
           (value as number[])[idx],
-          this._modelOptions.minValue,
-          this._modelOptions.maxValue,
-          this._viewOptions.isVertical
-            ? +this._objects.bar.element.clientHeight
-            : +this._objects.bar.element.clientWidth,
+          minValue,
+          maxValue,
+          isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
         ),
       );
 
@@ -163,9 +168,9 @@ export default class View {
     } else {
       const pxNum = calculatePxNum(
         value as number,
-        this._modelOptions.minValue,
-        this._modelOptions.maxValue,
-        this._viewOptions.isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
+        minValue,
+        maxValue,
+        isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
       );
       this._objects.firstPin.updateValue(pxNum, value as number);
     }
@@ -192,10 +197,10 @@ export default class View {
     this._objects = {
       bar: new BarView(),
       firstPin: new PinView(firstPinData),
-      input: new InputView(this._modelOptions.defaultValue),
+      input: new InputView(defaultValue),
     };
 
-    if (this._viewOptions.scaleOptionsNum) {
+    if (scaleOptionsNum) {
       const scaleData: ScaleData = {
         scaleOptionsNum: scaleOptionsNum,
         isVertical,
@@ -205,7 +210,7 @@ export default class View {
       this._objects.scale = new ScaleView(scaleData);
     }
 
-    if (this._modelOptions.range) {
+    if (range) {
       const secondPinData: PinData = {
         pinNumber: 2,
         isTooltipDisabled,

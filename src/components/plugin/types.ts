@@ -21,7 +21,6 @@ export interface ModelState {
   step: number;
   defaultValue: number | number[];
   range?: boolean;
-  rangetest?: Function;
 }
 
 export interface PinData {
