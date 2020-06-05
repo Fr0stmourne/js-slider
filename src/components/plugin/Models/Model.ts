@@ -42,6 +42,7 @@ export default class Model {
   }
 
   setState(modelState: ModelState): void {
+    console.log(modelState);
     const validatedState = {
       ...this.state,
       ...modelState,
@@ -51,6 +52,7 @@ export default class Model {
       ...this.state,
       ...validatedState,
     };
+
     if (this._onStateChange) this._onStateChange(this.state.value);
   }
 

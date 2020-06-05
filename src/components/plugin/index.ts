@@ -51,7 +51,15 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
       console.log('test API');
       return this;
     },
-    updateValue(value: number | number[]): void {},
+    updateValue(value: number | number[]): void {
+      console.log(value);
+
+      const model = $(this).data().slider.model;
+      model.setState({
+        ...model.getState(),
+        value,
+      });
+    },
     init(): JQuery {
       const viewState = getViewState({ ...(methodOrOptions as Options) });
       const modelState = getModelState({ ...(methodOrOptions as Options) });
@@ -65,7 +73,7 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
   };
 
   if (pluginAPI[methodOrOptions as keyof API]) {
-    return pluginAPI[methodOrOptions as keyof API].apply(this, Array.prototype.slice.call(params, 1));
+    return pluginAPI[methodOrOptions as keyof API].apply(this, params);
   } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
     return pluginAPI.init.apply(this, params);
   } else {

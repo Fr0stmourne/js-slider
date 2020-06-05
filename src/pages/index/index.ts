@@ -140,4 +140,6 @@ function bindListeners(): void {
 bindListeners();
 
 $('.js-example-default').slider('log');
-$('.js-example-default').slider('updateValue', 50);
+
+// $('.js-example-default').slider('updateValue', 33);
+// $('.js-example-vr').slider('updateValue', [-75, 75]);
