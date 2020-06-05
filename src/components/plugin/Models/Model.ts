@@ -20,11 +20,11 @@ export default class Model {
       );
 
       const secondValue = Math.min(Math.ceil((newValue as number[])[1] / step) * step, maxValue);
-      if ((value as number[])[0] > (value as number[])[1]) {
-        validatedValue = [Math.max((value as number[])[1], minValue), Math.min((value as number[])[0], maxValue)];
-      }
-
       validatedValue = [firstValue, secondValue];
+
+      if (firstValue >= secondValue) {
+        validatedValue = value;
+      }
     } else {
       validatedValue =
         (newValue as number) < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
