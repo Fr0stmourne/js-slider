@@ -1,4 +1,5 @@
 import { ModelState } from '../types';
+import deleteUndef from '../utils/deleteUndef/deleteUndef';
 
 export default class Model {
   _onStateChange: Function;
@@ -9,6 +10,7 @@ export default class Model {
   }
 
   validateValue(newValue: number | number[], state: ModelState): number | number[] {
+    if (newValue === undefined) return this.state.value;
     const { minValue, step, maxValue, value } = state;
     let validatedValue;
     if (Array.isArray(newValue)) {
@@ -38,6 +40,12 @@ export default class Model {
   }
 
   validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
+    if (minValue === undefined || maxValue === undefined) {
+      return {
+        minValue: this.state.minValue,
+        maxValue: this.state.maxValue,
+      };
+    }
     return minValue > maxValue
       ? {
           minValue: maxValue,
@@ -50,7 +58,7 @@ export default class Model {
   }
 
   validateStep(step: number): number {
-    return Math.abs(step);
+    return Math.abs(step) || this.state.step;
   }
 
   validateState(newState: ModelState): ModelState {
@@ -63,13 +71,17 @@ export default class Model {
       ...validatedMinMaxValues,
     });
 
-    return {
+    const validatedState = {
       ...this.state,
       step: validatedStep,
       ...validatedMinMaxValues,
       value: validatedValue,
       range: Array.isArray(validatedValue),
     };
+
+    deleteUndef(validatedState);
+
+    return validatedState;
   }
 
   getState(): ModelState {

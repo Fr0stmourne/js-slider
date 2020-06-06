@@ -7,7 +7,7 @@ const testOptionsDefault: Options = {
   maxValue: 103,
   step: 5,
   value: 75,
-  scaleOptionsNum: 5,
+  scaleOptionsNum: 6,
 };
 
 const testOptionsVerticalRange: Options = {
@@ -36,9 +36,9 @@ const testOptionsVertical: Options = {
 };
 
 $('.js-example-default').slider(testOptionsDefault);
-$('.js-example-vr').slider(testOptionsVerticalRange);
-$('.js-example-r').slider(testOptionsRange);
-$('.js-example-v').slider(testOptionsVertical);
+// $('.js-example-vr').slider(testOptionsVerticalRange);
+// $('.js-example-r').slider(testOptionsRange);
+// $('.js-example-v').slider(testOptionsVertical);
 
 function change(el: HTMLElement, val: number): void {
   $(el).val(String(val));
@@ -65,88 +65,89 @@ function handleSliderChange(e: Event): void {
   (target.closest('.js-test').querySelector('.js-control-panel input') as HTMLInputElement).value = target.value;
 }
 
-function handleControlPanelChange(e: Event, initialOptions: Options): void {
-  const target = e.target as HTMLInputElement;
-  const element = target.closest('.js-control-panel');
+// function handleControlPanelChange(e: Event, initialOptions: Options): void {
+//   const target = e.target as HTMLInputElement;
+//   const element = target.closest('.js-control-panel');
 
-  const inputs = {
-    isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
-    step: element.querySelector('.js-step') as HTMLInputElement,
-    minValue: element.querySelector('.js-min-value') as HTMLInputElement,
-    maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
-    scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
-  };
+//   const inputs = {
+//     isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
+//     step: element.querySelector('.js-step') as HTMLInputElement,
+//     minValue: element.querySelector('.js-min-value') as HTMLInputElement,
+//     maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
+//     scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
+//   };
 
-  const inputsState: Options = {
-    isTooltipDisabled: inputs.isTooltipDisabled.checked,
-    step: +inputs.step.value || +initialOptions.step,
-    minValue: inputs.minValue.value !== '' ? +inputs.minValue.value : initialOptions.minValue,
-    maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : initialOptions.maxValue,
-    scaleOptionsNum:
-      inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : initialOptions.scaleOptionsNum,
-  };
+//   const inputsState: Options = {
+//     isTooltipDisabled: inputs.isTooltipDisabled.checked,
+//     step: +inputs.step.value || +initialOptions.step,
+//     minValue: inputs.minValue.value !== '' ? +inputs.minValue.value : initialOptions.minValue,
+//     maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : initialOptions.maxValue,
+//     scaleOptionsNum:
+//       inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : initialOptions.scaleOptionsNum,
+//   };
 
-  const slider = target.closest('.js-test').querySelector('.js-example');
-  slider.textContent = '';
+//   const slider = target.closest('.js-test').querySelector('.js-example');
+//   slider.textContent = '';
 
-  $(slider).slider({ ...initialOptions, ...inputsState });
-  bindListeners();
-}
+//   $(slider).slider({ ...initialOptions, ...inputsState });
+//   bindListeners();
+// }
 
-function makeChangeHandler(options: Options): EventListener {
-  return (e: Event): void => handleControlPanelChange(e, options);
-}
+// function makeChangeHandler(options: Options): EventListener {
+//   return (e: Event): void => handleControlPanelChange(e, options);
+// }
 
-const defaultHandler = makeChangeHandler(testOptionsDefault);
-const verticalRangeHandler = makeChangeHandler(testOptionsVerticalRange);
-const rangeHandler = makeChangeHandler(testOptionsRange);
-const verticalHandler = makeChangeHandler(testOptionsVertical);
+// const defaultHandler = makeChangeHandler(testOptionsDefault);
+// const verticalRangeHandler = makeChangeHandler(testOptionsVerticalRange);
+// const rangeHandler = makeChangeHandler(testOptionsRange);
+// const verticalHandler = makeChangeHandler(testOptionsVertical);
 
-function bindListeners(): void {
-  document.querySelectorAll('.js-control-input-range').forEach(input => {
-    (input as HTMLInputElement).value = (input
-      .closest('.js-test')
-      .querySelector('.js-example .js-input') as HTMLInputElement).value;
-    input.addEventListener('change', handleRangeChange);
-  });
+// function bindListeners(): void {
+//   document.querySelectorAll('.js-control-input-range').forEach(input => {
+//     (input as HTMLInputElement).value = (input
+//       .closest('.js-test')
+//       .querySelector('.js-example .js-input') as HTMLInputElement).value;
+//     input.addEventListener('change', handleRangeChange);
+//   });
 
-  document.querySelectorAll('.js-control-input').forEach(input => {
-    (input as HTMLInputElement).value = (input
-      .closest('.js-test')
-      .querySelector('.js-example .js-input') as HTMLInputElement).value;
-    input.addEventListener('change', handleChange);
-  });
+//   document.querySelectorAll('.js-control-input').forEach(input => {
+//     (input as HTMLInputElement).value = (input
+//       .closest('.js-test')
+//       .querySelector('.js-example .js-input') as HTMLInputElement).value;
+//     input.addEventListener('change', handleChange);
+//   });
 
-  document.querySelectorAll('.js-example .js-input').forEach(input => {
-    input.addEventListener('blur', handleSliderChange);
-  });
+//   document.querySelectorAll('.js-example .js-input').forEach(input => {
+//     input.addEventListener('blur', handleSliderChange);
+//   });
 
-  document.querySelectorAll('.js-test-default .js-secondary').forEach(input => {
-    input.addEventListener('change', defaultHandler);
-  });
-  document.querySelectorAll('.js-test-vr .js-secondary').forEach(input => {
-    input.addEventListener('change', verticalRangeHandler);
-  });
-  document.querySelectorAll('.js-test-r .js-secondary').forEach(input => {
-    input.addEventListener('change', rangeHandler);
-  });
-  document.querySelectorAll('.js-test-v .js-secondary').forEach(input => {
-    input.addEventListener('change', verticalHandler);
-  });
-}
+//   document.querySelectorAll('.js-test-default .js-secondary').forEach(input => {
+//     input.addEventListener('change', defaultHandler);
+//   });
+//   document.querySelectorAll('.js-test-vr .js-secondary').forEach(input => {
+//     input.addEventListener('change', verticalRangeHandler);
+//   });
+//   document.querySelectorAll('.js-test-r .js-secondary').forEach(input => {
+//     input.addEventListener('change', rangeHandler);
+//   });
+//   document.querySelectorAll('.js-test-v .js-secondary').forEach(input => {
+//     input.addEventListener('change', verticalHandler);
+//   });
+// }
 
-bindListeners();
+// bindListeners();
 
 setTimeout(() => {
-  // $('.js-example-default').slider('update', { ...testOptionsDefault, isTooltipDisabled: true });
+  $('.js-example-default').slider('update', { isTooltipDisabled: true });
+  // .slider('update', { isVertical: true });
   // $('.js-example').slider('updateValue', 20);
-  // $('.js-example-default').slider('update', {
-  //   ...testOptionsVerticalRange,
-  //   ...{
-  //     minValue: -205,
-  //     maxValue: 210,
-  //     defaultValue: [-190, 190],
-  //   },
-  // });
+  $('.js-example-default').slider('update', {
+    ...testOptionsVerticalRange,
+    ...{
+      minValue: -205,
+      maxValue: 210,
+      value: [-190, 190],
+    },
+  });
   // console.log($('.js-example').slider('getValue'));
 }, 2000);

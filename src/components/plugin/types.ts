@@ -1,6 +1,6 @@
 export interface Options {
-  minValue: number;
-  maxValue: number;
+  minValue?: number;
+  maxValue?: number;
   step?: number;
   value?: number | number[];
   range?: boolean;
@@ -10,16 +10,16 @@ export interface Options {
 }
 
 export interface ViewState {
-  scaleOptionsNum: number;
-  isTooltipDisabled: boolean;
-  isVertical: boolean;
+  scaleOptionsNum?: number;
+  isTooltipDisabled?: boolean;
+  isVertical?: boolean;
 }
 
 export interface ModelState {
-  minValue: number;
-  maxValue: number;
-  step: number;
-  value: number | number[];
+  minValue?: number;
+  maxValue?: number;
+  step?: number;
+  value?: number | number[];
   range?: boolean;
 }
 

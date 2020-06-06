@@ -5,6 +5,7 @@ import { Options, ModelState, ViewState } from './types';
 
 import './slider.scss';
 import { DEFAULT_CONFIG } from './defaults';
+import deleteUndef from './utils/deleteUndef/deleteUndef';
 
 declare global {
   interface JQuery {
@@ -13,21 +14,26 @@ declare global {
 }
 
 function getModelState(options: Options): ModelState {
-  return {
+  const state: ModelState = {
     minValue: options.minValue,
     maxValue: options.maxValue,
     step: options.step,
     value: options.value,
-    range: Array.isArray(options.value),
+    range: options.value ? Array.isArray(options.value) : undefined,
   };
+  deleteUndef(state);
+  return state;
 }
 
 function getViewState(options: Options): ViewState {
-  return {
+  const state: ViewState = {
     scaleOptionsNum: options.scaleOptionsNum,
     isTooltipDisabled: options.isTooltipDisabled,
     isVertical: options.isVertical,
   };
+
+  deleteUndef(state);
+  return state;
 }
 
 $.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
