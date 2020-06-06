@@ -45,6 +45,7 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
     init(): void;
     updateValue(value: number | number[]): void;
     updateViewState(viewState: ViewState): void;
+    update(options: Options): void;
   }
 
   const pluginAPI: API = {
@@ -64,6 +65,23 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
       const newState = { ...view._viewOptions, ...viewState };
       view.setViewOptions(newState);
       view.render();
+      this.data().slider.connect();
+      $(this)
+        .children()
+        .first()
+        .replaceWith(view.element);
+      view.updateValue(model.getState().value);
+    },
+    update(options: Options) {
+      const { view, model } = $(this).data().slider;
+      const updatedViewState = getViewState({ ...(options as Options) });
+      const updatedModelState = getModelState({ ...(options as Options) });
+      debugger;
+      model.setState(updatedModelState);
+      view.setState(updatedViewState, model.getState());
+      view.render();
+      console.log(this.data().slider);
+
       this.data().slider.connect();
       $(this)
         .children()

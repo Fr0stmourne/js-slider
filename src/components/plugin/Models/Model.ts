@@ -9,9 +9,9 @@ export default class Model {
   }
 
   validateValue(newValue: number | number[]): number | number[] {
-    const { range, minValue, step, maxValue, value } = this.state;
+    const { minValue, step, maxValue, value } = this.state;
     let validatedValue;
-    if (range) {
+    if (Array.isArray(newValue)) {
       const firstValue = Math.max(
         (newValue as number[])[0] < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
           ? Math.floor((newValue as number[])[0] / step) * step

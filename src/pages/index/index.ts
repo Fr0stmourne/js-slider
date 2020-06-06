@@ -142,10 +142,11 @@ bindListeners();
 $('.js-example-default').slider('log');
 
 setTimeout(() => {
-  $('.js-example-default').slider('updateViewState', {
-    // isTooltipDisabled: true,
-    scaleOptionsNum: 0,
-  });
+  // $('.js-example-default').slider('updateViewState', {
+  //   // isTooltipDisabled: true,
+  //   scaleOptionsNum: 0,
+  // });
+  $('.js-example-default').slider('update', testOptionsRange);
 }, 2000);
 
 // $('.js-example-default').slider('updateValue', 33);
