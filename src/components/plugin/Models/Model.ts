@@ -8,8 +8,8 @@ export default class Model {
     this.state = modelState;
   }
 
-  validateValue(newValue: number | number[]): number | number[] {
-    const { minValue, step, maxValue, value } = this.state;
+  validateValue(newValue: number | number[], state: ModelState): number | number[] {
+    const { minValue, step, maxValue, value } = state;
     let validatedValue;
     if (Array.isArray(newValue)) {
       const firstValue = Math.max(
@@ -42,14 +42,17 @@ export default class Model {
   }
 
   setState(modelState: ModelState): void {
-    const validatedState = {
+    const newState = {
       ...this.state,
       ...modelState,
-      value: this.validateValue(modelState.value),
     };
+
+    newState.value = this.validateValue(newState.value, newState);
+    console.log(newState);
+
     this.state = {
       ...this.state,
-      ...validatedState,
+      ...newState,
     };
 
     if (this._onStateChange) this._onStateChange(this.state.value);

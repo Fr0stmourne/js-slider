@@ -41,70 +41,61 @@ function getViewState(options: Options): ViewState {
 
 $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
   interface API {
-    log(): void;
     init(): void;
     updateValue(value: number | number[]): void;
-    updateViewState(viewState: ViewState): void;
     update(options: Options): void;
   }
 
   const pluginAPI: API = {
-    log(): void {
-      console.log('test API');
-      return this;
-    },
     updateValue(value: number | number[]): void {
-      const model: Model = $(this).data().slider.model;
-      model.setState({
-        ...model.getState(),
-        value,
+      return this.each((index: number, el: HTMLElement) => {
+        const { model } = $(el).data().slider;
+
+        model.setState({
+          ...model.getState(),
+          value,
+        });
       });
     },
-    updateViewState(viewState: ViewState): void {
-      const { view, model } = $(this).data().slider;
-      const newState = { ...view._viewOptions, ...viewState };
-      view.setViewOptions(newState);
-      view.render();
-      this.data().slider.connect();
-      $(this)
-        .children()
-        .first()
-        .replaceWith(view.element);
-      view.updateValue(model.getState().value);
-    },
     update(options: Options) {
-      const { view, model } = $(this).data().slider;
-      const updatedViewState = getViewState({ ...(options as Options) });
-      const updatedModelState = getModelState({ ...(options as Options) });
-      debugger;
-      model.setState(updatedModelState);
-      view.setState(updatedViewState, model.getState());
-      view.render();
-      console.log(this.data().slider);
+      return this.each((index: number, el: HTMLElement) => {
+        const { view, model } = $(el).data().slider;
+        const updatedViewState = getViewState({ ...(options as Options) });
+        const updatedModelState = getModelState({ ...(options as Options) });
 
-      this.data().slider.connect();
-      $(this)
-        .children()
-        .first()
-        .replaceWith(view.element);
-      view.updateValue(model.getState().value);
+        model.setState(updatedModelState);
+        view.setState(updatedViewState, model.getState());
+        view.render();
+
+        $(el)
+          .data()
+          .slider.connect();
+
+        $(el)
+          .children()
+          .first()
+          .replaceWith(view.element);
+
+        view.updateValue(model.getState().value);
+      });
     },
-    init(): JQuery {
-      const viewState = getViewState({ ...(methodOrOptions as Options) });
-      const modelState = getModelState({ ...(methodOrOptions as Options) });
-      const model = new Model(modelState);
-      const view = new View(viewState, modelState);
-      $(this).data('slider', new Controller(model, view));
-      this.append(view.element);
-      view.updateValue(model.getState().value);
-      return this;
+    init(methodOrOptions = DEFAULT_CONFIG): JQuery {
+      return this.each((index: number, el: HTMLElement) => {
+        const viewState = getViewState({ ...(methodOrOptions as Options) });
+        const modelState = getModelState({ ...(methodOrOptions as Options) });
+        const model = new Model(modelState);
+        const view = new View(viewState, modelState);
+        $(el).data('slider', new Controller(model, view));
+        el.append(view.element);
+        view.updateValue(model.getState().value);
+      });
     },
   };
 
   if (pluginAPI[methodOrOptions as keyof API]) {
     return pluginAPI[methodOrOptions as keyof API].apply(this, params);
   } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
-    return pluginAPI.init.apply(this, params);
+    return pluginAPI.init.call(this, methodOrOptions);
   } else {
     $.error('Method ' + methodOrOptions + ' does not exist on $.slider');
   }

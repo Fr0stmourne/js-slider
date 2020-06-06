@@ -40,6 +40,8 @@ $('.js-example-vr').slider(testOptionsVerticalRange);
 $('.js-example-r').slider(testOptionsRange);
 $('.js-example-v').slider(testOptionsVertical);
 
+// $('.js-example').slider(testOptionsDefault);
+
 function change(el: HTMLElement, val: number): void {
   $(el).val(String(val));
   $(el).change();
@@ -51,14 +53,12 @@ function changeRange(el: HTMLElement, values: number[]): void {
 
 function handleChange(e: Event): void {
   const newValue = +(e.target as HTMLInputElement).value;
-  console.log(newValue);
 
   change((e.target as HTMLElement).closest('.js-test').querySelector('.js-example .js-input'), newValue);
 }
 
 function handleRangeChange(e: Event): void {
   const newValue = (e.target as HTMLInputElement).value.split(',').map(el => +el.trim());
-  console.log((e.target as HTMLInputElement).value);
   changeRange((e.target as HTMLElement).closest('.js-test').querySelector('.js-example .js-input'), newValue);
 }
 
@@ -139,15 +139,15 @@ function bindListeners(): void {
 
 bindListeners();
 
-$('.js-example-default').slider('log');
-
-setTimeout(() => {
-  // $('.js-example-default').slider('updateViewState', {
-  //   // isTooltipDisabled: true,
-  //   scaleOptionsNum: 0,
-  // });
-  $('.js-example-default').slider('update', testOptionsRange);
-}, 2000);
-
-// $('.js-example-default').slider('updateValue', 33);
-// $('.js-example-vr').slider('updateValue', [-75, 75]);
+// setTimeout(() => {
+//   $('.js-example').slider('update', testOptionsRange);
+//   $('.js-example').slider('updateValue', 20);
+//   $('.js-example-default').slider('update', {
+//     ...testOptionsVerticalRange,
+//     ...{
+//       minValue: -205,
+//       maxValue: 210,
+//       defaultValue: [-190, 190],
+//     },
+//   });
+// }, 2000);
