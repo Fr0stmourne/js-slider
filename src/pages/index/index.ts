@@ -141,5 +141,12 @@ bindListeners();
 
 $('.js-example-default').slider('log');
 
+setTimeout(() => {
+  $('.js-example-default').slider('updateViewState', {
+    // isTooltipDisabled: true,
+    scaleOptionsNum: 0,
+  });
+}, 2000);
+
 // $('.js-example-default').slider('updateValue', 33);
 // $('.js-example-vr').slider('updateValue', [-75, 75]);

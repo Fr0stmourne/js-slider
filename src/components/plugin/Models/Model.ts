@@ -42,7 +42,6 @@ export default class Model {
   }
 
   setState(modelState: ModelState): void {
-    console.log(modelState);
     const validatedState = {
       ...this.state,
       ...modelState,

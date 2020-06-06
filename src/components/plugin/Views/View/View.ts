@@ -36,6 +36,10 @@ export default class View {
     return this._element;
   }
 
+  setViewOptions(viewState: ViewState): void {
+    this._viewOptions = viewState;
+  }
+
   bindInputChange(handler?: Function): void {
     const input: InputView = this._objects.input;
     input.element.onchange = (e): void => {
