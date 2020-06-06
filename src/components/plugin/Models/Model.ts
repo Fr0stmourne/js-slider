@@ -1,4 +1,4 @@
-import { ModelState } from '../types';
+import { ModelState } from '../interfaces';
 import deleteUndef from '../utils/deleteUndef/deleteUndef';
 
 export default class Model {

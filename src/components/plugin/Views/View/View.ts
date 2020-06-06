@@ -1,4 +1,4 @@
-import { ViewState, ModelState, PinData, ScaleData } from '../../types';
+import { ViewState, ModelState, PinData, ScaleData } from '../../interfaces';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateValue from '../../utils/calculateValue/calculateValue';
 import PinView from '../subviews/PinView/PinView';

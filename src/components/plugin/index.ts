@@ -1,7 +1,7 @@
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
-import { Options, ModelState, ViewState } from './types';
+import { Options, ModelState, ViewState } from './interfaces';
 
 import './slider.scss';
 import { DEFAULT_CONFIG } from './defaults';

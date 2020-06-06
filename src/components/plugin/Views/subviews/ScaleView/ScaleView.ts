@@ -1,4 +1,4 @@
-import { Options, ScaleData } from '../../../types';
+import { Options, ScaleData } from '../../../interfaces';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 

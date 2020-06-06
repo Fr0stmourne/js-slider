@@ -1,13 +1,4 @@
-export interface Options {
-  minValue?: number;
-  maxValue?: number;
-  step?: number;
-  value?: number | number[];
-  range?: boolean;
-  scaleOptionsNum?: number;
-  isTooltipDisabled?: boolean;
-  isVertical?: boolean;
-}
+export type Options = ViewState & ModelState;
 
 export interface ViewState {
   scaleOptionsNum?: number;
