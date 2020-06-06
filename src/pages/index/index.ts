@@ -6,7 +6,7 @@ const testOptionsDefault: Options = {
   minValue: -33,
   maxValue: 103,
   step: 5,
-  defaultValue: 75,
+  value: 75,
   scaleOptionsNum: 5,
 };
 
@@ -14,7 +14,7 @@ const testOptionsVerticalRange: Options = {
   minValue: -101,
   maxValue: 100,
   step: 8,
-  defaultValue: [-50, 50],
+  value: [-50, 50],
   isVertical: true,
   scaleOptionsNum: 5,
 };
@@ -23,14 +23,14 @@ const testOptionsRange: Options = {
   minValue: -33,
   maxValue: 100,
   step: 2,
-  defaultValue: [30, 80],
+  value: [30, 80],
   scaleOptionsNum: 5,
 };
 const testOptionsVertical: Options = {
   minValue: 0,
   maxValue: 100,
   step: 7,
-  defaultValue: 45,
+  value: 45,
   isVertical: true,
   scaleOptionsNum: 5,
 };
@@ -39,8 +39,6 @@ $('.js-example-default').slider(testOptionsDefault);
 $('.js-example-vr').slider(testOptionsVerticalRange);
 $('.js-example-r').slider(testOptionsRange);
 $('.js-example-v').slider(testOptionsVertical);
-
-// $('.js-example').slider(testOptionsDefault);
 
 function change(el: HTMLElement, val: number): void {
   $(el).val(String(val));
@@ -140,8 +138,8 @@ function bindListeners(): void {
 bindListeners();
 
 // setTimeout(() => {
-//   $('.js-example').slider('update', testOptionsRange);
-//   $('.js-example').slider('updateValue', 20);
+//   $('.js-example-default').slider('update', { ...testOptionsDefault, isTooltipDisabled: true });
+//   // $('.js-example').slider('updateValue', 20);
 //   $('.js-example-default').slider('update', {
 //     ...testOptionsVerticalRange,
 //     ...{

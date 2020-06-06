@@ -4,6 +4,7 @@ import Controller from './Controller/Controller';
 import { Options, ModelState, ViewState } from './types';
 
 import './slider.scss';
+import { DEFAULT_CONFIG } from './defaults';
 
 declare global {
   interface JQuery {
@@ -11,35 +12,25 @@ declare global {
   }
 }
 
-const DEFAULT_CONFIG: Options = {
-  minValue: 0,
-  maxValue: 100,
-  step: 1,
-  defaultValue: 50,
-  scaleOptionsNum: 5,
-  isTooltipDisabled: false,
-  isVertical: false,
-};
-
 function getModelState(options: Options): ModelState {
   return {
-    minValue: options.minValue || DEFAULT_CONFIG.minValue,
-    maxValue: options.maxValue || DEFAULT_CONFIG.maxValue,
-    step: options.step || DEFAULT_CONFIG.step,
-    value: options.defaultValue || DEFAULT_CONFIG.defaultValue,
-    range: Array.isArray(options.defaultValue || DEFAULT_CONFIG.defaultValue),
+    minValue: options.minValue,
+    maxValue: options.maxValue,
+    step: options.step,
+    value: options.value,
+    range: Array.isArray(options.value),
   };
 }
 
 function getViewState(options: Options): ViewState {
   return {
-    scaleOptionsNum: options.scaleOptionsNum || DEFAULT_CONFIG.scaleOptionsNum,
-    isTooltipDisabled: options.isTooltipDisabled || DEFAULT_CONFIG.isTooltipDisabled,
-    isVertical: options.isVertical || DEFAULT_CONFIG.isVertical,
+    scaleOptionsNum: options.scaleOptionsNum,
+    isTooltipDisabled: options.isTooltipDisabled,
+    isVertical: options.isVertical,
   };
 }
 
-$.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
+$.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
   interface API {
     init(): void;
     updateValue(value: number | number[]): void;
@@ -81,13 +72,13 @@ $.fn.slider = function(methodOrOptions: Options | string, ...params: any): any {
     },
     init(methodOrOptions = DEFAULT_CONFIG): JQuery {
       return this.each((index: number, el: HTMLElement) => {
-        const viewState = getViewState({ ...(methodOrOptions as Options) });
-        const modelState = getModelState({ ...(methodOrOptions as Options) });
+        const viewState = getViewState(DEFAULT_CONFIG);
+        const modelState = getModelState(DEFAULT_CONFIG);
         const model = new Model(modelState);
         const view = new View(viewState, modelState);
         $(el).data('slider', new Controller(model, view));
         el.append(view.element);
-        view.updateValue(model.getState().value);
+        $(el).slider('update', { ...(methodOrOptions as Options) });
       });
     },
   };

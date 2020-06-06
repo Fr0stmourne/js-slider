@@ -2,7 +2,7 @@ export interface Options {
   minValue: number;
   maxValue: number;
   step?: number;
-  defaultValue?: number | number[];
+  value?: number | number[];
   range?: boolean;
   scaleOptionsNum?: number;
   isTooltipDisabled?: boolean;

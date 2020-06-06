@@ -37,23 +37,47 @@ export default class Model {
     return validatedValue;
   }
 
+  validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
+    return minValue > maxValue
+      ? {
+          minValue: maxValue,
+          maxValue: minValue,
+        }
+      : {
+          minValue,
+          maxValue,
+        };
+  }
+
+  validateStep(step: number): number {
+    return Math.abs(step);
+  }
+
+  validateState(newState: ModelState): ModelState {
+    const stateToValidate = { ...newState };
+    const validatedStep = this.validateStep(stateToValidate.step);
+    const validatedMinMaxValues = this.validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
+    const validatedValue = this.validateValue(stateToValidate.value, {
+      ...this.state,
+      step: validatedStep,
+      ...validatedMinMaxValues,
+    });
+
+    return {
+      ...this.state,
+      step: validatedStep,
+      ...validatedMinMaxValues,
+      value: validatedValue,
+      range: Array.isArray(validatedValue),
+    };
+  }
+
   getState(): ModelState {
     return { ...this.state };
   }
 
   setState(modelState: ModelState): void {
-    const newState = {
-      ...this.state,
-      ...modelState,
-    };
-
-    newState.value = this.validateValue(newState.value, newState);
-    console.log(newState);
-
-    this.state = {
-      ...this.state,
-      ...newState,
-    };
+    this.state = this.validateState(modelState);
 
     if (this._onStateChange) this._onStateChange(this.state.value);
   }
