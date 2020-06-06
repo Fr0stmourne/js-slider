@@ -137,15 +137,16 @@ function bindListeners(): void {
 
 bindListeners();
 
-// setTimeout(() => {
-//   $('.js-example-default').slider('update', { ...testOptionsDefault, isTooltipDisabled: true });
-//   // $('.js-example').slider('updateValue', 20);
-//   $('.js-example-default').slider('update', {
-//     ...testOptionsVerticalRange,
-//     ...{
-//       minValue: -205,
-//       maxValue: 210,
-//       defaultValue: [-190, 190],
-//     },
-//   });
-// }, 2000);
+setTimeout(() => {
+  // $('.js-example-default').slider('update', { ...testOptionsDefault, isTooltipDisabled: true });
+  // $('.js-example').slider('updateValue', 20);
+  // $('.js-example-default').slider('update', {
+  //   ...testOptionsVerticalRange,
+  //   ...{
+  //     minValue: -205,
+  //     maxValue: 210,
+  //     defaultValue: [-190, 190],
+  //   },
+  // });
+  // console.log($('.js-example').slider('getValue'));
+}, 2000);

@@ -35,6 +35,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
     init(): void;
     updateValue(value: number | number[]): void;
     update(options: Options): void;
+    getValue(): number | number[];
   }
 
   const pluginAPI: API = {
@@ -69,6 +70,11 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
 
         view.updateValue(model.getState().value);
       });
+    },
+    getValue() {
+      return $(this)
+        .data()
+        .slider.model.getState().value;
     },
     init(methodOrOptions = DEFAULT_CONFIG): JQuery {
       return this.each((index: number, el: HTMLElement) => {
