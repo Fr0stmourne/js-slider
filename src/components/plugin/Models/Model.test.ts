@@ -1,105 +1,134 @@
-// import { Options } from '../types';
-// import Model from './Model';
+import Model from './Model';
+import { ModelState } from '../interfaces';
 
-// const testOptions: { normal: Options; range: Options } = {
-//   normal: {
-//     minValue: -30,
-//     maxValue: 100,
-//     step: 5,
-//     defaultValue: 45,
-//   },
+const testOptions: { normal: ModelState; range: ModelState } = {
+  normal: {
+    minValue: -30,
+    maxValue: 100,
+    step: 5,
+    value: 45,
+    range: false,
+  },
 
-//   range: {
-//     minValue: 0,
-//     maxValue: 100,
-//     step: 2,
-//     defaultValue: [6, 64],
-//   },
-// };
+  range: {
+    minValue: 0,
+    maxValue: 100,
+    step: 2,
+    range: true,
+    value: [6, 64],
+  },
+};
 
-// let defaultModel: Model;
-// let rangeModel: Model;
+let defaultModel: Model;
+let rangeModel: Model;
 
-// describe('Value setter', () => {
-//   beforeAll(() => {
-//     defaultModel = new Model(testOptions.normal);
-//     rangeModel = new Model(testOptions.range);
-//   });
-//   test('should correctly update model value', () => {
-//     defaultModel.value = 50;
-//     expect(defaultModel.value).toBe(50);
+describe('setState()', () => {
+  beforeEach(() => {
+    defaultModel = new Model(testOptions.normal);
+    rangeModel = new Model(testOptions.range);
+  });
+  //TODO ПЕРЕДЕЛАТЬ НА SETSTATE
+  describe('should correctly update model value', () => {
+    test('default case', () => {
+      defaultModel.setState({
+        value: 50,
+      });
+      expect(defaultModel.state.value).toBe(50);
 
-//     defaultModel.value = 20;
-//     expect(defaultModel.value).toBe(20);
-//   });
+      defaultModel.setState({
+        value: 20,
+      });
+      expect(defaultModel.state.value).toBe(20);
+    });
 
-//   test('should correctly update model value: range', () => {
-//     rangeModel.value = [50, 70];
-//     expect(rangeModel.value).toEqual([50, 70]);
+    test('range case', () => {
+      rangeModel.setState({
+        value: [50, 70],
+      });
+      expect(rangeModel.state.value).toStrictEqual([50, 70]);
 
-//     rangeModel.value = [0, 100];
-//     expect(rangeModel.value).toEqual([0, 100]);
-//   });
+      rangeModel.setState({
+        value: [0, 100],
+      });
+      expect(rangeModel.state.value).toStrictEqual([0, 100]);
+    });
+  });
 
-//   test('should replace newValue with a min/max value if newValue is not in the interval', () => {
-//     defaultModel.value = 1000;
-//     expect(defaultModel.value).toEqual(100);
+  describe('should replace newValue with a min/max value if newValue is not in the interval', () => {
+    test('default case', () => {
+      defaultModel.setState({
+        value: 1000,
+      });
+      expect(defaultModel.state.value).toEqual(100);
 
-//     defaultModel.value = -70;
-//     expect(defaultModel.value).toEqual(-30);
-//   });
+      defaultModel.setState({
+        value: -70,
+      });
+      expect(defaultModel.state.value).toEqual(-30);
+    });
 
-//   test('should replace newValue with a min/max value if newValue is not in the interval: range', () => {
-//     rangeModel.value = [-90, 70];
-//     expect(rangeModel.value).toEqual([0, 70]);
+    test('range case', () => {
+      rangeModel.setState({
+        value: [-90, 70],
+      });
+      expect(rangeModel.state.value).toStrictEqual([0, 70]);
 
-//     rangeModel.value = [0, 200];
-//     expect(rangeModel.value).toEqual([0, 100]);
-//   });
+      rangeModel.setState({
+        value: [0, 200],
+      });
+      expect(rangeModel.state.value).toStrictEqual([0, 100]);
+    });
+  });
+  describe('should ceil the values if they are not multiples of the step value', () => {
+    test('default case', () => {
+      defaultModel.setState({
+        value: 51,
+      });
+      expect(defaultModel.state.value).toEqual(55);
+    });
 
-//   test('should ceil the values if they are not multiples of the step value', () => {
-//     defaultModel.value = 51;
-//     expect(defaultModel.value).toEqual(55);
+    test('range case', () => {
+      rangeModel.setState({
+        value: [31, 77],
+      });
+      expect(rangeModel.state.value).toStrictEqual([32, 78]);
+    });
+  });
+  test('should not set values for range model if min value > max value', () => {
+    rangeModel.setState({
+      value: [70, 30],
+    });
+    expect(rangeModel.state.value).toStrictEqual(testOptions.range.value);
+  });
+});
 
-//     rangeModel.value = [31, 77];
-//     expect(rangeModel.value).toEqual([32, 78]);
-//   });
+describe('getState()', () => {
+  beforeEach(() => {
+    defaultModel = new Model(testOptions.normal);
+    rangeModel = new Model(testOptions.range);
+  });
 
-//   test('should swap min/max values if min value > max value', () => {
-//     rangeModel.value = [70, 30];
-//     expect(rangeModel.value).toEqual([30, 70]);
-//     rangeModel.value = [63, -30];
-//     expect(rangeModel.value).toEqual([0, 64]);
-//   });
-// });
+  test('should return options object', () => {
+    expect(defaultModel.getState()).toEqual(testOptions.normal);
+    expect(rangeModel.getState()).toEqual(testOptions.range);
+  });
+});
 
-// describe('getState()', () => {
-//   beforeAll(() => {
-//     defaultModel = new Model(testOptions.normal);
-//     rangeModel = new Model(testOptions.range);
-//   });
+describe('bindSetState()', () => {
+  beforeAll(() => {
+    defaultModel = new Model(testOptions.normal);
+    rangeModel = new Model(testOptions.range);
+  });
 
-//   test('should return options object', () => {
-//     expect(defaultModel.getState()).toEqual(testOptions.normal);
-//     expect(rangeModel.getState()).toEqual(testOptions.range);
-//   });
-// });
+  test('should store the passed function in the class property', () => {
+    function testHandler(): void {
+      console.log(123);
+    }
 
-// describe('bindSetState()', () => {
-//   beforeAll(() => {
-//     defaultModel = new Model(testOptions.normal);
-//     rangeModel = new Model(testOptions.range);
-//   });
+    defaultModel.bindSetState(testHandler);
+    expect(defaultModel._onStateChange).toEqual(testHandler);
 
-//   test('should store the passed function in the class property', () => {
-//     function testHandler(): void {
-//       console.log(123);
-//     }
-
-//     defaultModel.bindSetState(testHandler);
-//     expect(defaultModel._onValueChange).toEqual(testHandler);
-
-//     rangeModel.bindSetState(testHandler);
-//     expect(rangeModel._onValueChange).toEqual(testHandler);
-//   });
-// });
+    rangeModel.bindSetState(testHandler);
+    expect(rangeModel._onStateChange).toEqual(testHandler);
+  });
+});

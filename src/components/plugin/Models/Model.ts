@@ -9,7 +9,7 @@ export default class Model {
     this.state = modelState;
   }
 
-  validateValue(newValue: number | number[], state: ModelState): number | number[] {
+  private validateValue(newValue: number | number[], state: ModelState): number | number[] {
     if (newValue === undefined) return this.state.value;
     const { minValue, step, maxValue, value } = state;
     let validatedValue;
@@ -39,7 +39,7 @@ export default class Model {
     return validatedValue;
   }
 
-  validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
+  private validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
     if (minValue === undefined || maxValue === undefined) {
       return {
         minValue: this.state.minValue,
@@ -57,11 +57,11 @@ export default class Model {
         };
   }
 
-  validateStep(step: number): number {
+  private validateStep(step: number): number {
     return Math.abs(step) || this.state.step;
   }
 
-  validateState(newState: ModelState): ModelState {
+  private validateState(newState: ModelState): ModelState {
     const stateToValidate = { ...newState };
     const validatedStep = this.validateStep(stateToValidate.step);
     const validatedMinMaxValues = this.validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
