@@ -37,7 +37,7 @@ const testOptionsVertical: Options = {
 
 $('.js-example-default').slider(testOptionsDefault);
 // $('.js-example-vr').slider(testOptionsVerticalRange);
-// $('.js-example-r').slider(testOptionsRange);
+$('.js-example-r').slider(testOptionsRange);
 // $('.js-example-v').slider(testOptionsVertical);
 
 function change(el: HTMLElement, val: number): void {

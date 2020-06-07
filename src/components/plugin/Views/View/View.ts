@@ -76,10 +76,10 @@ export default class View {
     return chosenPin;
   }
 
-  bindMovePin(valueHandler?: Function | Function[]): void {
+  bindMovePin(valueHandler?: Function): void {
     const slider: HTMLElement = this._objects.bar.element;
     const { isVertical } = this._viewOptions;
-    const { minValue, maxValue, range } = this._modelOptions;
+    const { minValue, maxValue, range, value } = this._modelOptions;
 
     const addPin = (pin: PinView, handler?: Function): void => {
       pin.element.onmousedown = (event): void => {
@@ -99,7 +99,13 @@ export default class View {
           if (newValue > rightEdge) newValue = rightEdge;
 
           const percentage = newValue / sliderSize;
-          const resultValue = calculateValue(+percentage, minValue, maxValue);
+          const calculatedValue = calculateValue(+percentage, minValue, maxValue);
+          let resultValue = value;
+          if (range) {
+            (resultValue as number[])[pin.pinNumber - 1] = calculatedValue;
+          } else {
+            resultValue = calculatedValue;
+          }
 
           if (handler) handler(resultValue);
         };
@@ -114,12 +120,8 @@ export default class View {
       };
     };
 
-    if (range) {
-      addPin(this._objects.firstPin, (valueHandler as Function[])[0]);
-      addPin(this._objects.secondPin, (valueHandler as Function[])[1]);
-    } else {
-      addPin(this._objects.firstPin, valueHandler as Function);
-    }
+    addPin(this._objects.firstPin, valueHandler);
+    if (range) addPin(this._objects.secondPin, valueHandler);
   }
 
   bindBarClick(handler?: Function): void {

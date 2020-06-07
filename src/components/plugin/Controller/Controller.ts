@@ -11,41 +11,22 @@ export default class Controller {
 
   connect(): void {
     const { model, view } = this;
-    if (model.getState().range) {
-      const firstPinHandler = (newValue: number): void => {
-        const currentState = model.getState();
-        model.setState({ ...currentState, value: [newValue, (currentState.value as number[])[1]] });
-      };
-      const secondPinHandler = (newValue: number): void => {
-        const currentState = model.getState();
-        model.setState({ ...currentState, value: [(currentState.value as number[])[0], newValue] });
-      };
+    const currentState = model.getState();
 
-      view.bindMovePin([firstPinHandler, secondPinHandler]);
-    } else {
-      view.bindMovePin((newValue: number): void => {
-        const currentState = model.getState();
-        model.setState({ ...currentState, value: newValue });
-      });
+    function setModelValue(value: number | number[]): void {
+      model.setState({ ...currentState, value });
     }
 
-    view.bindInputChange((newValue: number | number[]) => {
-      const currentState = model.getState();
-      model.setState({ ...currentState, value: newValue });
-    });
+    view.bindMovePin(setModelValue);
+
+    view.bindInputChange(setModelValue);
+
+    view.bindScaleClick(setModelValue);
+
+    view.bindBarClick(setModelValue);
 
     model.bindSetState((value: number | number[]) => {
       view.updateValue(value);
-    });
-
-    view.bindScaleClick((value: number | number[]) => {
-      const currentState = model.getState();
-      model.setState({ ...currentState, value });
-    });
-
-    view.bindBarClick((value: number | number[]) => {
-      const currentState = model.getState();
-      model.setState({ ...currentState, value });
     });
   }
 }

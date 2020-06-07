@@ -10,8 +10,4 @@ describe('BarView', () => {
   test('should store HTML element as .element property', () => {
     expect(bar.element).toBeInstanceOf(HTMLElement);
   });
-
-  // test('should store correct number of scale milestones', () => {
-  //   expect(bar.element.querySelectorAll('.js-option').length).toBe(12);
-  // });
 });
