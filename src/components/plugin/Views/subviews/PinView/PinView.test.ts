@@ -1,43 +1,52 @@
-// import PinView from './PinView';
+import PinView from './PinView';
+import { PinData } from '../../../interfaces';
 
-// const options = {
-//   minValue: -30,
-//   maxValue: 100,
-//   step: 5,
-//   defaultValue: 45,
-// };
+const options: PinData = {
+  pinNumber: 1,
+  isTooltipDisabled: false,
+  isVertical: true,
+  value: 50,
+};
+const options1: PinData = {
+  pinNumber: 2,
+  isTooltipDisabled: true,
+  isVertical: false,
+  value: 70,
+};
 
-// const options2 = {
-//   minValue: 0,
-//   maxValue: 100,
-//   step: 2,
-//   defaultValue: 94,
-// };
+const pxNum = 10;
 
-// describe('PinView', () => {
-//   test('should store HTML element as _element property', () => {
-//     const pin = new PinView(options, 1);
+describe('PinView', () => {
+  let pin: PinView, pin1: PinView;
+  beforeEach(() => {
+    pin = new PinView(options);
+    pin1 = new PinView(options1);
+  });
+  test('should store HTML element as _element property', () => {
+    expect(pin.element).toBeInstanceOf(HTMLElement);
+    expect(pin1.element).toBeInstanceOf(HTMLElement);
+  });
 
-//     expect(pin.element).toBeInstanceOf(HTMLElement);
-//   });
+  describe('value getter', () => {
+    test('should return correct value after an instance initialization', () => {
+      expect(pin.value).toBe(50);
+      expect(pin1.value).toBe(70);
+    });
 
-//   describe('value getter', () => {
-//     const pin = new PinView(options, 1);
-//     const pin2 = new PinView(options2, 2);
+    test('should correctly update the value after updateValue method call', () => {
+      pin.updateValue(pxNum, 52);
+      expect(pin.value).toBe(52);
 
-//     const pxNum = 0;
+      pin1.updateValue(pxNum, 74);
+      expect(pin1.value).toBe(74);
+    });
 
-//     test('should return correct value after an instance initialization', () => {
-//       expect(pin.value).toBe(45);
-//       expect(pin2.value).toBe(94);
-//     });
+    test('should correctly update textContent prop after updateValue method call', () => {
+      pin.updateValue(pxNum, 52);
+      expect(pin.element.textContent.trim()).toBe('52');
 
-//     test('should return correct value after updateValue method call', () => {
-//       pin.updateValue(pxNum, 22);
-//       expect(pin.value).toBe(22);
-
-//       pin2.updateValue(pxNum, 74);
-//       expect(pin2.value).toBe(74);
-//     });
-//   });
-// });
+      pin1.updateValue(pxNum, 74);
+      expect(pin1.element.textContent.trim()).toBe('74');
+    });
+  });
+});

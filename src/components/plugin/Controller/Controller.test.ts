@@ -15,25 +15,22 @@ describe('Controller constructor', () => {
     expect(controller.model).toEqual(model);
   });
 
-  test('should call bindMovePin on the view', () => {
+  test('should call binders on the view', () => {
     const view = new View(DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE);
     const model = new Model(DEFAULT_MODEL_STATE);
     expect(view.bindMovePin).not.toHaveBeenCalled();
+    expect(view.bindInputChange).not.toHaveBeenCalled();
+    expect(view.bindScaleClick).not.toHaveBeenCalled();
+    expect(view.bindBarClick).not.toHaveBeenCalled();
 
     new Controller(model, view);
     expect(view.bindMovePin).toHaveBeenCalled();
-  });
-
-  test('should call bindInputChange on the view', () => {
-    const view = new View(DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE);
-    const model = new Model(DEFAULT_MODEL_STATE);
-    expect(view.bindInputChange).not.toHaveBeenCalled();
-
-    new Controller(model, view);
     expect(view.bindInputChange).toHaveBeenCalled();
+    expect(view.bindScaleClick).toHaveBeenCalled();
+    expect(view.bindBarClick).toHaveBeenCalled();
   });
 
-  test('should bind _onValueChange handler to the model', () => {
+  test('should bind _onStateChange handler to the model', () => {
     const view = new View(DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE);
     const model = new Model(DEFAULT_MODEL_STATE);
     expect(model._onStateChange).not.toBeInstanceOf(Function);

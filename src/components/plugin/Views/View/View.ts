@@ -186,7 +186,7 @@ export default class View {
   render(): void {
     const VERTICAL_MODIFIER = 'slider-plugin--vertical';
     const { isVertical, scaleOptionsNum, isTooltipDisabled } = this._viewOptions;
-    const { value, minValue, maxValue, range } = this._modelOptions;
+    const { value, minValue, maxValue, range, step } = this._modelOptions;
     this._element = render(
       `
     <div class="slider-plugin js-slider ${isVertical ? VERTICAL_MODIFIER : ''}">
@@ -208,6 +208,7 @@ export default class View {
     if (scaleOptionsNum) {
       const scaleData: ScaleData = {
         scaleOptionsNum: scaleOptionsNum,
+        step,
         isVertical,
         minValue,
         maxValue,

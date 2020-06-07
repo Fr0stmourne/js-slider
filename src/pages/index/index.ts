@@ -138,16 +138,16 @@ function handleSliderChange(e: Event): void {
 // bindListeners();
 
 setTimeout(() => {
-  $('.js-example-default').slider('update', { isTooltipDisabled: true });
+  // $('.js-example-default').slider('update', { isTooltipDisabled: true });
   // .slider('update', { isVertical: true });
   // $('.js-example').slider('updateValue', 20);
-  $('.js-example-default').slider('update', {
-    ...testOptionsVerticalRange,
-    ...{
-      minValue: -205,
-      maxValue: 210,
-      value: [-190, 190],
-    },
-  });
+  // $('.js-example-default').slider('update', {
+  //   ...testOptionsVerticalRange,
+  //   ...{
+  //     minValue: -205,
+  //     maxValue: 210,
+  //     value: [-190, 190],
+  //   },
+  // });
   // console.log($('.js-example').slider('getValue'));
 }, 2000);

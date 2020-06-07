@@ -23,6 +23,7 @@ export interface PinData {
 
 export interface ScaleData {
   scaleOptionsNum: number;
+  step: number;
   isVertical: boolean;
   minValue: number;
   maxValue: number;

@@ -1,6 +1,7 @@
 import { PinData } from '../../../interfaces';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
+import movePin from '../../../utils/movePin/movePin';
 
 export default class PinView extends DefaultView {
   pinNumber: number;
@@ -47,6 +48,6 @@ export default class PinView extends DefaultView {
   }
 
   _movePin(value: number): void {
-    this._elements.pin.style[this.isVertical ? 'bottom' : 'left'] = value + 'px';
+    movePin(this._elements.pin, value, this.isVertical);
   }
 }
