@@ -27,7 +27,6 @@ describe('setState()', () => {
     defaultModel = new Model(testOptions.normal);
     rangeModel = new Model(testOptions.range);
   });
-  //TODO ПЕРЕДЕЛАТЬ НА SETSTATE
   describe('should correctly update model value', () => {
     test('default case', () => {
       defaultModel.setState({

@@ -1,300 +1,215 @@
-// import { Options } from '../../types';
-// import View from './View';
+import { ViewState, ModelState } from '../../interfaces';
+import View from './View';
 
-// const testOptions: { normal: Options; vertical: Options; range: Options; rangeVertical: Options } = {
-//   normal: {
-//     minValue: -30,
-//     maxValue: 100,
-//     step: 5,
-//     defaultValue: 45,
-//   },
+const testOptions: {
+  normal: { viewState: ViewState; modelState: ModelState };
+  vertical: { viewState: ViewState; modelState: ModelState };
+  range: { viewState: ViewState; modelState: ModelState };
+} = {
+  normal: {
+    viewState: {
+      isTooltipDisabled: false,
+      isVertical: false,
+      scaleOptionsNum: 5,
+    },
+    modelState: {
+      minValue: -30,
+      maxValue: 100,
+      step: 5,
+      value: 45,
+      range: false,
+    },
+  },
 
-//   vertical: {
-//     minValue: -30,
-//     maxValue: 100,
-//     step: 5,
-//     defaultValue: 45,
-//     isVertical: true,
-//   },
-//   range: {
-//     minValue: 0,
-//     maxValue: 100,
-//     step: 2,
-//     defaultValue: [6, 64],
-//     range: true,
-//   },
-//   rangeVertical: {
-//     minValue: 0,
-//     maxValue: 100,
-//     step: 2,
-//     defaultValue: [6, 64],
-//     range: true,
-//     isVertical: true,
-//   },
-// };
+  vertical: {
+    viewState: {
+      isTooltipDisabled: false,
+      isVertical: true,
+      scaleOptionsNum: 5,
+    },
+    modelState: {
+      minValue: -30,
+      maxValue: 100,
+      step: 5,
+      value: 45,
+      range: false,
+    },
+  },
 
-// function testHandler(): number {
-//   return 1 + 1;
-// }
+  range: {
+    viewState: {
+      isTooltipDisabled: true,
+      isVertical: false,
+      scaleOptionsNum: 10,
+    },
+    modelState: {
+      minValue: 0,
+      maxValue: 100,
+      step: 1,
+      value: [45, 75],
+      range: true,
+    },
+  },
+};
 
-// let defaultView: View, verticalView: View, rangeView: View, rangeVerticalView: View;
+let callback: Function;
 
-// describe('View constructor', () => {
-//   beforeAll(() => {
-//     defaultView = new View(testOptions.normal);
-//     verticalView = new View(testOptions.vertical);
-//     rangeView = new View(testOptions.range);
-//     rangeVerticalView = new View(testOptions.rangeVertical);
-//   });
-//   test('should return HTMLElement instance as view.element', () => {
-//     const view: View = defaultView;
-//     expect(view.element).toBeInstanceOf(HTMLElement);
-//   });
+let defaultView: View, verticalView: View, rangeView: View;
+beforeEach(() => {
+  defaultView = new View(testOptions.normal.viewState, testOptions.normal.modelState);
+  verticalView = new View(testOptions.vertical.viewState, testOptions.vertical.modelState);
+  rangeView = new View(testOptions.range.viewState, testOptions.range.modelState);
+});
 
-//   test('should return HTMLElement instance as view.element: range case', () => {
-//     const view = rangeView;
-//     expect(view.element).toBeInstanceOf(HTMLElement);
-//   });
-//   test('should return HTMLElement instance as view.element: vertical case', () => {
-//     const view = verticalView;
-//     expect(view.element).toBeInstanceOf(HTMLElement);
-//   });
-//   test('should return HTMLElement instance as view.element: range vertical case', () => {
-//     const view = rangeVerticalView;
-//     expect(view.element).toBeInstanceOf(HTMLElement);
-//   });
-// });
+describe('View constructor', () => {
+  test('should return HTMLElement instance as view.element', () => {
+    expect(defaultView.element).toBeInstanceOf(HTMLElement);
+    expect(verticalView.element).toBeInstanceOf(HTMLElement);
+    expect(rangeView.element).toBeInstanceOf(HTMLElement);
+  });
+});
 
-// describe('Update value()', () => {
-//   beforeAll(() => {
-//     defaultView = new View(testOptions.normal);
-//     verticalView = new View(testOptions.vertical);
-//     rangeView = new View(testOptions.range);
-//     rangeVerticalView = new View(testOptions.rangeVertical);
-//   });
-//   test('should correctly update pin value', () => {
-//     const view = defaultView;
-//     view.updateValue(100);
-//     expect(view._objects.firstPin.value).toBe(100);
+describe('Update value()', () => {
+  test('should correctly update pin value', () => {
+    defaultView.updateValue(100);
+    expect(defaultView._objects.firstPin.value).toBe(100);
 
-//     view.updateValue(-30);
-//     expect(view._objects.firstPin.value).toBe(-30);
+    verticalView.updateValue(-30);
+    expect(verticalView._objects.firstPin.value).toBe(-30);
 
-//     view.updateValue(54);
-//     expect(view._objects.firstPin.value).toBe(54);
-//   });
-//   test('should correctly update pin value: range case', () => {
-//     const view = rangeView;
-//     view.updateValue([30, 50]);
-//     expect(view._objects.firstPin.value).toBe(30);
-//     expect(view._objects.secondPin.value).toBe(50);
+    rangeView.updateValue([30, 50]);
+    expect(rangeView._objects.firstPin.value).toBe(30);
+    expect(rangeView._objects.secondPin.value).toBe(50);
+  });
 
-//     view.updateValue([25, 75]);
-//     expect(view._objects.firstPin.value).toBe(25);
-//     expect(view._objects.secondPin.value).toBe(75);
-//   });
-//   test('should correctly update pin value: vertical case', () => {
-//     const view = verticalView;
-//     view.updateValue(100);
-//     expect(view._objects.firstPin.value).toBe(100);
+  test('should throw an error if the passed value is not correct', () => {
+    expect(() => {
+      defaultView.updateValue(120);
+    }).toThrow(Error);
+    expect(() => {
+      verticalView.updateValue(-1000);
+    }).toThrow(Error);
+    expect(() => {
+      rangeView.updateValue([-900, -700]);
+    }).toThrow(Error);
+  });
 
-//     view.updateValue(-30);
-//     expect(view._objects.firstPin.value).toBe(-30);
+  test('should update hidden input.element', () => {
+    defaultView.updateValue(50);
+    expect((defaultView._objects.input.element as HTMLInputElement).value).toBe('50');
 
-//     view.updateValue(54);
-//     expect(view._objects.firstPin.value).toBe(54);
-//   });
-//   test('should correctly update pin value: range vertical case', () => {
-//     const view = rangeVerticalView;
-//     view.updateValue([30, 50]);
-//     expect(view._objects.firstPin.value).toBe(30);
-//     expect(view._objects.secondPin.value).toBe(50);
+    verticalView.updateValue(30);
+    expect((verticalView._objects.input.element as HTMLInputElement).value).toBe('30');
 
-//     view.updateValue([25, 75]);
-//     expect(view._objects.firstPin.value).toBe(25);
-//     expect(view._objects.secondPin.value).toBe(75);
-//   });
+    rangeView.updateValue([50, 70]);
+    expect((rangeView._objects.input.element as HTMLInputElement).value).toBe('50,70');
+  });
+});
 
-//   test('should throw an error if the passed value is not correct', () => {
-//     const view = defaultView;
+describe('bindMovePin()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+  test('should bind onmousedown listener with the passed callback', () => {
+    expect(defaultView._objects.firstPin.element.onmousedown).toBeNull();
 
-//     expect(() => {
-//       view.updateValue(120);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue(-1000);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue(-31);
-//     }).toThrow(Error);
-//   });
-//   test('should throw an error if the passed value is not correct: range', () => {
-//     const view = rangeView;
+    defaultView.bindMovePin(callback);
 
-//     expect(() => {
-//       view.updateValue([-150, 120]);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue([-1000, 1000]);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue([-31, 940]);
-//     }).toThrow(Error);
-//   });
-//   test('should throw an error if the passed value is not correct: vertical', () => {
-//     const view = verticalView;
+    expect(defaultView._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
+    expect(defaultView._objects.firstPin.element.onmousemove).toBeNull();
+    expect(defaultView._objects.firstPin.element.onmouseup).toBeNull();
+  });
 
-//     expect(() => {
-//       view.updateValue(120);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue(-1000);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue(-31);
-//     }).toThrow(Error);
-//   });
-//   test('should throw an error if the passed value is not correct: range vertical', () => {
-//     const view = rangeVerticalView;
+  test('should bind onmousedown listener with the passed callback: range', () => {
+    expect(rangeView._objects.firstPin.element.onmousedown).toBeNull();
+    expect(rangeView._objects.secondPin.element.onmousedown).toBeNull();
 
-//     expect(() => {
-//       view.updateValue([-150, 120]);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue([-1000, 1000]);
-//     }).toThrow(Error);
-//     expect(() => {
-//       view.updateValue([-31, 940]);
-//     }).toThrow(Error);
-//   });
+    rangeView.bindMovePin(callback);
 
-//   test('should update hidden input.element', () => {
-//     const view = defaultView;
-//     view.updateValue(50);
-//     expect((view._objects.input.element as HTMLInputElement).value).toBe('50');
-//   });
+    expect(rangeView._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
+    expect(rangeView._objects.secondPin.element.onmousedown).toBeInstanceOf(Function);
 
-//   test('should update hidden input.element: range', () => {
-//     const view = rangeView;
-//     view.updateValue([50, 70]);
-//     expect((view._objects.input.element as HTMLInputElement).value).toBe('50,70');
-//   });
+    expect(rangeView._objects.firstPin.element.onmousemove).toBeNull();
+    expect(rangeView._objects.firstPin.element.onmouseup).toBeNull();
+    expect(rangeView._objects.secondPin.element.onmousemove).toBeNull();
+    expect(rangeView._objects.secondPin.element.onmouseup).toBeNull();
+  });
+});
 
-//   test('should update hidden input.element: vertical', () => {
-//     const view = verticalView;
-//     view.updateValue(50);
-//     expect((view._objects.input.element as HTMLInputElement).value).toBe('50');
-//   });
+describe('bindInputChange()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+  test('should bind onmousedown listener with the passed callback', () => {
+    expect(defaultView._objects.input.element.onchange).toBeNull();
+    defaultView.bindInputChange(callback);
+    expect(defaultView._objects.input.element.onchange).toBeInstanceOf(Function);
 
-//   test('should update hidden input.element: range vertical', () => {
-//     const view = rangeVerticalView;
-//     view.updateValue([50, 70]);
-//     expect((view._objects.input.element as HTMLInputElement).value).toBe('50,70');
-//   });
-// });
+    expect(rangeView._objects.input.element.onchange).toBeNull();
+    rangeView.bindInputChange(callback);
+    expect(rangeView._objects.input.element.onchange).toBeInstanceOf(Function);
+  });
+});
 
-// describe('Bind move pin()', () => {
-//   beforeAll(() => {
-//     defaultView = new View(testOptions.normal);
-//     verticalView = new View(testOptions.vertical);
-//     rangeView = new View(testOptions.range);
-//     rangeVerticalView = new View(testOptions.rangeVertical);
-//   });
-//   test('should bind onmousedown listener with the passed callback', () => {
-//     const view = defaultView;
-//     expect(view._objects.firstPin.element.onmousedown).toBeNull();
+describe('applyToCorrectPin()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+  test('should correctly calculate correct pin', () => {
+    expect(rangeView.applyToCorrectPin(50, callback)).toBe(0);
+    expect(rangeView.applyToCorrectPin(70, callback)).toBe(1);
+  });
 
-//     view.bindMovePin(testHandler);
+  test('should run a callback for the chosen pin', () => {
+    expect(rangeView.applyToCorrectPin(50, callback)).toBe(0);
+    expect(rangeView.applyToCorrectPin(70, callback)).toBe(1);
+    expect(callback).toHaveBeenCalledTimes(2);
+  });
+});
 
-//     expect(view._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
+describe('bindBarClick()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+  test('should call a callback on bar click', () => {
+    defaultView.bindBarClick(callback);
+    defaultView._objects.bar.element.click();
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+});
 
-//     expect(view._objects.firstPin.element.onmousemove).toBeNull();
-//     expect(view._objects.firstPin.element.onmouseup).toBeNull();
-//   });
+describe('bindScaleClick()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+  test('should call a callback on scale option click', () => {
+    defaultView.bindScaleClick(callback);
+    (defaultView._objects.scale.element.firstElementChild as HTMLElement).click();
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+});
 
-//   test('should bind onmousedown listener with the passed callback: range', () => {
-//     const view = rangeView;
-//     expect(view._objects.firstPin.element.onmousedown).toBeNull();
-//     expect(view._objects.secondPin.element.onmousedown).toBeNull();
+describe('setState()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+  });
+  test('should merge current and new states', () => {
+    defaultView.setState(
+      {
+        isVertical: true,
+      },
+      {
+        step: 10,
+      },
+    );
+    expect(defaultView._viewOptions).toStrictEqual({
+      ...testOptions.normal.viewState,
+      isVertical: true,
+    });
 
-//     view.bindMovePin(testHandler);
-
-//     expect(view._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
-//     expect(view._objects.secondPin.element.onmousedown).toBeInstanceOf(Function);
-
-//     expect(view._objects.firstPin.element.onmousemove).toBeNull();
-//     expect(view._objects.firstPin.element.onmouseup).toBeNull();
-//     expect(view._objects.secondPin.element.onmousemove).toBeNull();
-//     expect(view._objects.secondPin.element.onmouseup).toBeNull();
-//   });
-//   test('should bind onmousedown listener with the passed callback: vertical', () => {
-//     const view = verticalView;
-//     expect(view._objects.firstPin.element.onmousedown).toBeNull();
-
-//     view.bindMovePin(testHandler);
-
-//     expect(view._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
-
-//     expect(view._objects.firstPin.element.onmousemove).toBeNull();
-//     expect(view._objects.firstPin.element.onmouseup).toBeNull();
-//   });
-
-//   test('should bind onmousedown listener with the passed callback: range vertical', () => {
-//     const view = rangeVerticalView;
-//     expect(view._objects.firstPin.element.onmousedown).toBeNull();
-//     expect(view._objects.secondPin.element.onmousedown).toBeNull();
-
-//     view.bindMovePin(testHandler);
-
-//     expect(view._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
-//     expect(view._objects.secondPin.element.onmousedown).toBeInstanceOf(Function);
-
-//     expect(view._objects.firstPin.element.onmousemove).toBeNull();
-//     expect(view._objects.firstPin.element.onmouseup).toBeNull();
-//     expect(view._objects.secondPin.element.onmousemove).toBeNull();
-//     expect(view._objects.secondPin.element.onmouseup).toBeNull();
-//   });
-// });
-
-// describe('Bind input.element change()', () => {
-//   beforeAll(() => {
-//     defaultView = new View(testOptions.normal);
-//     verticalView = new View(testOptions.vertical);
-//     rangeView = new View(testOptions.range);
-//     rangeVerticalView = new View(testOptions.rangeVertical);
-//   });
-//   test('should bind onmousedown listener with the passed callback', () => {
-//     const view = defaultView;
-//     expect(view._objects.input.element.onchange).toBeNull();
-
-//     view.bindInputChange(testHandler);
-
-//     expect(view._objects.input.element.onchange).toBeInstanceOf(Function);
-//   });
-
-//   test('should bind onmousedown listener with the passed callback: range', () => {
-//     const view = rangeView;
-//     expect(view._objects.input.element.onchange).toBeNull();
-
-//     view.bindInputChange(testHandler);
-
-//     expect(view._objects.input.element.onchange).toBeInstanceOf(Function);
-//   });
-//   test('should bind onmousedown listener with the passed callback: vertical', () => {
-//     const view = verticalView;
-//     expect(view._objects.input.element.onchange).toBeNull();
-
-//     view.bindInputChange(testHandler);
-
-//     expect(view._objects.input.element.onchange).toBeInstanceOf(Function);
-//   });
-
-//   test('should bind onmousedown listener with the passed callback: range vertical', () => {
-//     const view = rangeVerticalView;
-//     expect(view._objects.input.element.onchange).toBeNull();
-
-//     view.bindInputChange(testHandler);
-
-//     expect(view._objects.input.element.onchange).toBeInstanceOf(Function);
-//   });
-// });
+    expect(defaultView._modelOptions).toStrictEqual({
+      ...testOptions.normal.modelState,
+      step: 10,
+    });
+  });
+});

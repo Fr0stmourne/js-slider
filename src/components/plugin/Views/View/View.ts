@@ -1,16 +1,11 @@
 import { ViewState, ModelState, PinData, ScaleData } from '../../interfaces';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateValue from '../../utils/calculateValue/calculateValue';
+import render from '../../utils/render/render';
 import PinView from '../subviews/PinView/PinView';
 import BarView from '../subviews/BarView/BarView';
 import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
-
-function render(markup: string): HTMLElement {
-  const wrapper = document.createElement('div');
-  wrapper.innerHTML = markup.trim();
-  return wrapper.firstChild as HTMLElement;
-}
 
 export default class View {
   _element: HTMLElement;
@@ -54,11 +49,9 @@ export default class View {
   bindScaleClick(handler?: Function): void {
     let handleScaleClick;
     if (this._objects.scale) {
-      if (this._modelOptions.range) {
-        handleScaleClick = (value: number): number => this.applyToCorrectPin(value, handler);
-      } else {
-        handleScaleClick = handler;
-      }
+      handleScaleClick = this._modelOptions.range
+        ? (value: number): number => this.applyToCorrectPin(value, handler)
+        : handler;
       (this._objects.scale.onOptionClick as Function) = handleScaleClick;
     }
   }
@@ -125,33 +118,21 @@ export default class View {
   }
 
   bindBarClick(handler?: Function): void {
-    let handleBarClick;
     const { isVertical } = this._viewOptions;
     const { minValue, maxValue, range } = this._modelOptions;
 
-    if (range) {
-      handleBarClick = (e: Event): void => {
-        const offset = isVertical
-          ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
-            (e.target as HTMLElement).getBoundingClientRect().height
-          : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+    const handleBarClick = (e: Event): void => {
+      const offset = isVertical
+        ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
+          (e.target as HTMLElement).getBoundingClientRect().height
+        : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
-        const newValue = calculateValue(offset, minValue, maxValue);
+      const newValue = calculateValue(offset, minValue, maxValue);
 
-        this.applyToCorrectPin(newValue, handler);
-      };
-    } else {
-      handleBarClick = (e: Event): void => {
-        const offset = isVertical
-          ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
-            (e.target as HTMLElement).getBoundingClientRect().height
-          : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
-
-        const newValue = calculateValue(offset, minValue, maxValue);
-
-        if (handler) handler(newValue);
-      };
-    }
+      if (handler) {
+        range ? this.applyToCorrectPin(newValue, handler) : handler(newValue);
+      }
+    };
 
     (this._objects.bar.onBarClick as Function) = handleBarClick;
   }

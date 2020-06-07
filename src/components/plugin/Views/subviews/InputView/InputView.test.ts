@@ -15,14 +15,14 @@ describe('InputView', () => {
   describe('value getter/setter', () => {
     test('should return correct value after an instance initialization', () => {
       expect(input.value).toBe(45);
-      expect(input2.value).toBe([45, 94]);
+      expect(input2.value).toStrictEqual([45, 94]);
     });
 
     test('should return correct value after value setter call', () => {
       input.value = 54;
       expect(input.value).toBe(54);
       input2.value = [49, 73];
-      expect(input2.value).toBe([49, 73]);
+      expect(input2.value).toStrictEqual([49, 73]);
     });
   });
 });
