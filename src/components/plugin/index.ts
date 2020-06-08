@@ -1,10 +1,9 @@
+import deleteUndef from './utils/deleteUndef/deleteUndef';
 import View from './Views/View/View';
 import Model from './Models/Model';
 import Controller from './Controller/Controller';
 import { Options, ModelState, ViewState } from './interfaces';
-
 import { DEFAULT_CONFIG } from './defaults';
-import deleteUndef from './utils/deleteUndef/deleteUndef';
 import './slider.scss';
 
 declare global {
