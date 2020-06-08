@@ -199,7 +199,7 @@ export default class View {
       if (node !== this._objects.scale) this._element.append(node.element);
     });
 
-    if (this._objects.scale) this._objects.bar.element.append(this._objects.scale.element);
+    if (this._objects.scale) this._element.append(this._objects.scale.element);
   }
 
   private applyToCorrectPin(value: number, handler?: Function): number {

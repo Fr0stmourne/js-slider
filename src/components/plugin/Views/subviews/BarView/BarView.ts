@@ -17,6 +17,8 @@ export default class BarView extends DefaultView {
     );
 
     const handleBarClick = (e: Event): void => {
+      if ((e.target as HTMLElement).classList.contains('js-scale')) console.log(234);
+
       this.onBarClick(e);
     };
 
