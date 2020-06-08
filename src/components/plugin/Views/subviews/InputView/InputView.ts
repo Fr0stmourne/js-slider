@@ -12,10 +12,6 @@ export default class InputView extends DefaultView {
   set value(value: number[] | number) {
     const input = this._element as HTMLInputElement;
     input.value = String(value);
-
-    const evt = document.createEvent('HTMLEvents');
-    evt.initEvent('blur', false, true);
-    this._element.dispatchEvent(evt);
   }
 
   get value(): number | number[] {

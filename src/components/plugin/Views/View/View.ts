@@ -56,19 +56,6 @@ export default class View {
     }
   }
 
-  applyToCorrectPin(value: number, handler?: Function): number {
-    const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
-    const FIRST_PIN = 0;
-    const SECOND_PIN = 1;
-    const chosenPin =
-      Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
-        ? FIRST_PIN
-        : SECOND_PIN;
-    pinValues[chosenPin] = value;
-    handler(pinValues);
-    return chosenPin;
-  }
-
   bindMovePin(valueHandler?: Function): void {
     const slider: HTMLElement = this._objects.bar.element;
     const { isVertical } = this._viewOptions;
@@ -213,5 +200,18 @@ export default class View {
     });
 
     if (this._objects.scale) this._objects.bar.element.append(this._objects.scale.element);
+  }
+
+  private applyToCorrectPin(value: number, handler?: Function): number {
+    const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
+    const FIRST_PIN = 0;
+    const SECOND_PIN = 1;
+    const chosenPin =
+      Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
+        ? FIRST_PIN
+        : SECOND_PIN;
+    pinValues[chosenPin] = value;
+    handler(pinValues);
+    return chosenPin;
   }
 }

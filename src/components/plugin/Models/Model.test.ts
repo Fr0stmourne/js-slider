@@ -32,24 +32,24 @@ describe('setState()', () => {
       defaultModel.setState({
         value: 50,
       });
-      expect(defaultModel.state.value).toBe(50);
+      expect(defaultModel._state.value).toBe(50);
 
       defaultModel.setState({
         value: 20,
       });
-      expect(defaultModel.state.value).toBe(20);
+      expect(defaultModel._state.value).toBe(20);
     });
 
     test('range case', () => {
       rangeModel.setState({
         value: [50, 70],
       });
-      expect(rangeModel.state.value).toStrictEqual([50, 70]);
+      expect(rangeModel._state.value).toStrictEqual([50, 70]);
 
       rangeModel.setState({
         value: [0, 100],
       });
-      expect(rangeModel.state.value).toStrictEqual([0, 100]);
+      expect(rangeModel._state.value).toStrictEqual([0, 100]);
     });
   });
 
@@ -58,24 +58,24 @@ describe('setState()', () => {
       defaultModel.setState({
         value: 1000,
       });
-      expect(defaultModel.state.value).toEqual(100);
+      expect(defaultModel._state.value).toEqual(100);
 
       defaultModel.setState({
         value: -70,
       });
-      expect(defaultModel.state.value).toEqual(-30);
+      expect(defaultModel._state.value).toEqual(-30);
     });
 
     test('range case', () => {
       rangeModel.setState({
         value: [-90, 70],
       });
-      expect(rangeModel.state.value).toStrictEqual([0, 70]);
+      expect(rangeModel._state.value).toStrictEqual([0, 70]);
 
       rangeModel.setState({
         value: [0, 200],
       });
-      expect(rangeModel.state.value).toStrictEqual([0, 100]);
+      expect(rangeModel._state.value).toStrictEqual([0, 100]);
     });
   });
   describe('should ceil the values if they are not multiples of the step value', () => {
@@ -83,21 +83,21 @@ describe('setState()', () => {
       defaultModel.setState({
         value: 51,
       });
-      expect(defaultModel.state.value).toEqual(55);
+      expect(defaultModel._state.value).toEqual(55);
     });
 
     test('range case', () => {
       rangeModel.setState({
         value: [31, 77],
       });
-      expect(rangeModel.state.value).toStrictEqual([32, 78]);
+      expect(rangeModel._state.value).toStrictEqual([32, 78]);
     });
   });
   test('should not set values for range model if min value > max value', () => {
     rangeModel.setState({
       value: [70, 30],
     });
-    expect(rangeModel.state.value).toStrictEqual(testOptions.range.value);
+    expect(rangeModel._state.value).toStrictEqual(testOptions.range.value);
   });
 });
 
@@ -120,14 +120,12 @@ describe('bindSetState()', () => {
   });
 
   test('should store the passed function in the class property', () => {
-    function testHandler(): void {
-      console.log(123);
-    }
+    const callback = jest.fn();
 
-    defaultModel.bindSetState(testHandler);
-    expect(defaultModel._onStateChange).toEqual(testHandler);
+    defaultModel.bindSetState(callback);
+    expect(defaultModel._onStateChange).toEqual(callback);
 
-    rangeModel.bindSetState(testHandler);
-    expect(rangeModel._onStateChange).toEqual(testHandler);
+    rangeModel.bindSetState(callback);
+    expect(rangeModel._onStateChange).toEqual(callback);
   });
 });

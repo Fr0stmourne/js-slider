@@ -14,7 +14,7 @@ const testOptions = {
     minValue: -101,
     maxValue: 100,
     step: 8,
-    value: [-50, 50],
+    value: [-56, 56],
     isVertical: true,
     scaleOptionsNum: 5,
   },
@@ -29,7 +29,7 @@ const testOptions = {
     minValue: 0,
     maxValue: 100,
     step: 7,
-    value: 45,
+    value: 49,
     isVertical: true,
     scaleOptionsNum: 5,
   },
@@ -52,7 +52,6 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     value: element.querySelector('.js-control-input') as HTMLInputElement,
     isVertical: element.querySelector('.js-direction') as HTMLInputElement,
   };
-  console.log(inputs);
 
   function setInitialInputValues(initialOptions: Options): void {
     inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled;
@@ -67,19 +66,17 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
   const slider = element.closest('.js-test').querySelector('.js-example');
   setInitialInputValues(initialOptions);
 
-  function handlePanelChange(e: Event) {
+  function handlePanelChange(): void {
     const newOptions = getInputsState();
-    console.log(newOptions);
-
     $(slider).slider('update', newOptions);
     bindListeners(inputs);
   }
 
-  function bindListeners(inputs: any) {
+  function bindListeners(inputs: any): void {
     Object.values(inputs).forEach(input => {
       (input as HTMLInputElement).addEventListener('change', handlePanelChange);
     });
-    function updateInputValue(value: number | number[]) {
+    function updateInputValue(value: number | number[]): void {
       inputs.value.value = value;
     }
 
@@ -105,18 +102,3 @@ Object.values(testOptions).forEach((options, index) => {
   const panels = document.querySelectorAll('.js-control-panel');
   createPanel(panels[index] as HTMLElement, options);
 });
-
-setTimeout(() => {
-  // $('.js-example-default').slider('update', { isTooltipDisabled: true });
-  // .slider('update', { isVertical: true });
-  // $('.js-example').slider('updateValue', 20);
-  // $('.js-example-default').slider('update', {
-  //   ...testOptionsVerticalRange,
-  //   ...{
-  //     minValue: -205,
-  //     maxValue: 210,
-  //     value: [-190, 190],
-  //   },
-  // });
-  // console.log($('.js-example').slider('getValue'));
-}, 2000);

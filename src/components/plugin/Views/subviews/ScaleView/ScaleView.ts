@@ -1,8 +1,9 @@
-import { Options, ScaleData } from '../../../interfaces';
+import { ScaleData } from '../../../interfaces';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class ScaleView extends DefaultView {
+  onOptionClick: Function;
   scaleOptionsNum: number;
   isVertical: boolean;
   step: number;
@@ -16,10 +17,6 @@ export default class ScaleView extends DefaultView {
     this.step = options.step;
     this.maxValue = options.maxValue;
     this.render();
-  }
-
-  onOptionClick(_value: number): void {
-    //
   }
 
   render(): void {

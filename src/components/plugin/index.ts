@@ -3,9 +3,9 @@ import Model from './Models/Model';
 import Controller from './Controller/Controller';
 import { Options, ModelState, ViewState } from './interfaces';
 
-import './slider.scss';
 import { DEFAULT_CONFIG } from './defaults';
 import deleteUndef from './utils/deleteUndef/deleteUndef';
+import './slider.scss';
 
 declare global {
   interface JQuery {
@@ -36,7 +36,7 @@ function getViewState(options: Options): ViewState {
   return state;
 }
 
-$.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
+$.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuery {
   interface API {
     init(): void;
     updateValue(value: number | number[]): void;

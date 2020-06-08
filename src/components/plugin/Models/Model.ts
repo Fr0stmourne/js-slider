@@ -2,16 +2,31 @@ import { ModelState } from '../interfaces';
 import deleteUndef from '../utils/deleteUndef/deleteUndef';
 
 export default class Model {
-  _onStateChange: Function;
   userCallback: Function;
-  state: ModelState;
+  _onStateChange: Function;
+  _state: ModelState;
 
   constructor(modelState: ModelState) {
-    this.state = modelState;
+    this._state = modelState;
+  }
+
+  getState(): ModelState {
+    return { ...this._state };
+  }
+
+  setState(modelState: ModelState): void {
+    this._state = this.validateState(modelState);
+
+    if (this._onStateChange) this._onStateChange(this._state.value);
+    if (this.userCallback) this.userCallback(this._state.value);
+  }
+
+  bindSetState(handler?: Function): void {
+    this._onStateChange = handler;
   }
 
   private validateValue(newValue: number | number[], state: ModelState): number | number[] {
-    if (newValue === undefined) return this.state.value;
+    if (newValue === undefined) return this._state.value;
     const { minValue, step, maxValue, value } = state;
     let validatedValue;
     if (Array.isArray(newValue)) {
@@ -43,8 +58,8 @@ export default class Model {
   private validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
     if (minValue === undefined || maxValue === undefined) {
       return {
-        minValue: this.state.minValue,
-        maxValue: this.state.maxValue,
+        minValue: this._state.minValue,
+        maxValue: this._state.maxValue,
       };
     }
     return minValue > maxValue
@@ -59,7 +74,7 @@ export default class Model {
   }
 
   private validateStep(step: number): number {
-    return Math.abs(step) || this.state.step;
+    return Math.abs(step) || this._state.step;
   }
 
   private validateState(newState: ModelState): ModelState {
@@ -67,13 +82,13 @@ export default class Model {
     const validatedStep = this.validateStep(stateToValidate.step);
     const validatedMinMaxValues = this.validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
     const validatedValue = this.validateValue(stateToValidate.value, {
-      ...this.state,
+      ...this._state,
       step: validatedStep,
       ...validatedMinMaxValues,
     });
 
     const validatedState = {
-      ...this.state,
+      ...this._state,
       step: validatedStep,
       ...validatedMinMaxValues,
       value: validatedValue,
@@ -83,20 +98,5 @@ export default class Model {
     deleteUndef(validatedState);
 
     return validatedState;
-  }
-
-  getState(): ModelState {
-    return { ...this.state };
-  }
-
-  setState(modelState: ModelState): void {
-    this.state = this.validateState(modelState);
-
-    if (this._onStateChange) this._onStateChange(this.state.value);
-    if (this.userCallback) this.userCallback(this.state.value);
-  }
-
-  bindSetState(handler?: Function): void {
-    this._onStateChange = handler;
   }
 }

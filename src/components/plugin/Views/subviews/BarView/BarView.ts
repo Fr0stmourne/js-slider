@@ -2,13 +2,11 @@ import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class BarView extends DefaultView {
+  onBarClick: Function;
+
   constructor() {
     super();
     this.render();
-  }
-
-  onBarClick(e: Event) {
-    //
   }
 
   render(): void {
