@@ -3,6 +3,7 @@ import deleteUndef from '../utils/deleteUndef/deleteUndef';
 
 export default class Model {
   _onStateChange: Function;
+  userCallback: Function;
   state: ModelState;
 
   constructor(modelState: ModelState) {
@@ -92,6 +93,7 @@ export default class Model {
     this.state = this.validateState(modelState);
 
     if (this._onStateChange) this._onStateChange(this.state.value);
+    if (this.userCallback) this.userCallback(this.state.value);
   }
 
   bindSetState(handler?: Function): void {

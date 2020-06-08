@@ -56,6 +56,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
 
   function setInitialInputValues(initialOptions: Options): void {
     inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled;
+    inputs.isVertical.checked = initialOptions.isVertical;
     inputs.step.value = String(initialOptions.step);
     inputs.minValue.value = String(initialOptions.minValue);
     inputs.maxValue.value = String(initialOptions.maxValue);
@@ -63,20 +64,26 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     inputs.value.value = String(initialOptions.value);
   }
 
+  const slider = element.closest('.js-test').querySelector('.js-example');
   setInitialInputValues(initialOptions);
 
   function handlePanelChange(e: Event) {
     const newOptions = getInputsState();
-    const slider = element.closest('.js-test').querySelector('.js-example');
+    console.log(newOptions);
 
     $(slider).slider('update', newOptions);
     bindListeners(inputs);
   }
 
-  function bindListeners(inputs: object) {
+  function bindListeners(inputs: any) {
     Object.values(inputs).forEach(input => {
       (input as HTMLInputElement).addEventListener('change', handlePanelChange);
     });
+    function updateInputValue(value: number | number[]) {
+      inputs.value.value = value;
+    }
+
+    $(slider).slider('onValueChange', updateInputValue);
   }
 
   function getInputsState(): Options {
@@ -87,6 +94,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
       maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : undefined,
       scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : undefined,
       isVertical: inputs.isVertical.checked,
+      value: inputs.value.value.includes(',') ? inputs.value.value.split(',').map(el => +el) : +inputs.value.value,
     };
   }
 
