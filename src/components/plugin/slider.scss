@@ -57,6 +57,10 @@
     border-radius: 50%;
     background-color: red;
     cursor: pointer;
+
+    &:hover {
+      z-index: 5;
+    }
   }
 
   &__scale {
