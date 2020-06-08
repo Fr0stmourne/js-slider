@@ -29,9 +29,6 @@ function getEntrypoints(scripts) {
   return result;
 }
 
-console.log(PAGE_SCRIPTS);
-
-
 module.exports = {
   // BASE config
   externals: {
@@ -69,7 +66,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
-  }, 
+  },
   mode: 'base',
   module: {
     rules: [
@@ -80,7 +77,7 @@ module.exports = {
       {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
-        loader: 'ts-loader'
+        loader: 'ts-loader',
       },
       {
         test: /\.js$/,

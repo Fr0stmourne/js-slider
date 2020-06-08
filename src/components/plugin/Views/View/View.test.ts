@@ -151,22 +151,6 @@ describe('bindInputChange()', () => {
   });
 });
 
-// describe('applyToCorrectPin()', () => {
-//   beforeEach(() => {
-//     callback = jest.fn();
-//   });
-//   test('should correctly calculate correct pin', () => {
-//     expect(rangeView.applyToCorrectPin(50, callback)).toBe(0);
-//     expect(rangeView.applyToCorrectPin(70, callback)).toBe(1);
-//   });
-
-//   test('should run a callback for the chosen pin', () => {
-//     expect(rangeView.applyToCorrectPin(50, callback)).toBe(0);
-//     expect(rangeView.applyToCorrectPin(70, callback)).toBe(1);
-//     expect(callback).toHaveBeenCalledTimes(2);
-//   });
-// });
-
 describe('bindBarClick()', () => {
   beforeEach(() => {
     callback = jest.fn();
