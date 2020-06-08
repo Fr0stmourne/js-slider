@@ -41,6 +41,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
     init(): void;
     updateValue(value: number | number[]): void;
     update(options: Options): void;
+    onValueChange(callback: Function): void;
     getValue(): number | number[];
   }
 
@@ -77,6 +78,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): any {
         view.updateValue(model.getState().value);
       });
     },
+    onValueChange(callback: Function): void {},
     getValue() {
       return $(this)
         .data()
