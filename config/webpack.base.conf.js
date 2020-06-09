@@ -33,6 +33,7 @@ module.exports = {
   // BASE config
   externals: {
     paths: PATHS,
+    jquery: '$',
   },
   entry: {
     utils: [`${__dirname}/../src/utils/scaffoldings.scss`, `${__dirname}/../src/utils/fonts.scss`],
@@ -50,16 +51,12 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    runtimeChunk: { name: 'common' },
     splitChunks: {
       cacheGroups: {
-        default: false,
         commons: {
-          test: /\.jsx?$/,
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
           chunks: 'all',
-          minChunks: 2,
-          name: 'common',
-          enforce: true,
         },
       },
     },
@@ -153,8 +150,7 @@ module.exports = {
       return new HtmlWebpackPlugin({
         template: `${__dirname}/../${pagePath.slice(pagePath.indexOf('src/pages'))}`,
         hash: true,
-        chunks: ['common', pageName.replace(/\.html/, '')],
-        filename: pageName,
+        chunks: ['vendors', 'plugin', 'index'],
       });
     }),
   ],

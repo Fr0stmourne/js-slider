@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Options } from '../../components/plugin/interfaces';
-import '../../components/plugin/index';
 
 const testOptions = {
   default: {

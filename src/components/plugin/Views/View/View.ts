@@ -117,7 +117,12 @@ export default class View {
       const newValue = calculateValue(offset, minValue, maxValue);
 
       if (handler) {
-        range ? this.applyToCorrectPin(newValue, handler) : handler(newValue);
+        if (range) {
+          const correctPinNumber = this.applyToCorrectPin(newValue, handler);
+          const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'].element as HTMLElement;
+        } else {
+          handler(newValue);
+        }
       }
     };
 
