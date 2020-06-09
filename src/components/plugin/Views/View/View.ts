@@ -74,7 +74,7 @@ export default class View {
             ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
             : e.clientX - shift - slider.getBoundingClientRect().left;
 
-          const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
+          const sliderSize = this._sliderSize;
           if (newValue < 0) newValue = 0;
           const rightEdge = sliderSize;
           if (newValue > rightEdge) newValue = rightEdge;
