@@ -29,6 +29,7 @@ function getViewState(options: Options): ViewState {
     scaleOptionsNum: options.scaleOptionsNum,
     isTooltipDisabled: options.isTooltipDisabled,
     isVertical: options.isVertical,
+    sliderSize: options.sliderSize,
   };
 
   deleteUndef(state);
@@ -95,7 +96,12 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
         const view = new View(viewState, modelState);
         $(el).data('slider', new Controller(model, view));
         el.append(view.element);
-        $(el).slider('update', { ...(methodOrOptions as Options) });
+        $(el).slider('update', {
+          ...(methodOrOptions as Options),
+        });
+        $(el).slider('update', {
+          sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect(),
+        });
       });
     },
   };

@@ -8,6 +8,7 @@ import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
 
 export default class View {
+  _sliderSize: number;
   _element: HTMLElement;
   _viewOptions: ViewState;
   _modelOptions: ModelState;
@@ -132,26 +133,15 @@ export default class View {
   updateValue(value: number | number[]): void {
     const { isVertical } = this._viewOptions;
     const { minValue, maxValue, range } = this._modelOptions;
+    const sliderSize = isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth;
     if (range) {
       const pins = [1, 2];
-      const pxNums = pins.map((el, idx) =>
-        calculatePxNum(
-          (value as number[])[idx],
-          minValue,
-          maxValue,
-          isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
-        ),
-      );
+      const pxNums = pins.map((el, idx) => calculatePxNum((value as number[])[idx], minValue, maxValue, sliderSize));
 
       this._objects.firstPin.updateValue(pxNums[0], (value as number[])[0]);
       this._objects.secondPin.updateValue(pxNums[1], (value as number[])[1]);
     } else {
-      const pxNum = calculatePxNum(
-        value as number,
-        minValue,
-        maxValue,
-        isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth,
-      );
+      const pxNum = calculatePxNum(value as number, minValue, maxValue, sliderSize);
       this._objects.firstPin.updateValue(pxNum, value as number);
     }
 
@@ -160,7 +150,7 @@ export default class View {
 
   render(): void {
     const VERTICAL_MODIFIER = 'slider-plugin--vertical';
-    const { isVertical, scaleOptionsNum, isTooltipDisabled } = this._viewOptions;
+    const { isVertical, scaleOptionsNum, isTooltipDisabled, sliderSize } = this._viewOptions;
     const { value, minValue, maxValue, range, step } = this._modelOptions;
     this._element = render(
       `
@@ -168,25 +158,30 @@ export default class View {
     </div>
     `,
     );
+
+    this._sliderSize = sliderSize && (isVertical ? +sliderSize.height : +sliderSize.width);
+
     const firstPinData: PinData = {
       pinNumber: 1,
       isTooltipDisabled,
       isVertical,
       value: (range ? (value as number[])[0] : value) as number,
     };
+
     this._objects = {
       bar: new BarView(),
       firstPin: new PinView(firstPinData),
       input: new InputView(value),
     };
 
-    if (scaleOptionsNum) {
+    if (scaleOptionsNum && this._sliderSize) {
       const scaleData: ScaleData = {
         scaleOptionsNum: scaleOptionsNum,
         step,
         isVertical,
         minValue,
         maxValue,
+        sliderSize: this._sliderSize,
       };
       this._objects.scale = new ScaleView(scaleData);
     }

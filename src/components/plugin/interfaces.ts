@@ -4,6 +4,7 @@ export interface ViewState {
   scaleOptionsNum?: number;
   isTooltipDisabled?: boolean;
   isVertical?: boolean;
+  sliderSize?: CSSStyleDeclaration;
 }
 
 export interface ModelState {
@@ -27,4 +28,5 @@ export interface ScaleData {
   isVertical: boolean;
   minValue: number;
   maxValue: number;
+  sliderSize?: number;
 }

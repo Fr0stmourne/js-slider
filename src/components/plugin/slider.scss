@@ -7,6 +7,7 @@
   &--vertical {
     width: 5px;
     display: flex;
+    height: 300px;
 
     .slider-plugin__bar {
       height: 300px;
@@ -26,12 +27,17 @@
     }
 
     .slider-plugin__scale {
-      position: absolute;
-      flex-direction: column;
+      position: relative;
+      width: max-content;
       height: 100%;
-      margin-left: -35px;
+      right: 20px;
       margin-top: 0;
       padding-top: 0;
+
+      &-option {
+        right: 0;
+        transform: translate(0, 50%);
+      }
     }
 
     .slider-plugin__input {
@@ -64,12 +70,14 @@
   }
 
   &__scale {
+    position: relative;
     padding-top: 10px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
 
     &-option {
+      position: absolute;
+      transform: translate(-50%, 0);
       cursor: pointer;
     }
   }
