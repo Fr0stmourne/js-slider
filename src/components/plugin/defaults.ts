@@ -8,6 +8,8 @@ export const DEFAULT_MODEL_STATE: ModelState = {
   range: false,
 };
 
+export const PIN_SIZE = 10;
+
 export const DEFAULT_VIEW_STATE: ViewState = {
   scaleOptionsNum: 5,
   isTooltipDisabled: false,

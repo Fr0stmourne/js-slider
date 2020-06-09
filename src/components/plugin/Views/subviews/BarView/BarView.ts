@@ -17,7 +17,9 @@ export default class BarView extends DefaultView {
     );
 
     const handleBarClick = (e: Event): void => {
-      this.onBarClick(e);
+      if (!(e.target as HTMLElement).classList.contains('js-slider-pin')) {
+        this.onBarClick(e);
+      }
     };
 
     this._element.addEventListener('click', handleBarClick);

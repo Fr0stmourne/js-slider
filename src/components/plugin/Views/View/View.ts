@@ -6,6 +6,7 @@ import PinView from '../subviews/PinView/PinView';
 import BarView from '../subviews/BarView/BarView';
 import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
+import { PIN_SIZE } from '../../defaults';
 
 export default class View {
   _sliderSize: number;
@@ -71,10 +72,10 @@ export default class View {
 
         const onMouseMove = (e: MouseEvent): void => {
           let newValue = isVertical
-            ? -(e.clientY - shift - slider.getBoundingClientRect().bottom)
-            : e.clientX - shift - slider.getBoundingClientRect().left;
+            ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) + PIN_SIZE / 2
+            : e.clientX - shift - slider.getBoundingClientRect().left + PIN_SIZE / 2;
 
-          const sliderSize = this._sliderSize;
+          const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
           if (newValue < 0) newValue = 0;
           const rightEdge = sliderSize;
           if (newValue > rightEdge) newValue = rightEdge;
@@ -195,11 +196,21 @@ export default class View {
       };
       this._objects.secondPin = new PinView(secondPinData);
     }
-    Object.values(this._objects).forEach(node => {
-      if (node !== this._objects.scale) this._element.append(node.element);
-    });
 
-    if (this._objects.scale) this._element.append(this._objects.scale.element);
+    const { firstPin, secondPin, scale, bar } = this._objects;
+    this._objects.bar.element.append(firstPin.element);
+    if (range) {
+      this._objects.bar.element.append(secondPin.element);
+    }
+    this._element.append(bar.element);
+
+    if (scale) this._element.append(scale.element);
+
+    // Object.values(this._objects).forEach(node => {
+    //   if (node !== this._objects.scale) this._element.append(node.element);
+    // });
+
+    // if (this._objects.scale) this._element.append(this._objects.scale.element);
   }
 
   private applyToCorrectPin(value: number, handler?: Function): number {

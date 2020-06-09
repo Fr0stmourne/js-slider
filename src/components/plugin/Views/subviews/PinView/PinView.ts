@@ -33,7 +33,7 @@ export default class PinView extends DefaultView {
   render(): void {
     this._element = render(
       `
-      <div class="slider-plugin__pin js-slider-pin-${this.pinNumber}">
+      <div class="slider-plugin__pin js-slider-pin js-slider-pin-${this.pinNumber}">
         <div class="slider-plugin__value ${
           this.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
         } js-slider-value">${this._value}</div>
