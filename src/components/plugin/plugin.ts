@@ -59,8 +59,11 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
     update(options: Options) {
       return this.each((index: number, el: HTMLElement) => {
         const { view, model } = $(el).data().slider;
-        const updatedViewState = getViewState({ ...(options as Options) });
-        const updatedModelState = getModelState({ ...(options as Options) });
+        const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
+        const updatedViewState = getViewState({
+          ...(newOptions as Options),
+        });
+        const updatedModelState = getModelState({ ...(newOptions as Options) });
 
         model.setState(updatedModelState);
         view.setState(updatedViewState, model.getState());
@@ -98,9 +101,6 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
         el.append(view.element);
         $(el).slider('update', {
           ...(methodOrOptions as Options),
-        });
-        $(el).slider('update', {
-          sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect(),
         });
       });
     },

@@ -160,7 +160,7 @@ export default class View {
     `,
     );
 
-    this._sliderSize = sliderSize && (isVertical ? +sliderSize.height : +sliderSize.width);
+    this._sliderSize = sliderSize && Math.max(+sliderSize.height, +sliderSize.width);
 
     const firstPinData: PinData = {
       pinNumber: 1,

@@ -4,7 +4,7 @@ export interface ViewState {
   scaleOptionsNum?: number;
   isTooltipDisabled?: boolean;
   isVertical?: boolean;
-  sliderSize?: CSSStyleDeclaration;
+  sliderSize?: DOMRect;
 }
 
 export interface ModelState {
