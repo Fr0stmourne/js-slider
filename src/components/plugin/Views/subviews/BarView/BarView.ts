@@ -22,6 +22,6 @@ export default class BarView extends DefaultView {
       }
     };
 
-    this._element.addEventListener('click', handleBarClick);
+    this._element.addEventListener('mousedown', handleBarClick);
   }
 }
