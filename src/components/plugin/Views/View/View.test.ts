@@ -106,36 +106,6 @@ describe('Update value()', () => {
   });
 });
 
-describe('bindMovePin()', () => {
-  beforeEach(() => {
-    callback = jest.fn();
-  });
-  test('should bind onmousedown listener with the passed callback', () => {
-    expect(defaultView._objects.firstPin.element.onmousedown).toBeNull();
-
-    defaultView.bindMovePin(callback);
-
-    expect(defaultView._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
-    expect(defaultView._objects.firstPin.element.onmousemove).toBeNull();
-    expect(defaultView._objects.firstPin.element.onmouseup).toBeNull();
-  });
-
-  test('should bind onmousedown listener with the passed callback: range', () => {
-    expect(rangeView._objects.firstPin.element.onmousedown).toBeNull();
-    expect(rangeView._objects.secondPin.element.onmousedown).toBeNull();
-
-    rangeView.bindMovePin(callback);
-
-    expect(rangeView._objects.firstPin.element.onmousedown).toBeInstanceOf(Function);
-    expect(rangeView._objects.secondPin.element.onmousedown).toBeInstanceOf(Function);
-
-    expect(rangeView._objects.firstPin.element.onmousemove).toBeNull();
-    expect(rangeView._objects.firstPin.element.onmouseup).toBeNull();
-    expect(rangeView._objects.secondPin.element.onmousemove).toBeNull();
-    expect(rangeView._objects.secondPin.element.onmouseup).toBeNull();
-  });
-});
-
 describe('bindInputChange()', () => {
   beforeEach(() => {
     callback = jest.fn();
@@ -155,9 +125,14 @@ describe('bindBarClick()', () => {
   beforeEach(() => {
     callback = jest.fn();
   });
-  test('should call a callback on bar click', () => {
+  test('should call a callback on bar mousedown evt', () => {
     defaultView.bindBarClick(callback);
-    defaultView._objects.bar.element.click();
+    defaultView._objects.bar.element.dispatchEvent(new Event('mousedown'));
+    expect(callback).toHaveBeenCalledTimes(1);
+  });
+  test('should call a callback on bar mousedown evt for range case', () => {
+    defaultView.bindBarClick(callback);
+    defaultView._objects.bar.element.dispatchEvent(new Event('mousedown'));
     expect(callback).toHaveBeenCalledTimes(1);
   });
 });
@@ -168,8 +143,10 @@ describe('bindScaleClick()', () => {
   });
   test('should call a callback on scale option click', () => {
     defaultView.bindScaleClick(callback);
-    (defaultView._objects.scale.element.firstElementChild as HTMLElement).click();
-    expect(callback).toHaveBeenCalledTimes(1);
+    if (defaultView._objects.scale) {
+      (defaultView._objects.scale.element.firstElementChild as HTMLElement).click();
+      expect(callback).toHaveBeenCalledTimes(1);
+    }
   });
 });
 

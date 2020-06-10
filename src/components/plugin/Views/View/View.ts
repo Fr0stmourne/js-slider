@@ -166,14 +166,9 @@ export default class View {
     this._element.append(bar.element);
 
     if (scale) this._element.append(scale.element);
-
-    // Object.values(this._objects).forEach(node => {
-    //   if (node !== this._objects.scale) this._element.append(node.element);
-    // });
-
-    // if (this._objects.scale) this._element.append(this._objects.scale.element);
   }
 
+  /* istanbul ignore next */
   private applyToCorrectPin(value: number, handler?: Function): number {
     const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
     const FIRST_PIN = 0;
@@ -187,11 +182,13 @@ export default class View {
     return chosenPin;
   }
 
+  /* istanbul ignore next */
   private bindListenersToPin(pin: PinView, handler?: Function): void {
     const onMouseDown = (event: MouseEvent): void => this.onMouseDown(event, pin, handler);
     pin.element.addEventListener('mousedown', onMouseDown);
   }
 
+  /* istanbul ignore next */
   private onMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
     const { isVertical } = this._viewOptions;
     const { minValue, maxValue, range, value } = this._modelOptions;
