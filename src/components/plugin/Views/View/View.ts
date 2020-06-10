@@ -58,52 +58,6 @@ export default class View {
     }
   }
 
-  onMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
-    const { isVertical } = this._viewOptions;
-    const { minValue, maxValue, range, value } = this._modelOptions;
-    const slider = this._objects.bar.element;
-    event.preventDefault();
-    const shift = isVertical
-      ? event.clientY - pin.element.getBoundingClientRect().bottom
-      : event.clientX - pin.element.getBoundingClientRect().left;
-
-    const onMouseMove = (e: MouseEvent): void => {
-      let newValue = isVertical
-        ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) + PIN_SIZE / 2
-        : e.clientX - shift - slider.getBoundingClientRect().left + PIN_SIZE / 2;
-
-      const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
-      if (newValue < 0) newValue = 0;
-      const rightEdge = sliderSize;
-      if (newValue > rightEdge) newValue = rightEdge;
-
-      const percentage = newValue / sliderSize;
-
-      const calculatedValue = calculateValue(+percentage, minValue, maxValue);
-      let resultValue = value;
-      if (range) {
-        (resultValue as number[])[pin.pinNumber - 1] = calculatedValue;
-      } else {
-        resultValue = calculatedValue;
-      }
-
-      if (handler) handler(resultValue);
-    };
-
-    const onMouseUp = (): void => {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  }
-
-  bindListenersToPin(pin: PinView, handler?: Function) {
-    const onMouseDown = (event: MouseEvent) => this.onMouseDown(event, pin, handler);
-    pin.element.addEventListener('mousedown', onMouseDown);
-  }
-
   bindMovePin(valueHandler?: Function): void {
     const { range } = this._modelOptions;
 
@@ -116,18 +70,18 @@ export default class View {
     const { minValue, maxValue, range } = this._modelOptions;
 
     const handleBarClick = (e: MouseEvent): void => {
-      const percentage = isVertical
-        ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
-          (e.target as HTMLElement).getBoundingClientRect().height
-        : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
-
-      const newValue = calculateValue(percentage, minValue, maxValue);
-      console.log('offset', percentage);
-
       if (handler) {
+        const percentage = isVertical
+          ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
+            (e.target as HTMLElement).getBoundingClientRect().height
+          : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+
+        const newValue = calculateValue(percentage, minValue, maxValue);
+
         if (range) {
           const correctPinNumber = this.applyToCorrectPin(newValue, handler);
-          const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'].element as HTMLElement;
+          const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'];
+          this.onMouseDown(e, pin, handler);
         } else {
           handler(newValue);
           this.onMouseDown(e, this._objects.firstPin, handler);
@@ -231,5 +185,51 @@ export default class View {
     pinValues[chosenPin] = value;
     handler(pinValues);
     return chosenPin;
+  }
+
+  private bindListenersToPin(pin: PinView, handler?: Function): void {
+    const onMouseDown = (event: MouseEvent): void => this.onMouseDown(event, pin, handler);
+    pin.element.addEventListener('mousedown', onMouseDown);
+  }
+
+  private onMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
+    const { isVertical } = this._viewOptions;
+    const { minValue, maxValue, range, value } = this._modelOptions;
+    const slider = this._objects.bar.element;
+    event.preventDefault();
+    const shift = isVertical
+      ? event.clientY - pin.element.getBoundingClientRect().bottom
+      : event.clientX - pin.element.getBoundingClientRect().left;
+
+    const onMouseMove = (e: MouseEvent): void => {
+      let newValue = isVertical
+        ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) + PIN_SIZE / 2
+        : e.clientX - shift - slider.getBoundingClientRect().left + PIN_SIZE / 2;
+
+      const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
+      if (newValue < 0) newValue = 0;
+      const rightEdge = sliderSize;
+      if (newValue > rightEdge) newValue = rightEdge;
+
+      const percentage = newValue / sliderSize;
+
+      const calculatedValue = calculateValue(+percentage, minValue, maxValue);
+      let resultValue = value;
+      if (range) {
+        (resultValue as number[])[pin.pinNumber - 1] = calculatedValue;
+      } else {
+        resultValue = calculatedValue;
+      }
+
+      if (handler) handler(resultValue);
+    };
+
+    const onMouseUp = (): void => {
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMouseMove);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   }
 }
