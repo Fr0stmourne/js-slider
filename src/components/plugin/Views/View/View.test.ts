@@ -73,13 +73,16 @@ describe('Update value()', () => {
   test('should correctly update pin value', () => {
     defaultView.updateValue(100);
     expect(defaultView._objects.firstPin.value).toBe(100);
+    expect(defaultView._modelOptions.value).toBe(100);
 
     verticalView.updateValue(-30);
     expect(verticalView._objects.firstPin.value).toBe(-30);
+    expect(verticalView._modelOptions.value).toBe(-30);
 
     rangeView.updateValue([30, 50]);
     expect(rangeView._objects.firstPin.value).toBe(30);
     expect(rangeView._objects.secondPin.value).toBe(50);
+    expect(rangeView._modelOptions.value).toStrictEqual([30, 50]);
   });
 
   test('should throw an error if the passed value is not correct', () => {
