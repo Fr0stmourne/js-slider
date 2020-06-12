@@ -108,6 +108,7 @@ export default class View {
     }
 
     this._objects.input.value = value;
+    this._modelOptions.value = value;
   }
 
   render(): void {
@@ -191,9 +192,7 @@ export default class View {
   /* istanbul ignore next */
   private onMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
     const { isVertical } = this._viewOptions;
-    const { minValue, maxValue, range } = this._modelOptions;
-    const inputValue = (this._objects.input.element as HTMLInputElement).value;
-    const value = range ? inputValue.split(',').map(el => +el) : +inputValue;
+    const { minValue, maxValue, range, value } = this._modelOptions;
 
     const slider = this._objects.bar.element;
     event.preventDefault();
