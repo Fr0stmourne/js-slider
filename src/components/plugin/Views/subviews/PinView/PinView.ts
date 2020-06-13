@@ -6,9 +6,9 @@ import movePin from '../../../utils/movePin/movePin';
 export default class PinView extends DefaultView {
   pinNumber: number;
   isTooltipDisabled: boolean;
-  _value: number;
   isVertical: boolean;
-  _elements: { pin: HTMLElement; tooltip: HTMLElement };
+  private _value: number;
+  private _elements: { pin: HTMLElement; tooltip: HTMLElement };
 
   constructor(options: PinData) {
     super();

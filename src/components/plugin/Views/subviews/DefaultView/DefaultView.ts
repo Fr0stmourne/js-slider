@@ -1,5 +1,5 @@
 export default class DefaultView {
-  _element: HTMLElement;
+  protected _element: HTMLElement;
 
   get element(): HTMLElement {
     return this._element;
