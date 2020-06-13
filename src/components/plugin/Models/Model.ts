@@ -15,13 +15,13 @@ export default class Model {
   }
 
   set state(modelState: ModelState) {
-    this._state = this.validateState(modelState);
+    this._state = this._validateState(modelState);
 
     if (this.onStateChange) this.onStateChange(this._state.value);
     if (this.userCallback) this.userCallback(this._state.value);
   }
 
-  private validateValue(newValue: number | number[], state: ModelState): number | number[] {
+  private _validateValue(newValue: number | number[], state: ModelState): number | number[] {
     if (newValue === undefined) return this._state.value;
     const { minValue, step, maxValue, value } = state;
     let validatedValue;
@@ -51,7 +51,7 @@ export default class Model {
     return validatedValue;
   }
 
-  private validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
+  private _validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
     if (minValue === undefined || maxValue === undefined) {
       return {
         minValue: this._state.minValue,
@@ -69,15 +69,15 @@ export default class Model {
         };
   }
 
-  private validateStep(step: number): number {
+  private _validateStep(step: number): number {
     return Math.abs(step) || this._state.step;
   }
 
-  private validateState(newState: ModelState): ModelState {
+  private _validateState(newState: ModelState): ModelState {
     const stateToValidate = { ...newState };
-    const validatedStep = this.validateStep(stateToValidate.step);
-    const validatedMinMaxValues = this.validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
-    const validatedValue = this.validateValue(stateToValidate.value, {
+    const validatedStep = this._validateStep(stateToValidate.step);
+    const validatedMinMaxValues = this._validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
+    const validatedValue = this._validateValue(stateToValidate.value, {
       ...this._state,
       step: validatedStep,
       ...validatedMinMaxValues,

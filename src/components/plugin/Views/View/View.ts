@@ -52,7 +52,7 @@ export default class View {
     let handleScaleClick;
     if (this._objects.scale) {
       handleScaleClick = this._modelOptions.range
-        ? (value: number): number => this.applyToCorrectPin(value, handler)
+        ? (value: number): number => this._applyToCorrectPin(value, handler)
         : handler;
       (this._objects.scale.onOptionClick as Function) = handleScaleClick;
     }
@@ -61,8 +61,8 @@ export default class View {
   bindMovePin(valueHandler?: Function): void {
     const { range } = this._modelOptions;
 
-    this.bindListenersToPin(this._objects.firstPin, valueHandler);
-    if (range) this.bindListenersToPin(this._objects.secondPin, valueHandler);
+    this._bindListenersToPin(this._objects.firstPin, valueHandler);
+    if (range) this._bindListenersToPin(this._objects.secondPin, valueHandler);
   }
 
   bindBarClick(handler?: Function): void {
@@ -79,12 +79,12 @@ export default class View {
         const newValue = calculateValue(percentage, minValue, maxValue);
 
         if (range) {
-          const correctPinNumber = this.applyToCorrectPin(newValue, handler);
+          const correctPinNumber = this._applyToCorrectPin(newValue, handler);
           const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'];
-          this.handleMouseDown(e, pin, handler);
+          this._handleMouseDown(e, pin, handler);
         } else {
           handler(newValue);
-          this.handleMouseDown(e, this._objects.firstPin, handler);
+          this._handleMouseDown(e, this._objects.firstPin, handler);
         }
       }
     };
@@ -170,7 +170,7 @@ export default class View {
   }
 
   /* istanbul ignore next */
-  private applyToCorrectPin(value: number, handler?: Function): number {
+  private _applyToCorrectPin(value: number, handler?: Function): number {
     const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
     const FIRST_PIN = 0;
     const SECOND_PIN = 1;
@@ -184,13 +184,13 @@ export default class View {
   }
 
   /* istanbul ignore next */
-  private bindListenersToPin(pin: PinView, handler?: Function): void {
-    const handleMouseDown = (event: MouseEvent): void => this.handleMouseDown(event, pin, handler);
-    pin.element.addEventListener('mousedown', handleMouseDown);
+  private _bindListenersToPin(pin: PinView, handler?: Function): void {
+    const _handleMouseDown = (event: MouseEvent): void => this._handleMouseDown(event, pin, handler);
+    pin.element.addEventListener('mousedown', _handleMouseDown);
   }
 
   /* istanbul ignore next */
-  private handleMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
+  private _handleMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
     const { isVertical } = this._viewOptions;
     const { minValue, maxValue, range, value } = this._modelOptions;
 

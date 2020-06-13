@@ -12,15 +12,15 @@ export default class Controller {
   }
 
   connect(): void {
-    const { setModelValue, view, model } = this;
+    const { _setModelValue, view, model } = this;
 
-    view.bindMovePin(setModelValue);
+    view.bindMovePin(_setModelValue);
 
-    view.bindInputChange(setModelValue);
+    view.bindInputChange(_setModelValue);
 
-    view.bindScaleClick(setModelValue);
+    view.bindScaleClick(_setModelValue);
 
-    view.bindBarClick(setModelValue);
+    view.bindBarClick(_setModelValue);
 
     model.onStateChange = (value: number | number[]): void => {
       view.updateValue(value);
@@ -29,7 +29,7 @@ export default class Controller {
 
   /* istanbul ignore next */
   @boundMethod
-  private setModelValue(value: number | number[]): void {
+  private _setModelValue(value: number | number[]): void {
     const { model } = this;
     model.state = { ...model.state, value };
   }
