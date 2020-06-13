@@ -11,6 +11,16 @@ const testOptions: {
       isTooltipDisabled: false,
       isVertical: false,
       scaleOptionsNum: 5,
+      sliderSize: {
+        bottom: 93,
+        height: 5,
+        left: 361,
+        right: 661,
+        top: 88,
+        width: 300,
+        x: 361,
+        y: 88,
+      } as DOMRect,
     },
     modelState: {
       minValue: -30,
@@ -72,17 +82,17 @@ describe('View constructor', () => {
 describe('Update value()', () => {
   test('should correctly update pin value', () => {
     defaultView.updateValue(100);
-    expect(defaultView._objects.firstPin.value).toBe(100);
-    expect(defaultView._modelOptions.value).toBe(100);
+    expect(defaultView.objects.firstPin.value).toBe(100);
+    expect(defaultView.state.modelState.value).toBe(100);
 
     verticalView.updateValue(-30);
-    expect(verticalView._objects.firstPin.value).toBe(-30);
-    expect(verticalView._modelOptions.value).toBe(-30);
+    expect(verticalView.objects.firstPin.value).toBe(-30);
+    expect(verticalView.state.modelState.value).toBe(-30);
 
     rangeView.updateValue([30, 50]);
-    expect(rangeView._objects.firstPin.value).toBe(30);
-    expect(rangeView._objects.secondPin.value).toBe(50);
-    expect(rangeView._modelOptions.value).toStrictEqual([30, 50]);
+    expect(rangeView.objects.firstPin.value).toBe(30);
+    expect(rangeView.objects.secondPin.value).toBe(50);
+    expect(rangeView.state.modelState.value).toStrictEqual([30, 50]);
   });
 
   test('should throw an error if the passed value is not correct', () => {
@@ -99,13 +109,13 @@ describe('Update value()', () => {
 
   test('should update hidden input.element', () => {
     defaultView.updateValue(50);
-    expect((defaultView._objects.input.element as HTMLInputElement).value).toBe('50');
+    expect((defaultView.objects.input.element as HTMLInputElement).value).toBe('50');
 
     verticalView.updateValue(30);
-    expect((verticalView._objects.input.element as HTMLInputElement).value).toBe('30');
+    expect((verticalView.objects.input.element as HTMLInputElement).value).toBe('30');
 
     rangeView.updateValue([50, 70]);
-    expect((rangeView._objects.input.element as HTMLInputElement).value).toBe('50,70');
+    expect((rangeView.objects.input.element as HTMLInputElement).value).toBe('50,70');
   });
 });
 
@@ -114,13 +124,13 @@ describe('bindInputChange()', () => {
     callback = jest.fn();
   });
   test('should bind onmousedown listener with the passed callback', () => {
-    expect(defaultView._objects.input.element.onchange).toBeNull();
+    expect(defaultView.objects.input.element.onchange).toBeNull();
     defaultView.bindInputChange(callback);
-    expect(defaultView._objects.input.element.onchange).toBeInstanceOf(Function);
+    expect(defaultView.objects.input.element.onchange).toBeInstanceOf(Function);
 
-    expect(rangeView._objects.input.element.onchange).toBeNull();
+    expect(rangeView.objects.input.element.onchange).toBeNull();
     rangeView.bindInputChange(callback);
-    expect(rangeView._objects.input.element.onchange).toBeInstanceOf(Function);
+    expect(rangeView.objects.input.element.onchange).toBeInstanceOf(Function);
   });
 });
 
@@ -130,12 +140,12 @@ describe('bindBarClick()', () => {
   });
   test('should call a callback on bar mousedown evt', () => {
     defaultView.bindBarClick(callback);
-    defaultView._objects.bar.element.dispatchEvent(new Event('mousedown'));
+    defaultView.objects.bar.element.dispatchEvent(new Event('mousedown'));
     expect(callback).toHaveBeenCalledTimes(1);
   });
   test('should call a callback on bar mousedown evt for range case', () => {
-    defaultView.bindBarClick(callback);
-    defaultView._objects.bar.element.dispatchEvent(new Event('mousedown'));
+    rangeView.bindBarClick(callback);
+    rangeView.objects.bar.element.dispatchEvent(new Event('mousedown'));
     expect(callback).toHaveBeenCalledTimes(1);
   });
 });
@@ -146,9 +156,18 @@ describe('bindScaleClick()', () => {
   });
   test('should call a callback on scale option click', () => {
     defaultView.bindScaleClick(callback);
-    if (defaultView._objects.scale) {
-      (defaultView._objects.scale.element.firstElementChild as HTMLElement).click();
+    if (defaultView.objects.scale) {
+      (defaultView.objects.scale.element.firstElementChild as HTMLElement).click();
       expect(callback).toHaveBeenCalledTimes(1);
+    }
+
+    rangeView.bindScaleClick(callback);
+    if (rangeView.objects.scale) {
+      (rangeView.objects.scale.element.firstElementChild as HTMLElement).click();
+      expect(callback).toHaveBeenCalledTimes(1);
+
+      (rangeView.objects.scale.element.lastElementChild as HTMLElement).click();
+      expect(callback).toHaveBeenCalledTimes(2);
     }
   });
 });
@@ -166,12 +185,12 @@ describe('setState()', () => {
         step: 10,
       },
     );
-    expect(defaultView._viewOptions).toStrictEqual({
+    expect(defaultView.state.viewState).toStrictEqual({
       ...testOptions.normal.viewState,
       isVertical: true,
     });
 
-    expect(defaultView._modelOptions).toStrictEqual({
+    expect(defaultView.state.modelState).toStrictEqual({
       ...testOptions.normal.modelState,
       step: 10,
     });

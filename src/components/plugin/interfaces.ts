@@ -1,3 +1,8 @@
+import BarView from './Views/subviews/BarView/BarView';
+import PinView from './Views/subviews/PinView/PinView';
+import InputView from './Views/subviews/InputView/InputView';
+import ScaleView from './Views/subviews/ScaleView/ScaleView';
+
 export type Options = ViewState & ModelState;
 
 export interface ViewState {
@@ -29,4 +34,12 @@ export interface ScaleData {
   minValue: number;
   maxValue: number;
   sliderSize?: number;
+}
+
+export interface Objects {
+  bar: BarView;
+  firstPin: PinView;
+  secondPin?: PinView;
+  input: InputView;
+  scale?: ScaleView;
 }
