@@ -3,26 +3,22 @@ import deleteUndef from '../utils/deleteUndef/deleteUndef';
 
 export default class Model {
   userCallback: Function;
-  _onStateChange: Function;
-  _state: ModelState;
+  onStateChange: Function;
+  private _state: ModelState;
 
   constructor(modelState: ModelState) {
     this._state = modelState;
   }
 
-  getState(): ModelState {
+  get state(): ModelState {
     return { ...this._state };
   }
 
-  setState(modelState: ModelState): void {
+  set state(modelState: ModelState) {
     this._state = this.validateState(modelState);
 
-    if (this._onStateChange) this._onStateChange(this._state.value);
+    if (this.onStateChange) this.onStateChange(this._state.value);
     if (this.userCallback) this.userCallback(this._state.value);
-  }
-
-  bindSetState(handler?: Function): void {
-    this._onStateChange = handler;
   }
 
   private validateValue(newValue: number | number[], state: ModelState): number | number[] {

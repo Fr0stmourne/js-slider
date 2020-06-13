@@ -50,10 +50,10 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
       return this.each((index: number, el: HTMLElement) => {
         const { model } = $(el).data().slider;
 
-        model.setState({
-          ...model.getState(),
+        model.state = {
+          ...model.state,
           value,
-        });
+        };
       });
     },
     update(options: Options) {
@@ -65,8 +65,8 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
         });
         const updatedModelState = getModelState({ ...(newOptions as Options) });
 
-        model.setState(updatedModelState);
-        view.setState(updatedViewState, model.getState());
+        model.state = updatedModelState;
+        view.setState(updatedViewState, model.state);
         view.render();
 
         $(el)
@@ -78,7 +78,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
           .first()
           .replaceWith(view.element);
 
-        view.updateValue(model.getState().value);
+        view.updateValue(model.state.value);
       });
     },
     onValueChange(callback: Function): JQuery {
@@ -87,9 +87,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
       });
     },
     getValue() {
-      return $(this)
-        .data()
-        .slider.model.getState().value;
+      return $(this).data().slider.model.state.value;
     },
     init(methodOrOptions = DEFAULT_CONFIG): JQuery {
       return this.each((index: number, el: HTMLElement) => {

@@ -81,10 +81,10 @@ export default class View {
         if (range) {
           const correctPinNumber = this.applyToCorrectPin(newValue, handler);
           const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'];
-          this.onMouseDown(e, pin, handler);
+          this.handleMouseDown(e, pin, handler);
         } else {
           handler(newValue);
-          this.onMouseDown(e, this._objects.firstPin, handler);
+          this.handleMouseDown(e, this._objects.firstPin, handler);
         }
       }
     };
@@ -185,12 +185,12 @@ export default class View {
 
   /* istanbul ignore next */
   private bindListenersToPin(pin: PinView, handler?: Function): void {
-    const onMouseDown = (event: MouseEvent): void => this.onMouseDown(event, pin, handler);
-    pin.element.addEventListener('mousedown', onMouseDown);
+    const handleMouseDown = (event: MouseEvent): void => this.handleMouseDown(event, pin, handler);
+    pin.element.addEventListener('mousedown', handleMouseDown);
   }
 
   /* istanbul ignore next */
-  private onMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
+  private handleMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
     const { isVertical } = this._viewOptions;
     const { minValue, maxValue, range, value } = this._modelOptions;
 
@@ -200,7 +200,7 @@ export default class View {
       ? event.clientY - pin.element.getBoundingClientRect().bottom
       : event.clientX - pin.element.getBoundingClientRect().left;
 
-    const onMouseMove = (e: MouseEvent): void => {
+    const handleMouseMove = (e: MouseEvent): void => {
       let newValue = isVertical
         ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) + PIN_SIZE / 2
         : e.clientX - shift - slider.getBoundingClientRect().left + PIN_SIZE / 2;
@@ -223,12 +223,12 @@ export default class View {
       if (handler) handler(resultValue);
     };
 
-    const onMouseUp = (): void => {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
+    const handleMouseUp = (): void => {
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   }
 }

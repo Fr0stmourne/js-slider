@@ -1,3 +1,5 @@
+import { boundMethod } from 'autobind-decorator';
+
 import Model from '../Models/Model';
 import View from '../Views/View/View';
 
@@ -10,12 +12,7 @@ export default class Controller {
   }
 
   connect(): void {
-    const { model, view } = this;
-    const currentState = model.getState();
-
-    function setModelValue(value: number | number[]): void {
-      model.setState({ ...currentState, value });
-    }
+    const { setModelValue, view, model } = this;
 
     view.bindMovePin(setModelValue);
 
@@ -25,8 +22,15 @@ export default class Controller {
 
     view.bindBarClick(setModelValue);
 
-    model.bindSetState((value: number | number[]) => {
+    model.onStateChange = (value: number | number[]): void => {
       view.updateValue(value);
-    });
+    };
+  }
+
+  /* istanbul ignore next */
+  @boundMethod
+  private setModelValue(value: number | number[]): void {
+    const { model } = this;
+    model.state = { ...model.state, value };
   }
 }
