@@ -43,3 +43,9 @@ export interface Objects {
   input: InputView;
   scale?: ScaleView;
 }
+
+export interface MouseMoveData {
+  pin: PinView;
+  shift: number;
+  handler?: Function;
+}
