@@ -78,19 +78,19 @@ describe('state setter', () => {
       expect(rangeModel.state.value).toStrictEqual([0, 100]);
     });
   });
-  describe('should ceil the values if they are not multiples of the step value', () => {
+  describe('should round the values if they are not multiples of the step value', () => {
     test('default case', () => {
       defaultModel.state = {
         value: 51,
       };
-      expect(defaultModel.state.value).toEqual(55);
+      expect(defaultModel.state.value).toEqual(50);
     });
 
     test('range case', () => {
       rangeModel.state = {
         value: [31, 77],
       };
-      expect(rangeModel.state.value).toStrictEqual([32, 78]);
+      expect(rangeModel.state.value).toStrictEqual([30, 76]);
     });
   });
   test('should not set values for range model if min value > max value', () => {

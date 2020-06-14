@@ -214,6 +214,7 @@ export default class View {
     document.addEventListener('mouseup', handleMouseUp);
   }
 
+  /* istanbul ignore next */
   private _handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
     const { isVertical } = this._viewState;
     const { minValue, maxValue, range, value } = this._modelState;
