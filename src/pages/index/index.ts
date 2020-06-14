@@ -6,11 +6,11 @@ const testOptions = {
     minValue: -33,
     maxValue: 103,
     step: 5,
-    value: 75,
+    value: 73,
     scaleOptionsNum: 6,
   },
   vr: {
-    minValue: -101,
+    minValue: -112,
     maxValue: 100,
     step: 8,
     value: [-56, 56],
@@ -21,7 +21,7 @@ const testOptions = {
     minValue: -33,
     maxValue: 100,
     step: 2,
-    value: [30, 80],
+    value: [29, 80],
     scaleOptionsNum: 5,
   },
   v: {

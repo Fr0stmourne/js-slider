@@ -23,7 +23,7 @@ export default class Controller {
     view.bindBarClick(_setModelValue);
 
     model.onStateChange = (value: number | number[]): void => {
-      view.updateValue(value);
+      view.updateValue(Array.isArray(value) ? [...value] : value);
     };
   }
 

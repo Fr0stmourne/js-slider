@@ -47,7 +47,7 @@ export default class PinView extends DefaultView {
     };
   }
 
-  _movePin(value: number): void {
+  private _movePin(value: number): void {
     movePin(this._elements.pin, value, this.isVertical);
   }
 }

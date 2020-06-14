@@ -5,9 +5,11 @@ export default class Model {
   userCallback: Function;
   onStateChange: Function;
   private _state: ModelState;
+  private _steps: number[];
 
   constructor(modelState: ModelState) {
     this._state = modelState;
+    this._steps = this._calculateSteps();
   }
 
   get state(): ModelState {
@@ -16,36 +18,42 @@ export default class Model {
 
   set state(modelState: ModelState) {
     this._state = this._validateState(modelState);
+    this._steps = this._calculateSteps();
 
-    if (this.onStateChange) this.onStateChange(this._state.value);
-    if (this.userCallback) this.userCallback(this._state.value);
+    if (this.onStateChange) this.onStateChange(this.state.value);
+    if (this.userCallback) this.userCallback(this.state.value);
+  }
+
+  private _calculateSteps(): number[] {
+    const { minValue, maxValue, step } = this.state;
+    const steps = [];
+    for (let i = minValue; i < maxValue; i += step) {
+      steps.push(i);
+      if (i + step > maxValue) steps.push(maxValue);
+    }
+    return steps;
+  }
+
+  private _findClosestStep(value: number): number {
+    return this._steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
   private _validateValue(newValue: number | number[], state: ModelState): number | number[] {
     if (newValue === undefined) return this._state.value;
-    const { minValue, step, maxValue, value } = state;
+    const { value } = state;
     let validatedValue;
-    if (Array.isArray(newValue)) {
-      const firstValue = Math.max(
-        (newValue as number[])[0] < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
-          ? Math.floor((newValue as number[])[0] / step) * step
-          : Math.ceil((newValue as number[])[0] / step) * step,
-        minValue,
-      );
 
-      const secondValue = Math.min(Math.ceil((newValue as number[])[1] / step) * step, maxValue);
+    if (Array.isArray(newValue)) {
+      const firstValue = this._findClosestStep(newValue[0]);
+      const secondValue = this._findClosestStep(newValue[1]);
       validatedValue = [firstValue, secondValue];
 
+      const prevValue = [this._findClosestStep((value as number[])[0]), this._findClosestStep((value as number[])[1])];
       if (firstValue >= secondValue) {
-        validatedValue = value;
+        validatedValue = prevValue;
       }
     } else {
-      validatedValue =
-        (newValue as number) < ((Math.ceil(minValue / step) * step - minValue) / 2 || step / 2)
-          ? Math.floor((newValue as number) / step) * step
-          : Math.ceil((newValue as number) / step) * step;
-      if (validatedValue > maxValue) validatedValue = maxValue;
-      if (validatedValue < minValue) validatedValue = minValue;
+      validatedValue = this._findClosestStep(newValue);
     }
 
     return validatedValue;
@@ -75,6 +83,7 @@ export default class Model {
 
   private _validateState(newState: ModelState): ModelState {
     const stateToValidate = { ...newState };
+
     const validatedStep = this._validateStep(stateToValidate.step);
     const validatedMinMaxValues = this._validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
     const validatedValue = this._validateValue(stateToValidate.value, {
