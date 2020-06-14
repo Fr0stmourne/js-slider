@@ -195,9 +195,7 @@ export default class View {
     const { isVertical } = this._viewState;
 
     event.preventDefault();
-    const shift = isVertical
-      ? event.clientY - pin.element.getBoundingClientRect().bottom
-      : event.clientX - pin.element.getBoundingClientRect().left;
+    const shift = isVertical ? event.offsetX : (event.target as HTMLElement).offsetHeight - event.offsetY;
 
     const mouseMoveData: MouseMoveData = {
       pin,
@@ -223,7 +221,7 @@ export default class View {
     const slider = this._objects.bar.element;
 
     let newValue = isVertical
-      ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) + PIN_SIZE / 2
+      ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) - PIN_SIZE / 2
       : e.clientX - shift - slider.getBoundingClientRect().left + PIN_SIZE / 2;
 
     const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
