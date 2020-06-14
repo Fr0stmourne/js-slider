@@ -28,7 +28,6 @@ export default class ScaleView extends DefaultView {
     const options = new Array(scaleOptionsNum).fill(null);
     options[0] = minValue;
     options[options.length - 1] = maxValue;
-    console.log(this._getMilestones());
 
     const calculatedOptions = this._getMilestones();
 
@@ -69,13 +68,28 @@ export default class ScaleView extends DefaultView {
   private _getMilestones(): number[] {
     const { minValue, maxValue, scaleOptionsNum, step } = this;
     const steps = calculateSteps(minValue, maxValue, step);
-    const filteredSteps = steps.filter((step, index, stepsArr) => {
-      const isFirstStep = index === 0;
-      const isLastStep = index === stepsArr.length - 1;
-      if (isFirstStep || isLastStep) return true;
 
-      return index % Math.round(stepsArr.length / (scaleOptionsNum - 1)) === 0;
-    });
+    function filterSteps(steps: number[], scaleOptionsNum: number): number[] {
+      if (scaleOptionsNum >= steps.length) {
+        return [...steps];
+      }
+      const result: number[] = [];
+      const totalItems = steps.length;
+      const interval = totalItems / scaleOptionsNum;
+
+      for (let i = 0; i < scaleOptionsNum; i++) {
+        const evenIndex = Math.floor(i * interval + interval / 2);
+        result.push(steps[evenIndex]);
+      }
+
+      result.pop();
+      result.shift();
+      result.unshift(steps[0]);
+      result.push(steps[steps.length - 1]);
+      return result;
+    }
+
+    const filteredSteps = filterSteps(steps, scaleOptionsNum);
     return filteredSteps;
   }
 }
