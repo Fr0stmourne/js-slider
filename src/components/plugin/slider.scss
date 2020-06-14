@@ -2,9 +2,8 @@
   position: relative;
   font-family: 'Roboto', Arial, sans-serif;
   font-size: 14px;
-  width: 100%;
+  width: calc(100% - 5px);
   padding: 38px 0 15px;
-  margin: 0 10px;
 
   &--vertical {
     width: 5px;
