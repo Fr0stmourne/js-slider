@@ -1,5 +1,6 @@
 import { ModelState } from '../interfaces';
 import deleteUndef from '../utils/deleteUndef/deleteUndef';
+import calculateSteps from '../utils/calculateSteps/calculateSteps';
 
 export default class Model {
   userCallback: Function;
@@ -9,7 +10,9 @@ export default class Model {
 
   constructor(modelState: ModelState) {
     this._state = modelState;
-    this._steps = this._calculateSteps();
+
+    const { minValue, maxValue, step } = this.state;
+    this._steps = calculateSteps(minValue, maxValue, step);
   }
 
   get state(): ModelState {
@@ -18,20 +21,12 @@ export default class Model {
 
   set state(modelState: ModelState) {
     this._state = this._validateState(modelState);
-    this._steps = this._calculateSteps();
+
+    const { minValue, maxValue, step } = this.state;
+    this._steps = calculateSteps(minValue, maxValue, step);
 
     if (this.onStateChange) this.onStateChange(this.state.value);
     if (this.userCallback) this.userCallback(this.state.value);
-  }
-
-  private _calculateSteps(): number[] {
-    const { minValue, maxValue, step } = this.state;
-    const steps = [];
-    for (let i = minValue; i < maxValue; i += step) {
-      steps.push(i);
-      if (i + step > maxValue) steps.push(maxValue);
-    }
-    return steps;
   }
 
   private _findClosestStep(value: number): number {

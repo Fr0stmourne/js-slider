@@ -2,6 +2,7 @@ import { ScaleData } from '../../../interfaces';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 import calculatePxNum from '../../../utils/calculatePxNum/calculatePxNum';
+import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
 
 export default class ScaleView extends DefaultView {
   onOptionClick: Function;
@@ -27,11 +28,9 @@ export default class ScaleView extends DefaultView {
     const options = new Array(scaleOptionsNum).fill(null);
     options[0] = minValue;
     options[options.length - 1] = maxValue;
+    console.log(this._getMilestones());
 
-    const calculatedOptions = options.map((el, index) => {
-      if (el !== null) return el;
-      return this._calculateMilestone(index);
-    });
+    const calculatedOptions = this._getMilestones();
 
     const optionPositions = calculatedOptions.map(value => {
       return calculatePxNum(value, minValue, maxValue, sliderSize);
@@ -67,8 +66,16 @@ export default class ScaleView extends DefaultView {
     });
   }
 
-  private _calculateMilestone(index: number): number {
+  private _getMilestones(): number[] {
     const { minValue, maxValue, scaleOptionsNum, step } = this;
-    return Math.round((minValue + Math.round((index * (maxValue - minValue)) / (scaleOptionsNum - 1))) / step) * step;
+    const steps = calculateSteps(minValue, maxValue, step);
+    const filteredSteps = steps.filter((step, index, stepsArr) => {
+      const isFirstStep = index === 0;
+      const isLastStep = index === stepsArr.length - 1;
+      if (isFirstStep || isLastStep) return true;
+
+      return index % Math.round(stepsArr.length / (scaleOptionsNum - 1)) === 0;
+    });
+    return filteredSteps;
   }
 }
