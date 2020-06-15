@@ -43,64 +43,9 @@ export default class View extends Observer {
   }
 
   bindListeners(): void {
-    this.bindBarClick();
-    this.bindMovePin();
-    this.bindScaleClick();
-  }
-
-  bindInputChange(): void {
-    const input: InputView = this._objects.input;
-    input.element.onchange = (e): void => {
-      const newValue: number | number[] = this._modelState.range
-        ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
-        : +(e.target as HTMLInputElement).value;
-      this.emit('valueChanged', { value: newValue });
-    };
-  }
-
-  bindScaleClick(): void {
-    if (this._objects.scale) {
-      const handleScaleClick = (value: number): void => {
-        const { range } = this._modelState;
-        this.emit('valueChanged', { value: range ? this._applyToCorrectPin(value) : value });
-      };
-
-      this._objects.scale.onOptionClick = handleScaleClick;
-    }
-  }
-
-  bindMovePin(): void {
-    const { range } = this._modelState;
-
-    this._bindListenersToPin(this._objects.firstPin);
-    if (range) this._bindListenersToPin(this._objects.secondPin);
-  }
-
-  bindBarClick(): void {
-    const { isVertical } = this._viewState;
-    const { minValue, maxValue, range } = this._modelState;
-
-    const handleBarClick = (e: MouseEvent): void => {
-      const percentage = isVertical
-        ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
-          (e.target as HTMLElement).getBoundingClientRect().height
-        : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
-
-      const newValue = calculateValue(percentage, minValue, maxValue);
-
-      if (range) {
-        const updatedValues = this._applyToCorrectPin(newValue);
-        const updatedPinKey = (this._modelState.value as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
-        const updatedPin = this._objects[updatedPinKey];
-        this.emit('valueChanged', { value: updatedValues });
-        this._handleMouseDown(e, updatedPin);
-      } else {
-        this.emit('valueChanged', { value: newValue });
-        this._handleMouseDown(e, this._objects.firstPin);
-      }
-    };
-
-    (this._objects.bar.onBarClick as Function) = handleBarClick;
+    this._bindBarClick();
+    this._bindMovePin();
+    this._bindScaleClick();
   }
 
   updateValue(value: number | number[]): void {
@@ -193,6 +138,61 @@ export default class View extends Observer {
         : SECOND_PIN;
     pinValues[chosenPin] = value;
     return pinValues;
+  }
+
+  private _bindInputChange(): void {
+    const input: InputView = this._objects.input;
+    input.element.onchange = (e): void => {
+      const newValue: number | number[] = this._modelState.range
+        ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
+        : +(e.target as HTMLInputElement).value;
+      this.emit('valueChanged', { value: newValue });
+    };
+  }
+
+  private _bindScaleClick(): void {
+    if (this._objects.scale) {
+      const handleScaleClick = (value: number): void => {
+        const { range } = this._modelState;
+        this.emit('valueChanged', { value: range ? this._applyToCorrectPin(value) : value });
+      };
+
+      this._objects.scale.onOptionClick = handleScaleClick;
+    }
+  }
+
+  private _bindMovePin(): void {
+    const { range } = this._modelState;
+
+    this._bindListenersToPin(this._objects.firstPin);
+    if (range) this._bindListenersToPin(this._objects.secondPin);
+  }
+
+  private _bindBarClick(): void {
+    const { isVertical } = this._viewState;
+    const { minValue, maxValue, range } = this._modelState;
+
+    const handleBarClick = (e: MouseEvent): void => {
+      const percentage = isVertical
+        ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
+          (e.target as HTMLElement).getBoundingClientRect().height
+        : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+
+      const newValue = calculateValue(percentage, minValue, maxValue);
+
+      if (range) {
+        const updatedValues = this._applyToCorrectPin(newValue);
+        const updatedPinKey = (this._modelState.value as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
+        const updatedPin = this._objects[updatedPinKey];
+        this.emit('valueChanged', { value: updatedValues });
+        this._handleMouseDown(e, updatedPin);
+      } else {
+        this.emit('valueChanged', { value: newValue });
+        this._handleMouseDown(e, this._objects.firstPin);
+      }
+    };
+
+    (this._objects.bar.onBarClick as Function) = handleBarClick;
   }
 
   /* istanbul ignore next */

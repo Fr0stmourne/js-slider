@@ -14,19 +14,4 @@ describe('Controller constructor', () => {
     expect(controller.view).toEqual(view);
     expect(controller.model).toEqual(model);
   });
-
-  test('should call binders on the view', () => {
-    const view = new View(DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE);
-    const model = new Model(DEFAULT_MODEL_STATE);
-    expect(view.bindMovePin).not.toHaveBeenCalled();
-    expect(view.bindInputChange).not.toHaveBeenCalled();
-    expect(view.bindScaleClick).not.toHaveBeenCalled();
-    expect(view.bindBarClick).not.toHaveBeenCalled();
-
-    new Controller(model, view);
-    expect(view.bindMovePin).toHaveBeenCalled();
-    expect(view.bindInputChange).toHaveBeenCalled();
-    expect(view.bindScaleClick).toHaveBeenCalled();
-    expect(view.bindBarClick).toHaveBeenCalled();
-  });
 });
