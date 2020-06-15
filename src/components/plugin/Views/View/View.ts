@@ -7,8 +7,9 @@ import BarView from '../subviews/BarView/BarView';
 import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
 import { PIN_SIZE } from '../../defaults';
+import Observer from '../../Observer/Observer';
 
-export default class View {
+export default class View extends Observer {
   private _sliderSize: number;
   private _element: HTMLElement;
   private _viewState: ViewState;
@@ -16,6 +17,7 @@ export default class View {
   private _objects: Objects;
 
   constructor(viewState: ViewState, modelState: ModelState) {
+    super();
     this._viewState = viewState;
     this._modelState = modelState;
     this.render();
@@ -40,53 +42,60 @@ export default class View {
     this._modelState = { ...this._modelState, ...modelState };
   }
 
-  bindInputChange(handler?: Function): void {
+  bindListeners(): void {
+    this.bindBarClick();
+    this.bindMovePin();
+    this.bindScaleClick();
+  }
+
+  bindInputChange(): void {
     const input: InputView = this._objects.input;
     input.element.onchange = (e): void => {
       const newValue: number | number[] = this._modelState.range
         ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
         : +(e.target as HTMLInputElement).value;
-      handler(newValue);
+      // handler(newValue);
+      this.emit('valueChanged', { value: newValue });
     };
   }
 
-  bindScaleClick(handler?: Function): void {
-    let handleScaleClick;
+  bindScaleClick(): void {
     if (this._objects.scale) {
-      const rangeCaseHandler = (value: number): number => this._applyToCorrectPin(value, handler);
-      handleScaleClick = this._modelState.range ? rangeCaseHandler : handler;
-      (this._objects.scale.onOptionClick as Function) = handleScaleClick;
+      const handleScaleClick = (value: number): void => {
+        const { range } = this._modelState;
+        this.emit('valueChanged', { value: range ? this._applyToCorrectPin(value) : value });
+      };
+
+      this._objects.scale.onOptionClick = handleScaleClick;
     }
   }
 
-  bindMovePin(handler?: Function): void {
+  bindMovePin(): void {
     const { range } = this._modelState;
 
-    this._bindListenersToPin(this._objects.firstPin, handler);
-    if (range) this._bindListenersToPin(this._objects.secondPin, handler);
+    this._bindListenersToPin(this._objects.firstPin);
+    if (range) this._bindListenersToPin(this._objects.secondPin);
   }
 
-  bindBarClick(handler?: Function): void {
+  bindBarClick(): void {
     const { isVertical } = this._viewState;
     const { minValue, maxValue, range } = this._modelState;
 
     const handleBarClick = (e: MouseEvent): void => {
-      if (handler) {
-        const percentage = isVertical
-          ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
-            (e.target as HTMLElement).getBoundingClientRect().height
-          : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+      const percentage = isVertical
+        ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
+          (e.target as HTMLElement).getBoundingClientRect().height
+        : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
 
-        const newValue = calculateValue(percentage, minValue, maxValue);
+      const newValue = calculateValue(percentage, minValue, maxValue);
 
-        if (range) {
-          const correctPinNumber = this._applyToCorrectPin(newValue, handler);
-          const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'];
-          this._handleMouseDown(e, pin, handler);
-        } else {
-          handler(newValue);
-          this._handleMouseDown(e, this._objects.firstPin, handler);
-        }
+      if (range) {
+        const correctPinNumber = this._applyToCorrectPin(newValue);
+        const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'];
+        this._handleMouseDown(e, pin);
+      } else {
+        this.emit('valueChanged', { value: newValue });
+        this._handleMouseDown(e, this._objects.firstPin);
       }
     };
 
@@ -168,10 +177,12 @@ export default class View {
     this._element.append(bar.element);
 
     if (scale) this._element.append(scale.element);
+
+    this.bindListeners();
   }
 
   /* istanbul ignore next */
-  private _applyToCorrectPin(value: number, handler?: Function): number {
+  private _applyToCorrectPin(value: number): number[] {
     const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
     const FIRST_PIN = 0;
     const SECOND_PIN = 1;
@@ -180,18 +191,17 @@ export default class View {
         ? FIRST_PIN
         : SECOND_PIN;
     pinValues[chosenPin] = value;
-    handler(pinValues);
-    return chosenPin;
+    return pinValues;
   }
 
   /* istanbul ignore next */
-  private _bindListenersToPin(pin: PinView, handler?: Function): void {
-    const handleMouseDown = (event: MouseEvent): void => this._handleMouseDown(event, pin, handler);
+  private _bindListenersToPin(pin: PinView): void {
+    const handleMouseDown = (event: MouseEvent): void => this._handleMouseDown(event, pin);
     pin.element.addEventListener('mousedown', handleMouseDown);
   }
 
   /* istanbul ignore next */
-  private _handleMouseDown(event: MouseEvent, pin: PinView, handler?: Function): void {
+  private _handleMouseDown(event: MouseEvent, pin: PinView): void {
     const { isVertical } = this._viewState;
 
     event.preventDefault();
@@ -200,7 +210,6 @@ export default class View {
     const mouseMoveData: MouseMoveData = {
       pin,
       shift,
-      handler,
     };
 
     const handleMouseMove = (e: MouseEvent): void => this._handleMouseMove(e, mouseMoveData);
@@ -218,7 +227,7 @@ export default class View {
   private _handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
     const { isVertical } = this._viewState;
     const { minValue, maxValue, range, value } = this._modelState;
-    const { pin, shift, handler } = data;
+    const { pin, shift } = data;
     const slider = this._objects.bar.element;
 
     let newValue = isVertical
@@ -240,6 +249,6 @@ export default class View {
       resultValue = calculatedValue;
     }
 
-    if (handler) handler(resultValue);
+    this.emit('valueChanged', { value: resultValue });
   }
 }

@@ -27,11 +27,14 @@ export default class Model extends Observer {
     const { minValue, maxValue, step } = this.state;
     this._steps = calculateSteps(minValue, maxValue, step);
 
-    if (this.onStateChange) this.onStateChange(this.state.value);
-    if (this.userCallback) this.userCallback(this.state.value);
+    this.emit('stateChanged', { value: this.state.value });
+    // if (this.onStateChange) this.onStateChange(this.state.value);
+    // if (this.userCallback) this.userCallback(this.state.value);
   }
 
   private _findClosestStep(value: number): number {
+    console.log(this._steps);
+
     return this._steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 

@@ -14,23 +14,32 @@ export default class Controller {
   connect(): void {
     const { _setModelValue, view, model } = this;
 
-    view.bindMovePin(_setModelValue);
+    // view.bindMovePin(_setModelValue);
 
-    view.bindInputChange(_setModelValue);
+    // view.bindInputChange(_setModelValue);
 
-    view.bindScaleClick(_setModelValue);
+    // view.bindScaleClick(_setModelValue);
 
-    view.bindBarClick(_setModelValue);
+    // view.bindBarClick(_setModelValue);
 
-    model.onStateChange = (value: number | number[]): void => {
-      view.updateValue(Array.isArray(value) ? [...value] : value);
-    };
+    view.on('valueChanged', _setModelValue);
+
+    if (this.model.userCallback) {
+      model.on('stateChanged', this.model.userCallback);
+    }
+    model.on('stateChanged', this._updateView);
   }
 
   /* istanbul ignore next */
   @boundMethod
-  private _setModelValue(value: number | number[]): void {
+  private _setModelValue(data: object): void {
     const { model } = this;
-    model.state = { ...model.state, value };
+    model.state = { ...model.state, ...data };
+  }
+
+  /* istanbul ignore next */
+  @boundMethod
+  private _updateView({ value }: { value: number | number[] }): void {
+    this.view.updateValue(Array.isArray(value) ? [...value] : value);
   }
 }

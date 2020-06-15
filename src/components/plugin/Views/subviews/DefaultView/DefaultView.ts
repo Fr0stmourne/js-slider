@@ -1,4 +1,6 @@
-export default class DefaultView {
+import Observer from '../../../Observer/Observer';
+
+export default class DefaultView extends Observer {
   protected _element: HTMLElement;
 
   get element(): HTMLElement {

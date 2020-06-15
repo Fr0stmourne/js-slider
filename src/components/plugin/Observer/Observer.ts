@@ -6,6 +6,8 @@ export default class Observer {
   on(eventName: string, callback: Function): void {
     const callbacks = this.events[eventName];
 
+    console.log(`event ${eventName} caused callback`);
+
     if (callbacks) {
       callbacks.push(callback);
     } else {
@@ -15,6 +17,7 @@ export default class Observer {
 
   emit(eventName: string, data?: {}): void {
     const event = this.events[eventName];
+    console.log(`event ${eventName} triggered`);
 
     if (event) {
       event.forEach((func: Function) => func(data));
