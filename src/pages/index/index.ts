@@ -34,10 +34,10 @@ const testOptions = {
   },
 };
 
-$('.js-example-default').slider(testOptions.r);
-// $('.js-example-vr').slider(testOptions.vr);
-// $('.js-example-r').slider(testOptions.r);
-// $('.js-example-v').slider(testOptions.v);
+$('.js-example-default').slider(testOptions.default);
+$('.js-example-vr').slider(testOptions.vr);
+$('.js-example-r').slider(testOptions.r);
+$('.js-example-v').slider(testOptions.v);
 
 function createPanel(el: HTMLElement, initialOptions: Options): void {
   const element = el;
@@ -97,10 +97,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
   bindListeners(inputs);
 }
 
-// Object.values(testOptions).forEach((options, index) => {
-//   const panels = document.querySelectorAll('.js-control-panel');
-//   createPanel(panels[index] as HTMLElement, options);
-// });
-
-const panels = document.querySelector('.js-control-panel');
-createPanel(panels as HTMLElement, testOptions.r);
+Object.values(testOptions).forEach((options, index) => {
+  const panels = document.querySelectorAll('.js-control-panel');
+  createPanel(panels[index] as HTMLElement, options);
+});

@@ -83,7 +83,9 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
     },
     onValueChange(callback: Function): JQuery {
       return this.each((index: number, el: HTMLElement) => {
-        $(el).data().slider.model.userCallback = callback;
+        $(el)
+          .data()
+          .slider.setUserCallback(callback);
       });
     },
     getValue() {

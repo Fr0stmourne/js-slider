@@ -4,6 +4,8 @@ import Model from '../Models/Model';
 import View from '../Views/View/View';
 
 export default class Controller {
+  userCallback: Function;
+
   constructor(public model: Model, public view: View) {
     this.model = model;
     this.view = view;
@@ -11,22 +13,20 @@ export default class Controller {
     this.connect();
   }
 
+  setUserCallback(callback: Function): void {
+    this.userCallback = callback;
+
+    const callUserCallback = ({ value }: { value: number | number[] }): void => {
+      this.userCallback(value);
+    };
+
+    this.model.on('stateChanged', callUserCallback);
+  }
+
   connect(): void {
     const { _setModelValue, view, model } = this;
 
-    // view.bindMovePin(_setModelValue);
-
-    // view.bindInputChange(_setModelValue);
-
-    // view.bindScaleClick(_setModelValue);
-
-    // view.bindBarClick(_setModelValue);
-
     view.on('valueChanged', _setModelValue);
-
-    if (this.model.userCallback) {
-      model.on('stateChanged', this.model.userCallback);
-    }
     model.on('stateChanged', this._updateView);
   }
 

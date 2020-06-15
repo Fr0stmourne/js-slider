@@ -29,13 +29,4 @@ describe('Controller constructor', () => {
     expect(view.bindScaleClick).toHaveBeenCalled();
     expect(view.bindBarClick).toHaveBeenCalled();
   });
-
-  test('should bind _onStateChange handler to the model', () => {
-    const view = new View(DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE);
-    const model = new Model(DEFAULT_MODEL_STATE);
-    expect(model.onStateChange).not.toBeInstanceOf(Function);
-
-    new Controller(model, view);
-    expect(model.onStateChange).toBeInstanceOf(Function);
-  });
 });

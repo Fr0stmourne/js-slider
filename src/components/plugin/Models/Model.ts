@@ -5,7 +5,6 @@ import Observer from '../Observer/Observer';
 
 export default class Model extends Observer {
   userCallback: Function;
-  onStateChange: Function;
   private _state: ModelState;
   private _steps: number[];
 
@@ -82,6 +81,7 @@ export default class Model extends Observer {
 
     const validatedStep = this._validateStep(stateToValidate.step);
     const validatedMinMaxValues = this._validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
+    this._steps = calculateSteps(validatedMinMaxValues.minValue, validatedMinMaxValues.maxValue, validatedStep);
     const validatedValue = this._validateValue(stateToValidate.value, {
       ...this._state,
       step: validatedStep,
