@@ -203,11 +203,20 @@ export default class View extends Observer {
 
   /* istanbul ignore next */
   private _handleMouseDown(event: MouseEvent, pin: PinView): void {
-    const { isVertical } = this._viewState;
-
     event.preventDefault();
-    const shift = isVertical ? event.offsetX : (event.target as HTMLElement).offsetHeight - event.offsetY;
 
+    const { isVertical } = this._viewState;
+    const target = event.target as HTMLElement;
+    let shift = isVertical ? event.offsetX : (event.target as HTMLElement).offsetHeight - event.offsetY;
+    console.log(event.offsetX);
+
+    const tooltipShift = isVertical
+      ? target.getBoundingClientRect().height - event.offsetY
+      : target.getBoundingClientRect().width - event.offsetX;
+
+    if (target.classList.contains('js-slider-value')) {
+      shift -= tooltipShift;
+    }
     const mouseMoveData: MouseMoveData = {
       pin,
       shift,

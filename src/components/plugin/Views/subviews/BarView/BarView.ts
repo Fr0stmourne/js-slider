@@ -17,8 +17,9 @@ export default class BarView extends DefaultView {
     );
 
     const handleBarClick = (e: Event): void => {
-      const isPin = (e.target as HTMLElement).classList.contains('js-slider-pin');
-      const isTooltip = (e.target as HTMLElement).classList.contains('js-slider-value');
+      const target = e.target as HTMLElement;
+      const isPin = target.classList.contains('js-slider-pin');
+      const isTooltip = target.classList.contains('js-slider-value');
       if (!isPin && !isTooltip) {
         this.onBarClick(e);
       }
