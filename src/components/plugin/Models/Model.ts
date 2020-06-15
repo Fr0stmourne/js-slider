@@ -1,14 +1,16 @@
 import { ModelState } from '../interfaces';
 import deleteUndef from '../utils/deleteUndef/deleteUndef';
 import calculateSteps from '../utils/calculateSteps/calculateSteps';
+import Observer from '../Observer/Observer';
 
-export default class Model {
+export default class Model extends Observer {
   userCallback: Function;
   onStateChange: Function;
   private _state: ModelState;
   private _steps: number[];
 
   constructor(modelState: ModelState) {
+    super();
     this._state = modelState;
 
     const { minValue, maxValue, step } = this.state;

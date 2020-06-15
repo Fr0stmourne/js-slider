@@ -12,6 +12,10 @@ export interface ViewState {
   sliderSize?: DOMRect;
 }
 
+export interface Events {
+  [key: string]: Function[];
+}
+
 export interface ModelState {
   minValue?: number;
   maxValue?: number;
