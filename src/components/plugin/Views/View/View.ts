@@ -54,7 +54,6 @@ export default class View extends Observer {
       const newValue: number | number[] = this._modelState.range
         ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
         : +(e.target as HTMLInputElement).value;
-      // handler(newValue);
       this.emit('valueChanged', { value: newValue });
     };
   }
@@ -90,9 +89,11 @@ export default class View extends Observer {
       const newValue = calculateValue(percentage, minValue, maxValue);
 
       if (range) {
-        const correctPinNumber = this._applyToCorrectPin(newValue);
-        const pin = this._objects[correctPinNumber ? 'secondPin' : 'firstPin'];
-        this._handleMouseDown(e, pin);
+        const updatedValues = this._applyToCorrectPin(newValue);
+        const updatedPinKey = (this._modelState.value as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
+        const updatedPin = this._objects[updatedPinKey];
+        this.emit('valueChanged', { value: updatedValues });
+        this._handleMouseDown(e, updatedPin);
       } else {
         this.emit('valueChanged', { value: newValue });
         this._handleMouseDown(e, this._objects.firstPin);

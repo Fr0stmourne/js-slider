@@ -34,7 +34,7 @@ const testOptions = {
   },
 };
 
-$('.js-example-default').slider(testOptions.default);
+$('.js-example-default').slider(testOptions.r);
 // $('.js-example-vr').slider(testOptions.vr);
 // $('.js-example-r').slider(testOptions.r);
 // $('.js-example-v').slider(testOptions.v);
@@ -103,4 +103,4 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
 // });
 
 const panels = document.querySelector('.js-control-panel');
-createPanel(panels as HTMLElement, testOptions.default);
+createPanel(panels as HTMLElement, testOptions.r);
