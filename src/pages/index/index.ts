@@ -6,7 +6,7 @@ const testOptions = {
     minValue: -33,
     maxValue: 103,
     step: 5,
-    value: 73,
+    value: 72,
     scaleOptionsNum: 9,
   },
   vr: {
