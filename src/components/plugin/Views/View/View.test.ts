@@ -150,10 +150,17 @@ describe('render()', () => {
   beforeEach(() => {
     callback = jest.fn();
     defaultView.on('valueChanged', callback);
+    rangeView.on('valueChanged', callback);
   });
   describe('should bind callbacks to needed slider objects', () => {
     test('bar', () => {
       const objects = defaultView.objects;
+      objects.bar.element.dispatchEvent(new Event('mousedown'));
+      expect(callback).toBeCalled();
+    });
+
+    test('bar: range case', () => {
+      const objects = rangeView.objects;
       objects.bar.element.dispatchEvent(new Event('mousedown'));
       expect(callback).toBeCalled();
     });
@@ -174,6 +181,15 @@ describe('render()', () => {
       const objects = defaultView.objects;
       objects.firstPin.element.dispatchEvent(new Event('mousedown'));
       document.dispatchEvent(new Event('mousemove'));
+      document.dispatchEvent(new Event('mouseup'));
+      expect(callback).toBeCalled();
+    });
+
+    test('pin: range case', () => {
+      const objects = rangeView.objects;
+      objects.firstPin.element.dispatchEvent(new Event('mousedown'));
+      document.dispatchEvent(new Event('mousemove'));
+      document.dispatchEvent(new Event('mouseup'));
       expect(callback).toBeCalled();
     });
   });
