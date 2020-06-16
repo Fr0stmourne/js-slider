@@ -12,7 +12,7 @@ export default class Model extends Observer {
     this._state = modelState;
 
     const { minValue, maxValue, step } = this.state;
-    this._steps = calculateSteps(minValue, maxValue, step);
+    this._steps = calculateSteps({ minValue, maxValue, step });
   }
 
   get state(): ModelState {
@@ -23,7 +23,7 @@ export default class Model extends Observer {
     this._state = this._validateState(modelState);
 
     const { minValue, maxValue, step } = this.state;
-    this._steps = calculateSteps(minValue, maxValue, step);
+    this._steps = calculateSteps({ minValue, maxValue, step });
 
     this.emit(EventTypes.stateChanged, { value: this.state.value });
   }
@@ -80,7 +80,11 @@ export default class Model extends Observer {
 
     const validatedStep = this._validateStep(stateToValidate.step);
     const validatedMinMaxValues = this._validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
-    this._steps = calculateSteps(validatedMinMaxValues.minValue, validatedMinMaxValues.maxValue, validatedStep);
+    this._steps = calculateSteps({
+      minValue: validatedMinMaxValues.minValue,
+      maxValue: validatedMinMaxValues.maxValue,
+      step: validatedStep,
+    });
     const validatedValue = this._validateValue(stateToValidate.value, {
       ...this._state,
       step: validatedStep,

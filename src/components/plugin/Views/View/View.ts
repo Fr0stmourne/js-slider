@@ -57,12 +57,14 @@ export default class View extends Observer {
       : Number(this._objects.bar.element.clientWidth);
     if (range) {
       const pins = [1, 2];
-      const pxNums = pins.map((el, idx) => calculatePxNum((value as number[])[idx], minValue, maxValue, sliderSize));
+      const pxNums = pins.map((el, idx) =>
+        calculatePxNum({ value: (value as number[])[idx], minValue, maxValue, elementSize: sliderSize }),
+      );
 
       this._objects.firstPin.updateValue(pxNums[0], (value as number[])[0]);
       this._objects.secondPin.updateValue(pxNums[1], (value as number[])[1]);
     } else {
-      const pxNum = calculatePxNum(value as number, minValue, maxValue, sliderSize);
+      const pxNum = calculatePxNum({ value: value as number, minValue, maxValue, elementSize: sliderSize });
       this._objects.firstPin.updateValue(pxNum, value as number);
     }
 
@@ -181,7 +183,7 @@ export default class View extends Observer {
         ? (target.getBoundingClientRect().height - e.offsetY) / target.getBoundingClientRect().height
         : e.offsetX / target.getBoundingClientRect().width;
 
-      const newValue = calculateValue(percentage, minValue, maxValue);
+      const newValue = calculateValue({ percentage, minValue, maxValue });
 
       if (range) {
         const updatedValues = this._applyToCorrectPin(newValue);
@@ -250,7 +252,7 @@ export default class View extends Observer {
 
     const percentage = newValue / sliderSize;
 
-    const calculatedValue = calculateValue(+percentage, minValue, maxValue);
+    const calculatedValue = calculateValue({ percentage, minValue, maxValue });
     let resultValue = value;
     if (range) {
       (resultValue as number[])[pin.pinNumber - 1] = calculatedValue;

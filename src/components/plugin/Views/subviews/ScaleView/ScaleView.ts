@@ -32,7 +32,7 @@ export default class ScaleView extends DefaultView {
     const calculatedOptions = this._getMilestones();
 
     const optionPositions = calculatedOptions.map(value => {
-      return calculatePxNum(value, minValue, maxValue, sliderSize);
+      return calculatePxNum({ value, minValue, maxValue, elementSize: sliderSize });
     });
 
     const optionNodes = calculatedOptions.map((el, index) => {
@@ -68,7 +68,7 @@ export default class ScaleView extends DefaultView {
 
   private _getMilestones(): number[] {
     const { minValue, maxValue, scaleOptionsNum, step } = this;
-    const steps = calculateSteps(minValue, maxValue, step);
+    const steps = calculateSteps({ minValue, maxValue, step });
 
     function filterSteps(steps: number[], scaleOptionsNum: number): number[] {
       if (scaleOptionsNum >= steps.length) {

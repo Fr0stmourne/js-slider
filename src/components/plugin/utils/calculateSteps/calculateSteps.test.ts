@@ -6,7 +6,7 @@ describe('calculateSteps()', () => {
     const maxValue = 100;
     const step = 25;
 
-    expect(calculateSteps(minValue, maxValue, step)).toStrictEqual([0, 25, 50, 75, 100]);
+    expect(calculateSteps({ minValue, maxValue, step })).toStrictEqual([0, 25, 50, 75, 100]);
   });
 
   test('should correctly handle case when min/max value is not multiple of the step', () => {
@@ -14,6 +14,6 @@ describe('calculateSteps()', () => {
     const maxValue = 100;
     const step = 25;
 
-    expect(calculateSteps(minValue, maxValue, step)).toStrictEqual([-1, 24, 49, 74, 99, 100]);
+    expect(calculateSteps({ minValue, maxValue, step })).toStrictEqual([-1, 24, 49, 74, 99, 100]);
   });
 });
