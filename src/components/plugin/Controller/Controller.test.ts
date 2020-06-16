@@ -25,4 +25,13 @@ describe('setUserCallback', () => {
 
     expect(controller.userCallback).toStrictEqual(userCallback);
   });
+
+  test('should run passed user callback on event emit', () => {
+    const userCallback = jest.fn();
+    controller.setUserCallback(userCallback);
+
+    controller.model.emit('stateChanged', { value: 5 });
+
+    expect(userCallback).toBeCalled();
+  });
 });
