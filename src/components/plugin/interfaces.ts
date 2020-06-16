@@ -12,8 +12,10 @@ export interface ViewState {
   sliderSize?: DOMRect;
 }
 
+export type EventCallback = (data: any) => void;
+
 export type Events = {
-  [key in EventTypes]?: Function[];
+  [key in EventTypes]?: EventCallback[];
 };
 
 export interface ModelState {

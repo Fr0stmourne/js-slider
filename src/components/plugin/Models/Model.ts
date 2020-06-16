@@ -4,7 +4,6 @@ import calculateSteps from '../utils/calculateSteps/calculateSteps';
 import Observer from '../Observer/Observer';
 
 export default class Model extends Observer {
-  userCallback: Function;
   private _state: ModelState;
   private _steps: number[];
 

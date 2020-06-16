@@ -195,7 +195,7 @@ export default class View extends Observer {
       }
     };
 
-    (this._objects.bar.onBarClick as Function) = handleBarClick;
+    this._objects.bar.onBarClick = handleBarClick;
   }
 
   private _bindListenersToPin(pin: PinView): void {

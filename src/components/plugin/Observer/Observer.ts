@@ -1,9 +1,9 @@
-import { Events, EventTypes } from '../interfaces';
+import { Events, EventTypes, EventCallback } from '../interfaces';
 
 export default class Observer {
   constructor(public events: Events = {}) {}
 
-  on(eventName: keyof typeof EventTypes, callback: Function): void {
+  on(eventName: keyof typeof EventTypes, callback: EventCallback): void {
     const callbacks = this.events[eventName];
 
     if (callbacks) {
@@ -17,7 +17,7 @@ export default class Observer {
     const event = this.events[eventName];
 
     if (event) {
-      event.forEach((func: Function) => func(data));
+      event.forEach((func: EventCallback) => func(data));
     }
   }
 }

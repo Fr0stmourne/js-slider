@@ -5,7 +5,7 @@ import calculatePxNum from '../../../utils/calculatePxNum/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
 
 export default class ScaleView extends DefaultView {
-  onOptionClick: Function;
+  onOptionClick: (value: number) => void;
   scaleOptionsNum: number;
   isVertical: boolean;
   step: number;
