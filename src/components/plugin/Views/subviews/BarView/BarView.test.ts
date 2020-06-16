@@ -13,7 +13,7 @@ describe('BarView', () => {
 
   test('should call callback on bar mousedown', () => {
     const callback = jest.fn();
-    bar.onBarClick = callback;
+    bar.handleBarClick = callback;
 
     expect(callback).not.toHaveBeenCalled();
     bar.element.dispatchEvent(new Event('mousedown'));

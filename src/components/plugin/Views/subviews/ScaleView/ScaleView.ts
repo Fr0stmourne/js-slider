@@ -5,7 +5,7 @@ import calculatePxNum from '../../../utils/calculatePxNum/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
 
 export default class ScaleView extends DefaultView {
-  onOptionClick: (value: number) => void;
+  handleOptionClick: (value: number) => void;
   scaleOptionsNum: number;
   isVertical: boolean;
   step: number;
@@ -58,7 +58,7 @@ export default class ScaleView extends DefaultView {
       e.stopPropagation();
       const target = e.target as HTMLElement;
       if (!target.classList.contains('js-option')) return;
-      this.onOptionClick(Number(target.textContent));
+      this.handleOptionClick(Number(target.textContent));
     };
 
     this._element.querySelectorAll('.js-option').forEach(el => {

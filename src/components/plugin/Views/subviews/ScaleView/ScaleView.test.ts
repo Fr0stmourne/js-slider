@@ -31,7 +31,7 @@ describe('ScaleView', () => {
 
   test('should not react on click between scale milestones', () => {
     const callback = jest.fn();
-    scale.onOptionClick = callback;
+    scale.handleOptionClick = callback;
 
     (scale.element as HTMLElement).click();
     expect(callback).not.toHaveBeenCalled();
@@ -39,7 +39,7 @@ describe('ScaleView', () => {
 
   test('should run the passed callback on a scale milestone click', () => {
     const callback = jest.fn();
-    scale.onOptionClick = callback;
+    scale.handleOptionClick = callback;
 
     (scale.element.querySelector('.js-option') as HTMLElement).click();
     expect(callback).toHaveBeenCalled();

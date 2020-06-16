@@ -160,7 +160,7 @@ export default class View extends Observer {
         this.emit(EventTypes.valueChanged, { value: range ? this._applyToCorrectPin(value) : value });
       };
 
-      this._objects.scale.onOptionClick = handleScaleClick;
+      this._objects.scale.handleOptionClick = handleScaleClick;
     }
   }
 
@@ -195,7 +195,7 @@ export default class View extends Observer {
       }
     };
 
-    this._objects.bar.onBarClick = handleBarClick;
+    this._objects.bar.handleBarClick = handleBarClick;
   }
 
   private _bindListenersToPin(pin: PinView): void {

@@ -2,7 +2,7 @@ import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class BarView extends DefaultView {
-  onBarClick: (e: Event) => void;
+  handleBarClick: (e: Event) => void;
 
   constructor() {
     super();
@@ -21,7 +21,7 @@ export default class BarView extends DefaultView {
       const isPin = target.classList.contains('js-slider-pin');
       const isTooltip = target.classList.contains('js-slider-value');
       if (!isPin && !isTooltip) {
-        this.onBarClick(e);
+        this.handleBarClick(e);
       }
     };
 
