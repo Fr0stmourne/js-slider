@@ -12,9 +12,9 @@ export interface ViewState {
   sliderSize?: DOMRect;
 }
 
-export interface Events {
-  [key: string]: Function[];
-}
+export type Events = {
+  [key in EventTypes]?: Function[];
+};
 
 export interface ModelState {
   minValue?: number;
@@ -52,4 +52,9 @@ export interface MouseMoveData {
   pin: PinView;
   shift: number;
   handler?: Function;
+}
+
+export enum EventTypes {
+  valueChanged = 'valueChanged',
+  stateChanged = 'stateChanged',
 }

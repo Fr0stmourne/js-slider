@@ -1,4 +1,5 @@
 import Observer from './Observer';
+import { EventTypes } from '../interfaces';
 
 describe('Observer', () => {
   let observer: Observer;
@@ -12,19 +13,19 @@ describe('Observer', () => {
       const anotherCallback = jest.fn();
       const finalCallback = jest.fn();
 
-      observer.on('1', callback);
-      observer.on('1', anotherCallback);
-      observer.on('1', finalCallback);
+      observer.on(EventTypes.stateChanged, callback);
+      observer.on(EventTypes.stateChanged, anotherCallback);
+      observer.on(EventTypes.stateChanged, finalCallback);
 
-      expect(observer.events['1'].length).toBe(3);
+      expect(observer.events[EventTypes.stateChanged].length).toBe(3);
     });
   });
 
   describe('emit()', () => {
     test('should correctly emit events to run callbacks', () => {
       const callback = jest.fn();
-      observer.on('test', callback);
-      observer.emit('test');
+      observer.on(EventTypes.stateChanged, callback);
+      observer.emit(EventTypes.stateChanged);
       expect(callback).toHaveBeenCalled();
     });
   });

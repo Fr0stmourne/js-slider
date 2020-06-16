@@ -1,9 +1,9 @@
-import { Events } from '../interfaces';
+import { Events, EventTypes } from '../interfaces';
 
 export default class Observer {
   constructor(public events: Events = {}) {}
 
-  on(eventName: string, callback: Function): void {
+  on(eventName: keyof typeof EventTypes, callback: Function): void {
     const callbacks = this.events[eventName];
 
     if (callbacks) {
@@ -13,7 +13,7 @@ export default class Observer {
     }
   }
 
-  emit(eventName: string, data?: {}): void {
+  emit(eventName: keyof typeof EventTypes, data?: {}): void {
     const event = this.events[eventName];
 
     if (event) {

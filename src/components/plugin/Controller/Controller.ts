@@ -2,6 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import Model from '../Models/Model';
 import View from '../Views/View/View';
+import { EventTypes } from '../interfaces';
 
 export default class Controller {
   private _userCallback: Function;
@@ -20,7 +21,7 @@ export default class Controller {
       this._userCallback(value);
     };
 
-    this.model.on('stateChanged', callUserCallback);
+    this.model.on(EventTypes.stateChanged, callUserCallback);
   }
 
   get userCallback(): Function {
@@ -30,8 +31,8 @@ export default class Controller {
   connect(): void {
     const { _setModelValue, _updateView, view, model } = this;
 
-    view.on('valueChanged', _setModelValue);
-    model.on('stateChanged', _updateView);
+    view.on(EventTypes.valueChanged, _setModelValue);
+    model.on(EventTypes.stateChanged, _updateView);
   }
 
   @boundMethod

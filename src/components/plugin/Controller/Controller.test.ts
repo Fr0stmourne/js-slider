@@ -2,6 +2,7 @@ import View from '../Views/View/View';
 import Model from '../Models/Model';
 import Controller from './Controller';
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from '../defaults';
+import { EventTypes } from '../interfaces';
 
 let controller: Controller;
 let view: View;
@@ -30,7 +31,7 @@ describe('setUserCallback', () => {
     const userCallback = jest.fn();
     controller.userCallback = userCallback;
 
-    controller.model.emit('stateChanged', { value: 5 });
+    controller.model.emit(EventTypes.stateChanged, { value: 5 });
 
     expect(userCallback).toBeCalled();
   });

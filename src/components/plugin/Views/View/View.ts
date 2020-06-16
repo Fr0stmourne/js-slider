@@ -1,4 +1,4 @@
-import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData } from '../../interfaces';
+import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes } from '../../interfaces';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateValue from '../../utils/calculateValue/calculateValue';
 import render from '../../utils/render/render';
@@ -147,7 +147,7 @@ export default class View extends Observer {
       const newValue: number | number[] = this._modelState.range
         ? target.value.split(',').map(el => +el.trim())
         : +target.value;
-      this.emit('valueChanged', { value: newValue });
+      this.emit(EventTypes.valueChanged, { value: newValue });
     };
   }
 
@@ -155,7 +155,7 @@ export default class View extends Observer {
     if (this._objects.scale) {
       const handleScaleClick = (value: number): void => {
         const { range } = this._modelState;
-        this.emit('valueChanged', { value: range ? this._applyToCorrectPin(value) : value });
+        this.emit(EventTypes.valueChanged, { value: range ? this._applyToCorrectPin(value) : value });
       };
 
       this._objects.scale.onOptionClick = handleScaleClick;
@@ -185,10 +185,10 @@ export default class View extends Observer {
         const updatedValues = this._applyToCorrectPin(newValue);
         const updatedPinKey = (this._modelState.value as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
         const updatedPin = this._objects[updatedPinKey];
-        this.emit('valueChanged', { value: updatedValues });
+        this.emit(EventTypes.valueChanged, { value: updatedValues });
         this._handleMouseDown(e, updatedPin);
       } else {
-        this.emit('valueChanged', { value: newValue });
+        this.emit(EventTypes.valueChanged, { value: newValue });
         this._handleMouseDown(e, this._objects.firstPin);
       }
     };
@@ -256,6 +256,6 @@ export default class View extends Observer {
       resultValue = calculatedValue;
     }
 
-    this.emit('valueChanged', { value: resultValue });
+    this.emit(EventTypes.valueChanged, { value: resultValue });
   }
 }
