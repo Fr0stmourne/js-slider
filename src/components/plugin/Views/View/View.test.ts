@@ -169,5 +169,12 @@ describe('render()', () => {
       objects.input.element.dispatchEvent(new Event('change'));
       expect(callback).toBeCalled();
     });
+
+    test('pin', () => {
+      const objects = defaultView.objects;
+      objects.firstPin.element.dispatchEvent(new Event('mousedown'));
+      document.dispatchEvent(new Event('mousemove'));
+      expect(callback).toBeCalled();
+    });
   });
 });
