@@ -56,8 +56,9 @@ export default class ScaleView extends DefaultView {
 
     const handleOptionClick = (e: Event): void => {
       e.stopPropagation();
-      if (!(e.target as HTMLElement).classList.contains('js-option')) return;
-      this.onOptionClick(+(e.target as HTMLElement).textContent);
+      const target = e.target as HTMLElement;
+      if (!target.classList.contains('js-option')) return;
+      this.onOptionClick(Number(target.textContent));
     };
 
     this._element.querySelectorAll('.js-option').forEach(el => {

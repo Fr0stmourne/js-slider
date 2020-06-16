@@ -16,7 +16,7 @@ export default class InputView extends DefaultView {
 
   get value(): number | number[] {
     const inputVal = (this._element as HTMLInputElement).value;
-    return !Number.isNaN(+inputVal) ? +inputVal : inputVal.split(',').map(el => +el);
+    return !Number.isNaN(Number(inputVal)) ? Number(inputVal) : inputVal.split(',').map(el => Number(el));
   }
 
   render(): void {

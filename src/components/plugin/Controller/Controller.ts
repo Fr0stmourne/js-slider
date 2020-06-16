@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import Model from '../Models/Model';
 import View from '../Views/View/View';
-import { EventTypes } from '../interfaces';
+import { EventTypes, ModelState } from '../interfaces';
 
 export default class Controller {
   private _userCallback: Function;
@@ -36,7 +36,7 @@ export default class Controller {
   }
 
   @boundMethod
-  private _setModelValue(data: object): void {
+  private _setModelValue(data: ModelState): void {
     const { model } = this;
     model.state = { ...model.state, ...data };
   }

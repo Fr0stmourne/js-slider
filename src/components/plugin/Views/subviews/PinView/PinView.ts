@@ -15,13 +15,13 @@ export default class PinView extends DefaultView {
     this.pinNumber = options.pinNumber;
     this.isTooltipDisabled = options.isTooltipDisabled;
     this.isVertical = options.isVertical;
-    this._value = options.value as number;
+    this._value = options.value;
 
     this.render();
   }
 
   get value(): number {
-    return +this._elements.tooltip.textContent.trim();
+    return Number(this._elements.tooltip.textContent.trim());
   }
 
   updateValue(pxNum: number, value: number): void {

@@ -61,9 +61,9 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
         const { view, model } = $(el).data().slider;
         const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
         const updatedViewState = getViewState({
-          ...(newOptions as Options),
+          ...newOptions,
         });
-        const updatedModelState = getModelState({ ...(newOptions as Options) });
+        const updatedModelState = getModelState({ ...newOptions });
 
         model.state = updatedModelState;
         view.setState(updatedViewState, model.state);
@@ -98,7 +98,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
         $(el).data('slider', new Controller(model, view));
         el.append(view.element);
         $(el).slider('update', {
-          ...(methodOrOptions as Options),
+          ...methodOrOptions,
         });
       });
     },
@@ -109,6 +109,6 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
   } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
     return pluginAPI.init.call(this, methodOrOptions);
   } else {
-    $.error('Method ' + methodOrOptions + ' does not exist on $.slider');
+    $.error(`Method ${methodOrOptions} does not exist on $.slider`);
   }
 };

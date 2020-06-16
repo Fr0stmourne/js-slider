@@ -85,12 +85,14 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
   function getInputsState(): Options {
     return {
       isTooltipDisabled: inputs.isTooltipDisabled.checked,
-      step: +inputs.step.value,
-      minValue: inputs.minValue.value !== '' ? +inputs.minValue.value : undefined,
-      maxValue: inputs.maxValue.value !== '' ? +inputs.maxValue.value : undefined,
-      scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? +inputs.scaleOptionsNum.value : undefined,
+      step: Number(inputs.step.value),
+      minValue: inputs.minValue.value !== '' ? Number(inputs.minValue.value) : undefined,
+      maxValue: inputs.maxValue.value !== '' ? Number(inputs.maxValue.value) : undefined,
+      scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? Number(inputs.scaleOptionsNum.value) : undefined,
       isVertical: inputs.isVertical.checked,
-      value: inputs.value.value.includes(',') ? inputs.value.value.split(',').map(el => +el) : +inputs.value.value,
+      value: inputs.value.value.includes(',')
+        ? inputs.value.value.split(',').map(el => Number(el))
+        : Number(inputs.value.value),
     };
   }
 

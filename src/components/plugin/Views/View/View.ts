@@ -52,7 +52,9 @@ export default class View extends Observer {
   updateValue(value: number | number[]): void {
     const { isVertical } = this._viewState;
     const { minValue, maxValue, range } = this._modelState;
-    const sliderSize = isVertical ? +this._objects.bar.element.clientHeight : +this._objects.bar.element.clientWidth;
+    const sliderSize = isVertical
+      ? Number(this._objects.bar.element.clientHeight)
+      : Number(this._objects.bar.element.clientWidth);
     if (range) {
       const pins = [1, 2];
       const pxNums = pins.map((el, idx) => calculatePxNum((value as number[])[idx], minValue, maxValue, sliderSize));
@@ -79,7 +81,7 @@ export default class View extends Observer {
     `,
     );
 
-    this._sliderSize = sliderSize && Math.max(+sliderSize.height, +sliderSize.width);
+    this._sliderSize = sliderSize && Math.max(Number(sliderSize.height), Number(sliderSize.width));
 
     const firstPinData: PinData = {
       pinNumber: 1,
@@ -145,8 +147,8 @@ export default class View extends Observer {
     input.element.onchange = (e): void => {
       const target = e.target as HTMLInputElement;
       const newValue: number | number[] = this._modelState.range
-        ? target.value.split(',').map(el => +el.trim())
-        : +target.value;
+        ? target.value.split(',').map(el => Number(el.trim()))
+        : Number(target.value);
       this.emit(EventTypes.valueChanged, { value: newValue });
     };
   }
@@ -206,7 +208,7 @@ export default class View extends Observer {
 
     const { isVertical } = this._viewState;
     const target = event.target as HTMLElement;
-    let shift = isVertical ? event.offsetX : (event.target as HTMLElement).offsetHeight - event.offsetY;
+    let shift = isVertical ? event.offsetX : target.offsetHeight - event.offsetY;
 
     const tooltipShift = isVertical
       ? target.getBoundingClientRect().height - event.offsetY

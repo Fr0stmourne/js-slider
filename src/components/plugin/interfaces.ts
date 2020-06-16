@@ -51,7 +51,6 @@ export interface Objects {
 export interface MouseMoveData {
   pin: PinView;
   shift: number;
-  handler?: Function;
 }
 
 export enum EventTypes {
