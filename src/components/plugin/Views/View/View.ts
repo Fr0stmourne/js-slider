@@ -28,7 +28,7 @@ export default class View extends Observer {
   }
 
   get objects(): Objects {
-    return { ...this._objects };
+    return this._objects;
   }
 
   get state(): { viewState: ViewState; modelState: ModelState } {
@@ -46,6 +46,7 @@ export default class View extends Observer {
     this._bindBarClick();
     this._bindMovePin();
     this._bindScaleClick();
+    this._bindInputChange();
   }
 
   updateValue(value: number | number[]): void {
@@ -127,7 +128,6 @@ export default class View extends Observer {
     this.bindListeners();
   }
 
-  /* istanbul ignore next */
   private _applyToCorrectPin(value: number): number[] {
     const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
     const FIRST_PIN = 0;
@@ -143,9 +143,10 @@ export default class View extends Observer {
   private _bindInputChange(): void {
     const input: InputView = this._objects.input;
     input.element.onchange = (e): void => {
+      const target = e.target as HTMLInputElement;
       const newValue: number | number[] = this._modelState.range
-        ? (e.target as HTMLInputElement).value.split(',').map(el => +el.trim())
-        : +(e.target as HTMLInputElement).value;
+        ? target.value.split(',').map(el => +el.trim())
+        : +target.value;
       this.emit('valueChanged', { value: newValue });
     };
   }
@@ -173,10 +174,10 @@ export default class View extends Observer {
     const { minValue, maxValue, range } = this._modelState;
 
     const handleBarClick = (e: MouseEvent): void => {
+      const target = e.target as HTMLElement;
       const percentage = isVertical
-        ? ((e.target as HTMLElement).getBoundingClientRect().height - (e as MouseEvent).offsetY) /
-          (e.target as HTMLElement).getBoundingClientRect().height
-        : (e as MouseEvent).offsetX / (e.target as HTMLElement).getBoundingClientRect().width;
+        ? (target.getBoundingClientRect().height - e.offsetY) / target.getBoundingClientRect().height
+        : e.offsetX / target.getBoundingClientRect().width;
 
       const newValue = calculateValue(percentage, minValue, maxValue);
 
@@ -195,20 +196,17 @@ export default class View extends Observer {
     (this._objects.bar.onBarClick as Function) = handleBarClick;
   }
 
-  /* istanbul ignore next */
   private _bindListenersToPin(pin: PinView): void {
     const handleMouseDown = (event: MouseEvent): void => this._handleMouseDown(event, pin);
     pin.element.addEventListener('mousedown', handleMouseDown);
   }
 
-  /* istanbul ignore next */
   private _handleMouseDown(event: MouseEvent, pin: PinView): void {
     event.preventDefault();
 
     const { isVertical } = this._viewState;
     const target = event.target as HTMLElement;
     let shift = isVertical ? event.offsetX : (event.target as HTMLElement).offsetHeight - event.offsetY;
-    console.log(event.offsetX);
 
     const tooltipShift = isVertical
       ? target.getBoundingClientRect().height - event.offsetY
@@ -233,7 +231,6 @@ export default class View extends Observer {
     document.addEventListener('mouseup', handleMouseUp);
   }
 
-  /* istanbul ignore next */
   private _handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
     const { isVertical } = this._viewState;
     const { minValue, maxValue, range, value } = this._modelState;

@@ -1,5 +1,7 @@
 import { ViewState, ModelState } from '../../interfaces';
 import View from './View';
+import Model from '../../Models/Model';
+import Observer from '../../Observer/Observer';
 
 const testOptions: {
   normal: { viewState: ViewState; modelState: ModelState };
@@ -140,6 +142,32 @@ describe('setState()', () => {
     expect(defaultView.state.modelState).toStrictEqual({
       ...testOptions.normal.modelState,
       step: 10,
+    });
+  });
+});
+
+describe('render()', () => {
+  beforeEach(() => {
+    callback = jest.fn();
+    defaultView.on('valueChanged', callback);
+  });
+  describe('should bind callbacks to needed slider objects', () => {
+    test('bar', () => {
+      const objects = defaultView.objects;
+      objects.bar.element.dispatchEvent(new Event('mousedown'));
+      expect(callback).toBeCalled();
+    });
+
+    test('scale', () => {
+      const objects = defaultView.objects;
+      (objects.scale.element.firstElementChild as HTMLElement).click();
+      expect(callback).toBeCalled();
+    });
+
+    test('input', () => {
+      const objects = defaultView.objects;
+      objects.input.element.dispatchEvent(new Event('change'));
+      expect(callback).toBeCalled();
     });
   });
 });

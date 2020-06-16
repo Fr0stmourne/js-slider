@@ -24,20 +24,18 @@ export default class Controller {
   }
 
   connect(): void {
-    const { _setModelValue, view, model } = this;
+    const { _setModelValue, _updateView, view, model } = this;
 
     view.on('valueChanged', _setModelValue);
-    model.on('stateChanged', this._updateView);
+    model.on('stateChanged', _updateView);
   }
 
-  /* istanbul ignore next */
   @boundMethod
   private _setModelValue(data: object): void {
     const { model } = this;
     model.state = { ...model.state, ...data };
   }
 
-  /* istanbul ignore next */
   @boundMethod
   private _updateView({ value }: { value: number | number[] }): void {
     this.view.updateValue(Array.isArray(value) ? [...value] : value);
