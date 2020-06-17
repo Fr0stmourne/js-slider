@@ -125,9 +125,9 @@ export default class View extends Observer {
     }
 
     const { firstPin, secondPin, scale, bar } = this._objects;
-    this._objects.bar.element.append(firstPin.element);
+    bar.element.append(firstPin.element);
     if (range) {
-      this._objects.bar.element.append(secondPin.element);
+      bar.element.append(secondPin.element);
     }
     this._element.append(bar.element);
 
@@ -137,13 +137,11 @@ export default class View extends Observer {
   }
 
   private _applyToCorrectPin(value: number): number[] {
-    const pinValues = [this._objects.firstPin.value, this._objects.secondPin.value];
+    const { firstPin, secondPin } = this._objects;
+    const pinValues = [firstPin.value, secondPin.value];
     const FIRST_PIN = 0;
     const SECOND_PIN = 1;
-    const chosenPin =
-      Math.abs(value - this._objects.firstPin.value) < Math.abs(value - this._objects.secondPin.value)
-        ? FIRST_PIN
-        : SECOND_PIN;
+    const chosenPin = Math.abs(value - firstPin.value) < Math.abs(value - secondPin.value) ? FIRST_PIN : SECOND_PIN;
     pinValues[chosenPin] = value;
     return pinValues;
   }
@@ -160,21 +158,23 @@ export default class View extends Observer {
   }
 
   private _bindScaleClick(): void {
-    if (this._objects.scale) {
+    const { scale } = this._objects;
+    if (scale) {
       const handleScaleClick = (value: number): void => {
         const { range } = this._modelState;
         this.emit(EventTypes.valueChanged, { value: range ? this._applyToCorrectPin(value) : value });
       };
 
-      this._objects.scale.handleOptionClick = handleScaleClick;
+      scale.handleOptionClick = handleScaleClick;
     }
   }
 
   private _bindMovePin(): void {
     const { range } = this._modelState;
+    const { firstPin, secondPin } = this._objects;
 
-    this._bindListenersToPin(this._objects.firstPin);
-    if (range) this._bindListenersToPin(this._objects.secondPin);
+    this._bindListenersToPin(firstPin);
+    if (range) this._bindListenersToPin(secondPin);
   }
 
   private _bindBarClick(): void {
