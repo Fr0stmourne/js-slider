@@ -50,25 +50,30 @@ export default class View extends Observer {
 
   updateValue(value: number | number[]): void {
     const { isVertical } = this._viewState;
-    const { minValue, maxValue, range } = this._modelState;
-    const sliderSize = isVertical
-      ? Number(this._objects.bar.element.clientHeight)
-      : Number(this._objects.bar.element.clientWidth);
+    const { _modelState: modelState } = this;
+    const { minValue, maxValue, range } = modelState;
+    const { input, firstPin, secondPin, bar } = this._objects;
+
+    const sliderSize = isVertical ? Number(bar.element.clientHeight) : Number(bar.element.clientWidth);
     if (range) {
       const pins = [1, 2];
       const pxNums = pins.map((el, idx) =>
         calculatePxNum({ value: (value as number[])[idx], minValue, maxValue, elementSize: sliderSize }),
       );
 
-      this._objects.firstPin.updateValue(pxNums[0], (value as number[])[0]);
-      this._objects.secondPin.updateValue(pxNums[1], (value as number[])[1]);
+      firstPin.updateValue(pxNums[0], (value as number[])[0]);
+      secondPin.updateValue(pxNums[1], (value as number[])[1]);
     } else {
       const pxNum = calculatePxNum({ value: value as number, minValue, maxValue, elementSize: sliderSize });
-      this._objects.firstPin.updateValue(pxNum, value as number);
+      firstPin.updateValue(pxNum, value as number);
     }
 
-    this._objects.input.value = value;
+    input.value = value;
     this._modelState.value = value;
+
+    for (const option in modelState) {
+      this._element.setAttribute(`data-${option}`, String(modelState[option as keyof ModelState]));
+    }
   }
 
   render(): void {
