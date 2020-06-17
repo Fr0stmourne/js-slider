@@ -42,6 +42,12 @@ export interface ScaleData {
   sliderSize?: number;
 }
 
+export interface BarData {
+  minValue: number;
+  maxValue: number;
+  isVertical: boolean;
+}
+
 export interface Objects {
   bar: BarView;
   firstPin: PinView;
@@ -59,4 +65,5 @@ export enum EventTypes {
   valueChanged = 'valueChanged',
   stateChanged = 'stateChanged',
   newScaleValue = 'newScaleValue',
+  newBarValue = 'newBarValue',
 }

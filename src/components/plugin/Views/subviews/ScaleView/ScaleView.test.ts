@@ -1,5 +1,5 @@
 import ScaleView from './ScaleView';
-import { ScaleData } from '../../../interfaces';
+import { ScaleData, EventTypes } from '../../../interfaces';
 
 const options: ScaleData = {
   minValue: -30,
@@ -27,6 +27,22 @@ describe('ScaleView', () => {
 
   test('should store correct number of scale milestones', () => {
     expect(scale.element.querySelectorAll('.js-option').length).toBe(12);
+  });
+
+  test('should not react on click between scale milestones', () => {
+    const callback = jest.fn();
+    scale.on(EventTypes.newScaleValue, callback);
+
+    (scale.element as HTMLElement).click();
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  test('should run the passed callback on a scale milestone click', () => {
+    const callback = jest.fn();
+    scale.on(EventTypes.newScaleValue, callback);
+
+    (scale.element.querySelector('.js-option') as HTMLElement).click();
+    expect(callback).toHaveBeenCalled();
   });
 
   test('should correct place nodes in vertical case', () => {

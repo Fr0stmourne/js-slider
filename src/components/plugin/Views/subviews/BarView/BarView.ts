@@ -1,11 +1,18 @@
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
+import { EventTypes, BarData } from '../../../interfaces';
+import calculateValue from '../../../utils/calculateValue/calculateValue';
 
 export default class BarView extends DefaultView {
-  handleBarClick: (e: Event) => void;
+  minValue: number;
+  maxValue: number;
+  isVertical: boolean;
 
-  constructor() {
+  constructor({ minValue, maxValue, isVertical }: BarData) {
     super();
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+    this.isVertical = isVertical;
     this.render();
   }
 
@@ -16,12 +23,20 @@ export default class BarView extends DefaultView {
       `,
     );
 
-    const handleBarClick = (e: Event): void => {
+    const handleBarClick = (e: MouseEvent): void => {
       const target = e.target as HTMLElement;
+      const { minValue, maxValue, isVertical } = this;
       const isPin = target.classList.contains('js-slider-pin');
       const isTooltip = target.classList.contains('js-slider-value');
+
       if (!isPin && !isTooltip) {
-        this.handleBarClick(e);
+        const target = e.target as HTMLElement;
+        const percentage = isVertical
+          ? (target.getBoundingClientRect().height - e.offsetY) / target.getBoundingClientRect().height
+          : e.offsetX / target.getBoundingClientRect().width;
+
+        const newValue = calculateValue({ percentage, minValue, maxValue });
+        this.emit(EventTypes.newBarValue, { e, value: newValue });
       }
     };
 

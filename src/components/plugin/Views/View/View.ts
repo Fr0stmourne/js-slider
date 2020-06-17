@@ -1,4 +1,13 @@
-import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes } from '../../interfaces';
+import {
+  ViewState,
+  ModelState,
+  PinData,
+  ScaleData,
+  Objects,
+  MouseMoveData,
+  EventTypes,
+  BarData,
+} from '../../interfaces';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateValue from '../../utils/calculateValue/calculateValue';
 import render from '../../utils/render/render';
@@ -103,8 +112,14 @@ export default class View extends Observer {
       value: (range ? (value as number[])[0] : value) as number,
     };
 
+    const BarData: BarData = {
+      minValue,
+      maxValue,
+      isVertical,
+    };
+
     this._objects = {
-      bar: new BarView(),
+      bar: new BarView(BarData),
       firstPin: new PinView(firstPinData),
       input: new InputView(value),
     };
@@ -185,30 +200,23 @@ export default class View extends Observer {
   }
 
   private _bindBarClick(): void {
-    const { isVertical } = this._viewState;
-    const { minValue, maxValue, range } = this._modelState;
+    const { range, value: modelValue } = this._modelState;
+    const { bar } = this._objects;
 
-    const handleBarClick = (e: MouseEvent): void => {
-      const target = e.target as HTMLElement;
-      const percentage = isVertical
-        ? (target.getBoundingClientRect().height - e.offsetY) / target.getBoundingClientRect().height
-        : e.offsetX / target.getBoundingClientRect().width;
-
-      const newValue = calculateValue({ percentage, minValue, maxValue });
-
+    const handleBarClick = ({ e, value }: { e: MouseEvent; value: number }): void => {
       if (range) {
-        const updatedValues = this._applyToCorrectPin(newValue);
-        const updatedPinKey = (this._modelState.value as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
+        const updatedValues = this._applyToCorrectPin(value);
+        const updatedPinKey = (modelValue as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
         const updatedPin = this._objects[updatedPinKey];
         this.emit(EventTypes.valueChanged, { value: updatedValues });
         this._handleMouseDown(e, updatedPin);
       } else {
-        this.emit(EventTypes.valueChanged, { value: newValue });
+        this.emit(EventTypes.valueChanged, { value: value });
         this._handleMouseDown(e, this._objects.firstPin);
       }
     };
 
-    this._objects.bar.handleBarClick = handleBarClick;
+    bar.on(EventTypes.newBarValue, handleBarClick);
   }
 
   private _bindListenersToPin(pin: PinView): void {
