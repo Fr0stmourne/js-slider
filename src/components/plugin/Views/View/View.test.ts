@@ -169,12 +169,6 @@ describe('render()', () => {
       expect(callback).toBeCalled();
     });
 
-    test('input', () => {
-      const objects = defaultView.objects;
-      objects.input.element.dispatchEvent(new Event('change'));
-      expect(callback).toBeCalled();
-    });
-
     test('pin', () => {
       const objects = defaultView.objects;
       objects.firstPin.element.dispatchEvent(new Event('mousedown'));
