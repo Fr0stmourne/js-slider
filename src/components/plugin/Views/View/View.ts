@@ -7,6 +7,7 @@ import BarView from '../subviews/BarView/BarView';
 import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
 import Observer from '../../Observer/Observer';
+import camelToHyphen from '../../utils/camelToHyphen/camelToHyphen';
 
 export default class View extends Observer {
   private _sliderSize: number;
@@ -50,7 +51,7 @@ export default class View extends Observer {
 
   updateValue(value: number | number[]): void {
     const { isVertical } = this._viewState;
-    const { _modelState: modelState } = this;
+    const { _modelState: modelState, _viewState: viewState } = this;
     const { minValue, maxValue, range } = modelState;
     const { input, firstPin, secondPin, bar } = this._objects;
 
@@ -71,8 +72,14 @@ export default class View extends Observer {
     input.value = value;
     this._modelState.value = value;
 
-    for (const option in modelState) {
-      this._element.setAttribute(`data-${option}`, String(modelState[option as keyof ModelState]));
+    const dataAttributes = { ...modelState, ...viewState };
+
+    for (const option in dataAttributes) {
+      if (option !== 'sliderSize')
+        this._element.setAttribute(
+          `data-${camelToHyphen(option)}`,
+          String(dataAttributes[option as keyof ModelState | keyof ViewState]),
+        );
     }
   }
 
