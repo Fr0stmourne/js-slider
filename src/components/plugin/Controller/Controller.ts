@@ -2,14 +2,12 @@ import { boundMethod } from 'autobind-decorator';
 
 import Model from '../Models/Model';
 import View from '../Views/View/View';
-import { EventTypes, ModelState, Options, ViewState } from '../interfaces';
+import { EventTypes, ModelState, ViewState } from '../interfaces';
 
 export default class Controller {
-  private _userCallback: Function;
+  private _userCallback!: Function;
 
   constructor(public model: Model, public view: View) {
-    this.model = model;
-    this.view = view;
     this.view.render();
     this.connect();
   }
