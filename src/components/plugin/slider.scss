@@ -41,10 +41,6 @@
         transform: translate(0, 50%);
       }
     }
-
-    .slider-plugin__input {
-      margin-left: 20px;
-    }
   }
 
   &__bar {
@@ -85,8 +81,7 @@
   }
 
   &__input {
-    // display: none;
-    margin-top: 20px;
+    display: none;
   }
 
   &__value {
