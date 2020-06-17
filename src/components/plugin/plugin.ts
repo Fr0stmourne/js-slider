@@ -48,12 +48,8 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
   const pluginAPI: API = {
     updateValue(value: number | number[]): void {
       return this.each((index: number, el: HTMLElement) => {
-        const { model } = $(el).data().slider;
-
-        model.state = {
-          ...model.state,
-          value,
-        };
+        const slider: Controller = $(el).data().slider;
+        slider.value = value;
       });
     },
     update(options: Options) {
@@ -83,11 +79,12 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
     },
     onValueChange(callback: Function): JQuery {
       return this.each((index: number, el: HTMLElement) => {
-        $(el).data().slider.userCallback = callback;
+        const slider: Controller = $(el).data().slider;
+        slider.userCallback = callback;
       });
     },
     getValue() {
-      return $(this).data().slider.model.state.value;
+      return $(this).data().slider.value;
     },
     init(methodOrOptions = DEFAULT_CONFIG): JQuery {
       return this.each((index: number, el: HTMLElement) => {
