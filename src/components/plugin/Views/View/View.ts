@@ -6,7 +6,6 @@ import PinView from '../subviews/PinView/PinView';
 import BarView from '../subviews/BarView/BarView';
 import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
-import { PIN_SIZE } from '../../defaults';
 import Observer from '../../Observer/Observer';
 
 export default class View extends Observer {

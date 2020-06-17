@@ -1,5 +1,4 @@
 import calculatePxNum from './calculatePxNum';
-import { PIN_SIZE } from '../../defaults';
 
 describe('calculatePxNum', () => {
   test('should throw an error if element size is negative', () => {
@@ -21,9 +20,9 @@ describe('calculatePxNum', () => {
   });
 
   test('should return correct number of pixels', () => {
-    expect(calculatePxNum({ value: 1, minValue: 1, maxValue: 10, elementSize: 300 })).toBe(0 - PIN_SIZE / 2);
-    expect(calculatePxNum({ value: -50, minValue: -100, maxValue: 100, elementSize: 300 })).toBe(75 - PIN_SIZE / 2);
-    expect(calculatePxNum({ value: -50, minValue: -200, maxValue: -50, elementSize: 300 })).toBe(300 - PIN_SIZE / 2);
-    expect(calculatePxNum({ value: 800, minValue: 0, maxValue: 1000, elementSize: 200 })).toBe(160 - PIN_SIZE / 2);
+    expect(calculatePxNum({ value: 1, minValue: 1, maxValue: 10, elementSize: 300 })).toBe(0);
+    expect(calculatePxNum({ value: -50, minValue: -100, maxValue: 100, elementSize: 300 })).toBe(75);
+    expect(calculatePxNum({ value: -50, minValue: -200, maxValue: -50, elementSize: 300 })).toBe(300);
+    expect(calculatePxNum({ value: 800, minValue: 0, maxValue: 1000, elementSize: 200 })).toBe(160);
   });
 });
