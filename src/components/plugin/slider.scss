@@ -85,6 +85,7 @@
   }
 
   &__input {
+    // display: none;
     margin-top: 20px;
   }
 
@@ -104,9 +105,5 @@
     &--hidden {
       display: none;
     }
-  }
-
-  &__input {
-    display: none;
   }
 }

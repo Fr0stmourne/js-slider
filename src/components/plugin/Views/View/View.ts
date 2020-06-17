@@ -55,7 +55,6 @@ export default class View extends Observer {
     this._bindBarClick();
     this._bindMovePin();
     this._bindScaleClick();
-    this._bindInputChange();
   }
 
   updateValue(value: number | number[]): void {
@@ -146,12 +145,13 @@ export default class View extends Observer {
       this._objects.secondPin = new PinView(secondPinData);
     }
 
-    const { firstPin, secondPin, scale, bar } = this._objects;
+    const { firstPin, secondPin, scale, bar, input } = this._objects;
     bar.element.append(firstPin.element);
     if (range) {
       bar.element.append(secondPin.element);
     }
     this._element.append(bar.element);
+    this._element.append(input.element);
 
     if (scale) this._element.append(scale.element);
 
@@ -166,17 +166,6 @@ export default class View extends Observer {
     const chosenPin = Math.abs(value - firstPin.value) < Math.abs(value - secondPin.value) ? FIRST_PIN : SECOND_PIN;
     pinValues[chosenPin] = value;
     return pinValues;
-  }
-
-  private _bindInputChange(): void {
-    const input: InputView = this._objects.input;
-    input.element.onchange = (e): void => {
-      const target = e.target as HTMLInputElement;
-      const newValue: number | number[] = this._modelState.range
-        ? target.value.split(',').map(el => Number(el.trim()))
-        : Number(target.value);
-      this.emit(EventTypes.valueChanged, { value: newValue });
-    };
   }
 
   private _bindScaleClick(): void {
