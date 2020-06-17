@@ -58,4 +58,5 @@ export interface MouseMoveData {
 export enum EventTypes {
   valueChanged = 'valueChanged',
   stateChanged = 'stateChanged',
+  newScaleValue = 'newScaleValue',
 }

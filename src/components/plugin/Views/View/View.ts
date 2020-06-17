@@ -167,12 +167,12 @@ export default class View extends Observer {
   private _bindScaleClick(): void {
     const { scale } = this._objects;
     if (scale) {
-      const handleScaleClick = (value: number): void => {
+      const handleScaleClick = ({ value }: { value: number }): void => {
         const { range } = this._modelState;
+
         this.emit(EventTypes.valueChanged, { value: range ? this._applyToCorrectPin(value) : value });
       };
-
-      scale.handleOptionClick = handleScaleClick;
+      scale.on(EventTypes.newScaleValue, handleScaleClick);
     }
   }
 

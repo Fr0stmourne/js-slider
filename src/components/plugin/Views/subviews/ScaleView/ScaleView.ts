@@ -1,11 +1,10 @@
-import { ScaleData } from '../../../interfaces';
+import { ScaleData, EventTypes } from '../../../interfaces';
 import render from '../../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 import calculatePxNum from '../../../utils/calculatePxNum/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
 
 export default class ScaleView extends DefaultView {
-  handleOptionClick: (value: number) => void;
   scaleOptionsNum: number;
   isVertical: boolean;
   step: number;
@@ -58,7 +57,7 @@ export default class ScaleView extends DefaultView {
       e.stopPropagation();
       const target = e.target as HTMLElement;
       if (!target.classList.contains('js-option')) return;
-      this.handleOptionClick(Number(target.textContent));
+      this.emit(EventTypes.newScaleValue, { value: Number(target.textContent) });
     };
 
     this._element.querySelectorAll('.js-option').forEach(el => {
