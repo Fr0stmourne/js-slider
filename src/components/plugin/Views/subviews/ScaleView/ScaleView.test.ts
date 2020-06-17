@@ -1,5 +1,5 @@
-import ScaleView from './ScaleView';
 import { ScaleData, EventTypes } from '../../../interfaces';
+import ScaleView from './ScaleView';
 
 const options: ScaleData = {
   minValue: -30,

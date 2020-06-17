@@ -1,7 +1,5 @@
 import { ViewState, ModelState, EventTypes, EventCallback } from '../../interfaces';
 import View from './View';
-import Model from '../../Models/Model';
-import Observer from '../../Observer/Observer';
 
 const testOptions: {
   normal: { viewState: ViewState; modelState: ModelState };

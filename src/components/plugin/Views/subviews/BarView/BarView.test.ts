@@ -1,5 +1,5 @@
-import BarView from './BarView';
 import { BarData, EventTypes } from '../../../interfaces';
+import BarView from './BarView';
 
 describe('BarView', () => {
   let bar: BarView;

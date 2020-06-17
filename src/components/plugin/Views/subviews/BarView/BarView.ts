@@ -1,7 +1,7 @@
-import render from '../../../utils/render/render';
-import DefaultView from '../DefaultView/DefaultView';
-import { EventTypes, BarData } from '../../../interfaces';
 import calculateValue from '../../../utils/calculateValue/calculateValue';
+import render from '../../../utils/render/render';
+import { EventTypes, BarData } from '../../../interfaces';
+import DefaultView from '../DefaultView/DefaultView';
 
 export default class BarView extends DefaultView {
   minValue: number;

@@ -1,7 +1,7 @@
-import { ModelState, EventTypes } from '../interfaces';
 import deleteUndef from '../utils/deleteUndef/deleteUndef';
 import calculateSteps from '../utils/calculateSteps/calculateSteps';
 import Observer from '../Observer/Observer';
+import { ModelState, EventTypes } from '../interfaces';
 
 export default class Model extends Observer {
   private _state: ModelState;

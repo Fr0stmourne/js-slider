@@ -1,8 +1,8 @@
 import { ScaleData, EventTypes } from '../../../interfaces';
 import render from '../../../utils/render/render';
-import DefaultView from '../DefaultView/DefaultView';
 import calculatePxNum from '../../../utils/calculatePxNum/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
+import DefaultView from '../DefaultView/DefaultView';
 
 export default class ScaleView extends DefaultView {
   scaleOptionsNum: number;

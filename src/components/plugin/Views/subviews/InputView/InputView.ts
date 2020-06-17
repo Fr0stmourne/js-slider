@@ -1,5 +1,5 @@
-import DefaultView from '../DefaultView/DefaultView';
 import render from '../../../utils/render/render';
+import DefaultView from '../DefaultView/DefaultView';
 
 export default class InputView extends DefaultView {
   private _value: number | number[];
