@@ -210,9 +210,7 @@ export default class View extends Observer {
 
     const { isVertical } = this._viewState;
     const target = event.target as HTMLElement;
-    let shift = isVertical
-      ? event.clientY - target.getBoundingClientRect().bottom
-      : event.clientX - target.getBoundingClientRect().left;
+    let shift = isVertical ? event.offsetY : event.clientX - target.getBoundingClientRect().left;
 
     const tooltipShift = isVertical
       ? target.getBoundingClientRect().height - event.offsetY
@@ -224,7 +222,6 @@ export default class View extends Observer {
       shift = 0;
     }
 
-    console.log(shift);
     const mouseMoveData: MouseMoveData = {
       pin,
       shift,
@@ -246,7 +243,6 @@ export default class View extends Observer {
     const { minValue, maxValue, range, value } = this._modelState;
     const { pin, shift } = data;
     const slider = this._objects.bar.element;
-    const target = e.target as HTMLElement;
 
     let newValue = isVertical
       ? -(e.clientY - shift / 2 - slider.getBoundingClientRect().bottom)
@@ -256,7 +252,6 @@ export default class View extends Observer {
     if (newValue < 0) newValue = 0;
     const rightEdge = sliderSize;
     if (newValue > rightEdge) newValue = rightEdge;
-    console.log(newValue);
 
     const percentage = newValue / sliderSize;
 
