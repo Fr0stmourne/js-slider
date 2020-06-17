@@ -5,7 +5,7 @@ const testOptions = {
   default: {
     minValue: -33,
     maxValue: 103,
-    step: 5,
+    step: 1,
     value: 72,
     scaleOptionsNum: 9,
   },

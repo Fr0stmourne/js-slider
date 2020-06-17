@@ -17,15 +17,15 @@
     }
 
     .slider-plugin__pin {
-      left: 5px;
+      left: 50%;
       top: initial;
       bottom: 50px;
-      transform: translate(-75%, 0);
+      transform: translate(-50%, 50%);
     }
 
     .slider-plugin__value {
-      transform: translate(50%, -100%);
-      top: 20px;
+      transform: translate(50%, -50%);
+      top: 50%;
     }
 
     .slider-plugin__scale {
@@ -38,7 +38,7 @@
 
       &-option {
         right: 0;
-        transform: translate(0, 25%);
+        transform: translate(0, 50%);
       }
     }
 
@@ -58,11 +58,10 @@
 
   &__pin {
     position: absolute;
-    transform: translate(0, -75%);
-    left: 10px;
-    top: 5px;
-    height: 10px;
-    width: 10px;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     background-color: red;
     cursor: pointer;
@@ -80,7 +79,7 @@
 
     &-option {
       position: absolute;
-      transform: translate(-25%, 0);
+      transform: translate(-50%, 0);
       cursor: pointer;
     }
   }
@@ -96,10 +95,10 @@
     background-color: red;
     color: white;
     position: absolute;
-    top: -5px;
-    left: 0;
+    top: -35px;
+    left: 50%;
     text-align: center;
-    transform: translate(calc(-50% + 5px), -100%);
+    transform: translate(-50%);
     border-radius: 5px;
 
     &--hidden {

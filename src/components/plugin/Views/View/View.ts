@@ -210,15 +210,21 @@ export default class View extends Observer {
 
     const { isVertical } = this._viewState;
     const target = event.target as HTMLElement;
-    let shift = isVertical ? event.offsetX : target.offsetHeight - event.offsetY;
+    let shift = isVertical
+      ? event.clientY - target.getBoundingClientRect().bottom
+      : event.clientX - target.getBoundingClientRect().left;
 
     const tooltipShift = isVertical
       ? target.getBoundingClientRect().height - event.offsetY
       : target.getBoundingClientRect().width - event.offsetX;
 
-    if (target.classList.contains('js-slider-value')) {
-      shift -= tooltipShift;
+    shift -= tooltipShift;
+
+    if (target.classList.contains('js-slider-bar')) {
+      shift = 0;
     }
+
+    console.log(shift);
     const mouseMoveData: MouseMoveData = {
       pin,
       shift,
@@ -240,15 +246,17 @@ export default class View extends Observer {
     const { minValue, maxValue, range, value } = this._modelState;
     const { pin, shift } = data;
     const slider = this._objects.bar.element;
+    const target = e.target as HTMLElement;
 
     let newValue = isVertical
-      ? -(e.clientY - shift - slider.getBoundingClientRect().bottom) - PIN_SIZE / 2
-      : e.clientX - shift - slider.getBoundingClientRect().left + PIN_SIZE / 2;
+      ? -(e.clientY - shift / 2 - slider.getBoundingClientRect().bottom)
+      : e.clientX - shift / 2 - slider.getBoundingClientRect().left;
 
     const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
     if (newValue < 0) newValue = 0;
     const rightEdge = sliderSize;
     if (newValue > rightEdge) newValue = rightEdge;
+    console.log(newValue);
 
     const percentage = newValue / sliderSize;
 
