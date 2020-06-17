@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import Model from '../Models/Model';
 import View from '../Views/View/View';
-import { EventTypes, ModelState, Options } from '../interfaces';
+import { EventTypes, ModelState, Options, ViewState } from '../interfaces';
 
 export default class Controller {
   private _userCallback: Function;
@@ -39,29 +39,29 @@ export default class Controller {
     };
   }
 
-  // setOptions(options: Options) {
-  //   const { view, model } = this;
-  //       const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
-  //       const updatedViewState = getViewState({
-  //         ...newOptions,
-  //       });
-  //       const updatedModelState = getModelState({ ...newOptions });
+  get viewState(): ViewState {
+    return { ...this.view.state.viewState };
+  }
 
-  //       model.state = updatedModelState;
-  //       view.setState(updatedViewState, model.state);
-  //       view.render();
+  setViewState(viewState: ViewState, modelState: ModelState): void {
+    this.view.setState(viewState, modelState);
+  }
 
-  //       $(el)
-  //         .data()
-  //         .slider.connect();
+  get modelState(): ModelState {
+    return { ...this.model.state };
+  }
 
-  //       $(el)
-  //         .children()
-  //         .first()
-  //         .replaceWith(view.element);
+  set modelState(state: ModelState) {
+    this.model.state = state;
+  }
 
-  //       view.updateValue(model.state.value);
-  // }
+  get element(): HTMLElement {
+    return this.view.element;
+  }
+
+  render(): void {
+    this.view.render();
+  }
 
   connect(): void {
     const { _setModelValue, _updateView, view, model } = this;

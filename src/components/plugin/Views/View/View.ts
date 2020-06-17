@@ -46,6 +46,7 @@ export default class View extends Observer {
       modelState: { ...this._modelState },
     };
   }
+
   setState(viewState: ViewState, modelState: ModelState): void {
     this._viewState = { ...this._viewState, ...viewState };
     this._modelState = { ...this._modelState, ...modelState };

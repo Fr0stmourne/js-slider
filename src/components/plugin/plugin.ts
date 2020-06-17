@@ -47,34 +47,31 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
 
   const pluginAPI: API = {
     updateValue(value: number | number[]): void {
-      return this.each((index: number, el: HTMLElement) => {
+      return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
         slider.value = value;
       });
     },
     update(options: Options) {
-      return this.each((index: number, el: HTMLElement) => {
-        const { view, model } = $(el).data().slider;
+      return this.each((_: number, el: HTMLElement) => {
+        const controller: Controller = $(el).data().slider;
         const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
         const updatedViewState = getViewState({
           ...newOptions,
         });
         const updatedModelState = getModelState({ ...newOptions });
 
-        model.state = updatedModelState;
-        view.setState(updatedViewState, model.state);
-        view.render();
-
-        $(el)
-          .data()
-          .slider.connect();
+        controller.modelState = updatedModelState;
+        controller.setViewState(updatedViewState, controller.modelState);
+        controller.render();
+        controller.connect();
 
         $(el)
           .children()
           .first()
-          .replaceWith(view.element);
+          .replaceWith(controller.element);
 
-        view.updateValue(model.state.value);
+        controller.value = controller.modelState.value;
       });
     },
     onValueChange(callback: Function): JQuery {
@@ -87,13 +84,16 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
       return $(this).data().slider.value;
     },
     init(methodOrOptions = DEFAULT_CONFIG): JQuery {
-      return this.each((index: number, el: HTMLElement) => {
+      return this.each((_: number, el: HTMLElement) => {
         const viewState = getViewState(DEFAULT_CONFIG);
         const modelState = getModelState(DEFAULT_CONFIG);
+
         const model = new Model(modelState);
         const view = new View(viewState, modelState);
-        $(el).data('slider', new Controller(model, view));
-        el.append(view.element);
+        const controller = new Controller(model, view);
+
+        $(el).data('slider', controller);
+        el.append($(el).data('slider').element);
         $(el).slider('update', {
           ...methodOrOptions,
         });
