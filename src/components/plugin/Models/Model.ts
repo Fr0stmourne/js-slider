@@ -34,17 +34,20 @@ export default class Model extends Observer {
 
   private _validateValue(newValue: number | number[], state: ModelState): number | number[] {
     if (newValue === undefined) return this._state.value;
-    const { value } = state;
     let validatedValue;
 
     if (Array.isArray(newValue)) {
+      const { value: prevValue } = state;
       const firstValue = this._findClosestStep(newValue[0]);
       const secondValue = this._findClosestStep(newValue[1]);
       validatedValue = [firstValue, secondValue];
 
-      const prevValue = [this._findClosestStep((value as number[])[0]), this._findClosestStep((value as number[])[1])];
+      // TODO
       if (firstValue >= secondValue) {
-        validatedValue = prevValue;
+        validatedValue =
+          (prevValue as number[])[0] !== newValue[0]
+            ? [this._steps[this._steps.indexOf(secondValue) - 1], secondValue]
+            : [firstValue, this._steps[this._steps.indexOf(firstValue) + 1]];
       }
     } else {
       validatedValue = this._findClosestStep(newValue);

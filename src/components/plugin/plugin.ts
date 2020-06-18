@@ -8,7 +8,7 @@ import './slider.scss';
 
 declare global {
   interface JQuery {
-    slider: (options?: Options | string, ...params: any) => JQuery;
+    slider: (options?: Options | string, ...params: any) => void;
   }
 }
 
@@ -36,7 +36,7 @@ function getViewState(options: Options): ViewState {
   return state;
 }
 
-$.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuery {
+$.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
   interface API {
     init(): void;
     updateValue(value: number | number[]): void;
@@ -74,8 +74,8 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
         controller.value = controller.modelState.value;
       });
     },
-    onValueChange(callback: Function): JQuery {
-      return this.each((index: number, el: HTMLElement) => {
+    onValueChange(this: JQuery, callback: Function): JQuery {
+      return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
         slider.userCallback = callback;
       });
@@ -83,7 +83,7 @@ $.fn.slider = function(methodOrOptions: string | Options, ...params: any): JQuer
     getValue() {
       return $(this).data().slider.value;
     },
-    init(methodOrOptions = DEFAULT_CONFIG): JQuery {
+    init(this: JQuery, methodOrOptions = DEFAULT_CONFIG): JQuery {
       return this.each((_: number, el: HTMLElement) => {
         const viewState = getViewState(DEFAULT_CONFIG);
         const modelState = getModelState(DEFAULT_CONFIG);
