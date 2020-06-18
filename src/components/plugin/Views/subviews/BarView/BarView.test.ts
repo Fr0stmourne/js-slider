@@ -1,4 +1,4 @@
-import { BarData, EventTypes } from '../../../interfaces';
+import { BarData, EventTypes } from '../../../types';
 import BarView from './BarView';
 
 describe('BarView', () => {
@@ -19,7 +19,7 @@ describe('BarView', () => {
 
   test('should call callback on bar mousedown', () => {
     const callback = jest.fn();
-    bar.on(EventTypes.newBarValue, callback);
+    bar.on(EventTypes.NewBarValue, callback);
 
     expect(callback).not.toHaveBeenCalled();
     bar.element.dispatchEvent(new Event('mousedown'));

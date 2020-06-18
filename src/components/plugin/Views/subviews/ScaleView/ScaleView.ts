@@ -1,4 +1,4 @@
-import { ScaleData, EventTypes } from '../../../interfaces';
+import { ScaleData, EventTypes } from '../../../types';
 import render from '../../utils/render/render';
 import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
@@ -57,7 +57,7 @@ export default class ScaleView extends DefaultView {
       e.stopPropagation();
       const target = e.target as HTMLElement;
       if (!target.classList.contains('js-option')) return;
-      this.emit(EventTypes.newScaleValue, { value: Number(target.textContent) });
+      this.emit(EventTypes.NewScaleValue, { value: Number(target.textContent) });
     };
 
     this._element.querySelectorAll('.js-option').forEach(el => {

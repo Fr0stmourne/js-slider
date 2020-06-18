@@ -5,12 +5,12 @@ import ScaleView from './Views/subviews/ScaleView/ScaleView';
 
 export type Options = ViewState & ModelState;
 
-export interface ViewState {
+export type ViewState = {
   scaleOptionsNum?: number;
   isTooltipDisabled?: boolean;
   isVertical?: boolean;
   sliderSize?: DOMRect;
-}
+};
 
 export type EventCallback = (data: any) => void;
 
@@ -18,52 +18,52 @@ export type Events = {
   [key in EventTypes]?: EventCallback[];
 };
 
-export interface ModelState {
+export type ModelState = {
   minValue?: number;
   maxValue?: number;
   step?: number;
   value?: number | number[];
   range?: boolean;
-}
+};
 
-export interface PinData {
+export type PinData = {
   pinNumber: number;
   isTooltipDisabled: boolean;
   isVertical: boolean;
   value: number;
-}
+};
 
-export interface ScaleData {
+export type ScaleData = {
   scaleOptionsNum: number;
   step: number;
   isVertical: boolean;
   minValue: number;
   maxValue: number;
   sliderSize?: number;
-}
+};
 
-export interface BarData {
+export type BarData = {
   minValue: number;
   maxValue: number;
   isVertical: boolean;
-}
+};
 
-export interface Objects {
+export type Objects = {
   bar: BarView;
   firstPin: PinView;
   secondPin?: PinView;
   input: InputView;
   scale?: ScaleView;
-}
+};
 
-export interface MouseMoveData {
+export type MouseMoveData = {
   pin: PinView;
   shift: number;
-}
+};
 
 export enum EventTypes {
-  valueChanged = 'valueChanged',
-  stateChanged = 'stateChanged',
-  newScaleValue = 'newScaleValue',
-  newBarValue = 'newBarValue',
+  ValueChanged = 'ValueChanged',
+  StateChanged = 'StateChanged',
+  NewScaleValue = 'NewScaleValue',
+  NewBarValue = 'NewBarValue',
 }

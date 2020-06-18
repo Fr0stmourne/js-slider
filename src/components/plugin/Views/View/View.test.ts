@@ -1,4 +1,4 @@
-import { ViewState, ModelState, EventTypes, EventCallback } from '../../interfaces';
+import { ViewState, ModelState, EventTypes, EventCallback } from '../../types';
 import View from './View';
 
 const testOptions: {
@@ -147,8 +147,8 @@ describe('setState()', () => {
 describe('render()', () => {
   beforeEach(() => {
     callback = jest.fn();
-    defaultView.on(EventTypes.valueChanged, callback as EventCallback);
-    rangeView.on(EventTypes.valueChanged, callback as EventCallback);
+    defaultView.on(EventTypes.ValueChanged, callback as EventCallback);
+    rangeView.on(EventTypes.ValueChanged, callback as EventCallback);
   });
   describe('should bind callbacks to needed slider objects', () => {
     test('bar', () => {

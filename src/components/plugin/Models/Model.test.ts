@@ -1,5 +1,5 @@
 import Model from './Model';
-import { ModelState } from '../interfaces';
+import { ModelState } from '../types';
 
 const testOptions: { normal: ModelState; range: ModelState } = {
   normal: {

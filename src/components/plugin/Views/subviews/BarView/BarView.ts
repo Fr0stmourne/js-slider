@@ -1,6 +1,6 @@
 import calculateValue from '../../utils/calculateValue/calculateValue';
 import render from '../../utils/render/render';
-import { EventTypes, BarData } from '../../../interfaces';
+import { EventTypes, BarData } from '../../../types';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class BarView extends DefaultView {
@@ -36,7 +36,7 @@ export default class BarView extends DefaultView {
           : e.offsetX / target.getBoundingClientRect().width;
 
         const newValue = calculateValue({ percentage, minValue, maxValue });
-        this.emit(EventTypes.newBarValue, { e, value: newValue });
+        this.emit(EventTypes.NewBarValue, { e, value: newValue });
       }
     };
 

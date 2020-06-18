@@ -1,4 +1,4 @@
-import { PinData } from '../../../interfaces';
+import { PinData } from '../../../types';
 import render from '../../utils/render/render';
 import movePin from './utils/movePin/movePin';
 import DefaultView from '../DefaultView/DefaultView';

@@ -1,4 +1,4 @@
-import { ModelState, ViewState, Options } from './interfaces';
+import { ModelState, ViewState, Options } from './types';
 
 export const DEFAULT_MODEL_STATE: ModelState = {
   minValue: 0,

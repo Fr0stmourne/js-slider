@@ -1,4 +1,4 @@
-import { PinData } from '../../../interfaces';
+import { PinData } from '../../../types';
 import PinView from './PinView';
 
 const options: PinData = {

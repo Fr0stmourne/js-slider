@@ -1,4 +1,4 @@
-import { Events, EventTypes, EventCallback } from '../interfaces';
+import { Events, EventTypes, EventCallback } from '../types';
 
 export default class Observer {
   constructor(public events: Events = {}) {}

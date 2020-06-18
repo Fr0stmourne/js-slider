@@ -1,7 +1,7 @@
 import deleteUndef from '../utils/deleteUndef/deleteUndef';
 import calculateSteps from '../utils/calculateSteps/calculateSteps';
 import Observer from '../Observer/Observer';
-import { ModelState, EventTypes } from '../interfaces';
+import { ModelState, EventTypes } from '../types';
 
 export default class Model extends Observer {
   private _state: ModelState;
@@ -25,7 +25,7 @@ export default class Model extends Observer {
     const { minValue, maxValue, step } = this.state;
     this._steps = calculateSteps({ minValue, maxValue, step });
 
-    this.emit(EventTypes.stateChanged, { value: this.state.value });
+    this.emit(EventTypes.StateChanged, { value: this.state.value });
   }
 
   private _findClosestStep(value: number): number {
