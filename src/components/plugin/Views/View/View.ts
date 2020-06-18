@@ -64,7 +64,7 @@ export default class View extends Observer {
     const { minValue, maxValue, range } = modelState;
     const { input, firstPin, secondPin, bar } = this._objects;
 
-    const sliderSize = isVertical ? Number(bar.element.clientHeight) : Number(bar.element.clientWidth);
+    const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
     if (range) {
       const pins = [1, 2];
       const pxNums = pins.map((el, idx) =>
@@ -93,17 +93,16 @@ export default class View extends Observer {
   }
 
   render(): void {
-    const VERTICAL_MODIFIER = 'slider-plugin--vertical';
     const { isVertical, scaleOptionsNum, isTooltipDisabled, sliderSize } = this._viewState;
     const { value, minValue, maxValue, range, step } = this._modelState;
     this._element = render(
       `
-    <div class="slider-plugin js-slider ${isVertical ? VERTICAL_MODIFIER : ''}">
+    <div class="slider-plugin js-slider ${isVertical ? 'slider-plugin--vertical' : ''}">
     </div>
     `,
     );
 
-    this._sliderSize = sliderSize && Math.max(Number(sliderSize.height), Number(sliderSize.width));
+    this._sliderSize = sliderSize && Math.max(sliderSize.height, sliderSize.width);
 
     const firstPinData: PinData = {
       pinNumber: 1,
@@ -162,9 +161,7 @@ export default class View extends Observer {
   private _applyToCorrectPin(value: number): number[] {
     const { firstPin, secondPin } = this._objects;
     const pinValues = [firstPin.value, secondPin.value];
-    const FIRST_PIN = 0;
-    const SECOND_PIN = 1;
-    const chosenPin = Math.abs(value - firstPin.value) < Math.abs(value - secondPin.value) ? FIRST_PIN : SECOND_PIN;
+    const chosenPin = Math.abs(value - firstPin.value) < Math.abs(value - secondPin.value) ? 0 : 1;
     pinValues[chosenPin] = value;
     return pinValues;
   }
@@ -190,15 +187,17 @@ export default class View extends Observer {
   }
 
   private _bindBarClick(): void {
-    const { range, value: modelValue } = this._modelState;
+    const { range } = this._modelState;
     const { bar } = this._objects;
 
     const handleBarClick = ({ e, value }: { e: MouseEvent; value: number }): void => {
       if (range) {
+        const { firstPin, secondPin } = this._objects;
+        const prevValues = [firstPin.value, secondPin.value];
         const updatedValues = this._applyToCorrectPin(value);
-        const updatedPinKey = (modelValue as number[])[0] === updatedValues[0] ? 'secondPin' : 'firstPin';
-        const updatedPin = this._objects[updatedPinKey];
+        const updatedPin = prevValues[0] === updatedValues[0] ? secondPin : firstPin;
         this.emit(EventTypes.valueChanged, { value: updatedValues });
+
         this._handleMouseDown(e, updatedPin);
       } else {
         this.emit(EventTypes.valueChanged, { value: value });
