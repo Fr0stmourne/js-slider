@@ -25,7 +25,7 @@ export default class PinView extends DefaultView {
   }
 
   updateValue(pxNum: number, value: number): void {
-    this._movePin(pxNum);
+    this.movePin(pxNum);
 
     this._elements.tooltip.textContent = String(value);
   }
@@ -47,7 +47,7 @@ export default class PinView extends DefaultView {
     };
   }
 
-  private _movePin(value: number): void {
+  private movePin(value: number): void {
     const { isVertical } = this;
     movePin({ pinElement: this._elements.pin, value, isVertical });
   }

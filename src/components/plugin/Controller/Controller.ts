@@ -62,20 +62,20 @@ export default class Controller {
   }
 
   connect(): void {
-    const { _setModelValue, _updateView, view, model } = this;
+    const { setModelValue, updateView, view, model } = this;
 
-    view.on(EventTypes.ValueChanged, _setModelValue);
-    model.on(EventTypes.StateChanged, _updateView);
+    view.on(EventTypes.ValueChanged, setModelValue);
+    model.on(EventTypes.StateChanged, updateView);
   }
 
   @boundMethod
-  private _setModelValue(data: ModelState): void {
+  private setModelValue(data: ModelState): void {
     const { model } = this;
     model.state = { ...model.state, ...data };
   }
 
   @boundMethod
-  private _updateView({ value }: { value: number | number[] }): void {
+  private updateView({ value }: { value: number | number[] }): void {
     this.view.updateValue(Array.isArray(value) ? [...value] : value);
   }
 }

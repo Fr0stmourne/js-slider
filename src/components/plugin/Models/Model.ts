@@ -5,14 +5,14 @@ import { ModelState, EventTypes } from '../types';
 
 export default class Model extends Observer {
   private _state: ModelState;
-  private _steps: number[];
+  private steps: number[];
 
   constructor(modelState: ModelState) {
     super();
     this._state = modelState;
 
     const { minValue, maxValue, step } = this.state;
-    this._steps = calculateSteps({ minValue, maxValue, step });
+    this.steps = calculateSteps({ minValue, maxValue, step });
   }
 
   get state(): ModelState {
@@ -20,43 +20,43 @@ export default class Model extends Observer {
   }
 
   set state(modelState: ModelState) {
-    this._state = this._validateState(modelState);
+    this._state = this.validateState(modelState);
 
     const { minValue, maxValue, step } = this.state;
-    this._steps = calculateSteps({ minValue, maxValue, step });
+    this.steps = calculateSteps({ minValue, maxValue, step });
 
     this.emit(EventTypes.StateChanged, { value: this.state.value });
   }
 
-  private _findClosestStep(value: number): number {
-    return this._steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
+  private findClosestStep(value: number): number {
+    return this.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
-  private _validateValue(newValue: number | number[], state: ModelState): number | number[] {
+  private validateValue(newValue: number | number[], state: ModelState): number | number[] {
     if (newValue === undefined) return this._state.value;
     let validatedValue;
 
     if (Array.isArray(newValue)) {
       const { value: prevValue } = state;
-      const firstValue = this._findClosestStep(newValue[0]);
-      const secondValue = this._findClosestStep(newValue[1]);
+      const firstValue = this.findClosestStep(newValue[0]);
+      const secondValue = this.findClosestStep(newValue[1]);
       validatedValue = [firstValue, secondValue];
 
       // TODO
       if (firstValue >= secondValue) {
         validatedValue =
           (prevValue as number[])[0] !== newValue[0]
-            ? [this._steps[this._steps.indexOf(secondValue) - 1], secondValue]
-            : [firstValue, this._steps[this._steps.indexOf(firstValue) + 1]];
+            ? [this.steps[this.steps.indexOf(secondValue) - 1], secondValue]
+            : [firstValue, this.steps[this.steps.indexOf(firstValue) + 1]];
       }
     } else {
-      validatedValue = this._findClosestStep(newValue);
+      validatedValue = this.findClosestStep(newValue);
     }
 
     return validatedValue;
   }
 
-  private _validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
+  private validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
     if (minValue === undefined || maxValue === undefined) {
       return {
         minValue: this._state.minValue,
@@ -74,21 +74,21 @@ export default class Model extends Observer {
         };
   }
 
-  private _validateStep(step: number): number {
+  private validateStep(step: number): number {
     return Math.abs(step) || this._state.step;
   }
 
-  private _validateState(newState: ModelState): ModelState {
+  private validateState(newState: ModelState): ModelState {
     const stateToValidate = { ...newState };
 
-    const validatedStep = this._validateStep(stateToValidate.step);
-    const validatedMinMaxValues = this._validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
-    this._steps = calculateSteps({
+    const validatedStep = this.validateStep(stateToValidate.step);
+    const validatedMinMaxValues = this.validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
+    this.steps = calculateSteps({
       minValue: validatedMinMaxValues.minValue,
       maxValue: validatedMinMaxValues.maxValue,
       step: validatedStep,
     });
-    const validatedValue = this._validateValue(stateToValidate.value, {
+    const validatedValue = this.validateValue(stateToValidate.value, {
       ...this._state,
       step: validatedStep,
       ...validatedMinMaxValues,

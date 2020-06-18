@@ -44,9 +44,9 @@ export default class View extends Observer {
   }
 
   bindListeners(): void {
-    this._bindBarClick();
-    this._bindMovePin();
-    this._bindScaleClick();
+    this.bindBarClick();
+    this.bindMovePin();
+    this.bindScaleClick();
   }
 
   updateValue(value: number | number[]): void {
@@ -149,7 +149,7 @@ export default class View extends Observer {
     this.bindListeners();
   }
 
-  private _applyToCorrectPin(value: number): number[] {
+  private applyToCorrectPin(value: number): number[] {
     const { firstPin, secondPin } = this._objects;
     const pinValues = [firstPin.value, secondPin.value];
     const chosenPin = Math.abs(value - firstPin.value) < Math.abs(value - secondPin.value) ? 0 : 1;
@@ -157,27 +157,27 @@ export default class View extends Observer {
     return pinValues;
   }
 
-  private _bindScaleClick(): void {
+  private bindScaleClick(): void {
     const { scale } = this._objects;
     if (scale) {
       const handleScaleClick = ({ value }: { value: number }): void => {
         const { range } = this._modelState;
 
-        this.emit(EventTypes.ValueChanged, { value: range ? this._applyToCorrectPin(value) : value });
+        this.emit(EventTypes.ValueChanged, { value: range ? this.applyToCorrectPin(value) : value });
       };
       scale.on(EventTypes.NewScaleValue, handleScaleClick);
     }
   }
 
-  private _bindMovePin(): void {
+  private bindMovePin(): void {
     const { range } = this._modelState;
     const { firstPin, secondPin } = this._objects;
 
-    this._bindListenersToPin(firstPin);
-    if (range) this._bindListenersToPin(secondPin);
+    this.bindListenersToPin(firstPin);
+    if (range) this.bindListenersToPin(secondPin);
   }
 
-  private _bindBarClick(): void {
+  private bindBarClick(): void {
     const { range } = this._modelState;
     const { bar } = this._objects;
 
@@ -185,26 +185,26 @@ export default class View extends Observer {
       if (range) {
         const { firstPin, secondPin } = this._objects;
         const prevValues = [firstPin.value, secondPin.value];
-        const updatedValues = this._applyToCorrectPin(value);
+        const updatedValues = this.applyToCorrectPin(value);
         const updatedPin = prevValues[0] === updatedValues[0] ? secondPin : firstPin;
         this.emit(EventTypes.ValueChanged, { value: updatedValues });
 
-        this._handleMouseDown(e, updatedPin);
+        this.handleMouseDown(e, updatedPin);
       } else {
         this.emit(EventTypes.ValueChanged, { value: value });
-        this._handleMouseDown(e, this._objects.firstPin);
+        this.handleMouseDown(e, this._objects.firstPin);
       }
     };
 
     bar.on(EventTypes.NewBarValue, handleBarClick);
   }
 
-  private _bindListenersToPin(pin: PinView): void {
-    const handleMouseDown = (event: MouseEvent): void => this._handleMouseDown(event, pin);
+  private bindListenersToPin(pin: PinView): void {
+    const handleMouseDown = (event: MouseEvent): void => this.handleMouseDown(event, pin);
     pin.element.addEventListener('mousedown', handleMouseDown);
   }
 
-  private _handleMouseDown(event: MouseEvent, pin: PinView): void {
+  private handleMouseDown(event: MouseEvent, pin: PinView): void {
     event.preventDefault();
 
     const { isVertical } = this._viewState;
@@ -226,7 +226,7 @@ export default class View extends Observer {
       shift,
     };
 
-    const handleMouseMove = (e: MouseEvent): void => this._handleMouseMove(e, mouseMoveData);
+    const handleMouseMove = (e: MouseEvent): void => this.handleMouseMove(e, mouseMoveData);
 
     const handleMouseUp = (): void => {
       document.removeEventListener('mouseup', handleMouseUp);
@@ -237,7 +237,7 @@ export default class View extends Observer {
     document.addEventListener('mouseup', handleMouseUp);
   }
 
-  private _handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
+  private handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
     const { isVertical } = this._viewState;
     const { minValue, maxValue, range, value } = this._modelState;
     const { pin, shift } = data;
