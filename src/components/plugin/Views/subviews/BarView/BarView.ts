@@ -1,5 +1,5 @@
-import calculateValue from '../../../utils/calculateValue/calculateValue';
-import render from '../../../utils/render/render';
+import calculateValue from '../../utils/calculateValue/calculateValue';
+import render from '../../utils/render/render';
 import { EventTypes, BarData } from '../../../interfaces';
 import DefaultView from '../DefaultView/DefaultView';
 

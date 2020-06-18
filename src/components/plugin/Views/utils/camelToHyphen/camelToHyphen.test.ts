@@ -1,6 +1,6 @@
 import camelToHyphen from './camelToHyphen';
 
-describe('calculateSteps()', () => {
+describe('camelToHyphen()', () => {
   test('should correctly change notation', () => {
     expect(camelToHyphen('maxValue')).toBe('max-value');
   });

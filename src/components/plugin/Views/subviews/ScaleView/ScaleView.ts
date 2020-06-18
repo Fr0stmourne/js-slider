@@ -1,6 +1,6 @@
 import { ScaleData, EventTypes } from '../../../interfaces';
-import render from '../../../utils/render/render';
-import calculatePxNum from '../../../utils/calculatePxNum/calculatePxNum';
+import render from '../../utils/render/render';
+import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps/calculateSteps';
 import DefaultView from '../DefaultView/DefaultView';
 

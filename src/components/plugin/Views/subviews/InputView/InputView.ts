@@ -1,4 +1,4 @@
-import render from '../../../utils/render/render';
+import render from '../../utils/render/render';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class InputView extends DefaultView {

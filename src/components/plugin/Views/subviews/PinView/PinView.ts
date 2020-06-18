@@ -1,6 +1,6 @@
 import { PinData } from '../../../interfaces';
-import render from '../../../utils/render/render';
-import movePin from '../../../utils/movePin/movePin';
+import render from '../../utils/render/render';
+import movePin from './utils/movePin/movePin';
 import DefaultView from '../DefaultView/DefaultView';
 
 export default class PinView extends DefaultView {

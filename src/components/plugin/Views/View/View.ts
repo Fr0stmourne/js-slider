@@ -8,15 +8,15 @@ import {
   EventTypes,
   BarData,
 } from '../../interfaces';
-import calculatePxNum from '../../utils/calculatePxNum/calculatePxNum';
-import calculateValue from '../../utils/calculateValue/calculateValue';
-import render from '../../utils/render/render';
+import calculatePxNum from '../utils/calculatePxNum/calculatePxNum';
+import calculateValue from '../utils/calculateValue/calculateValue';
+import render from '../utils/render/render';
 import PinView from '../subviews/PinView/PinView';
 import BarView from '../subviews/BarView/BarView';
 import InputView from '../subviews/InputView/InputView';
 import ScaleView from '../subviews/ScaleView/ScaleView';
 import Observer from '../../Observer/Observer';
-import camelToHyphen from '../../utils/camelToHyphen/camelToHyphen';
+import camelToHyphen from '../utils/camelToHyphen/camelToHyphen';
 
 export default class View extends Observer {
   private _sliderSize: number;
@@ -111,14 +111,14 @@ export default class View extends Observer {
       value: (range ? (value as number[])[0] : value) as number,
     };
 
-    const BarData: BarData = {
+    const barData: BarData = {
       minValue,
       maxValue,
       isVertical,
     };
 
     this._objects = {
-      bar: new BarView(BarData),
+      bar: new BarView(barData),
       firstPin: new PinView(firstPinData),
       input: new InputView(value),
     };
