@@ -73,17 +73,16 @@ export default class ScaleView extends DefaultView {
       if (scaleOptionsNum >= steps.length) {
         return [...steps];
       }
-      const result: number[] = [];
-      const totalItems = steps.length;
-      const interval = totalItems / scaleOptionsNum;
 
-      for (let i = 0; i < scaleOptionsNum; i++) {
-        const evenIndex = Math.floor(i * interval + interval / 2);
-        result.push(steps[evenIndex]);
-      }
+      const interval = steps.length / scaleOptionsNum;
+      const result = Array(Math.floor(scaleOptionsNum))
+        .fill(null)
+        .reduce((acc: number[], el: number, index: number) => {
+          acc.push(steps[Math.floor(index * interval + interval / 2)]);
+          return acc;
+        }, [])
+        .slice(1, -1);
 
-      result.pop();
-      result.shift();
       result.unshift(steps[0]);
       result.push(steps[steps.length - 1]);
       return result;

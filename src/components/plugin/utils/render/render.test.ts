@@ -7,11 +7,11 @@ describe('render()', () => {
     `;
 
     const wrapper = document.createElement('div');
-    for (let i = 0; i < 3; i++) {
+    [1, 2, 3].forEach(el => {
       const p = document.createElement('p');
-      p.textContent = String(i + 1);
+      p.textContent = String(el);
       wrapper.append(p);
-    }
+    });
 
     expect(render(markup)).toStrictEqual(wrapper);
   });
