@@ -8,6 +8,7 @@ import InputView from './components/InputView';
 import ScaleView from './components/ScaleView';
 import Observer from '../Observer';
 import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes, BarData } from '../types';
+import { DEFAULT_VIEW_STATE } from '../defaults';
 
 class View extends Observer {
   private _sliderSize: number;
@@ -16,9 +17,9 @@ class View extends Observer {
   private _modelState: ModelState;
   private _objects: Objects;
 
-  constructor(viewState: ViewState, modelState: ModelState) {
+  constructor(modelState: ModelState, viewState?: ViewState) {
     super();
-    this._viewState = viewState;
+    this._viewState = { ...DEFAULT_VIEW_STATE, ...viewState };
     this._modelState = modelState;
     this.render();
   }

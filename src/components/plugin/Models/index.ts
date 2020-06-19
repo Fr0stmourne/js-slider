@@ -1,15 +1,15 @@
-import deleteUndef from '../utils/deleteUndef';
 import calculateSteps from '../utils/calculateSteps';
 import Observer from '../Observer';
 import { ModelState, EventTypes } from '../types';
+import { DEFAULT_MODEL_STATE } from '../defaults';
 
 class Model extends Observer {
   private _state: ModelState;
   private steps: number[];
 
-  constructor(modelState: ModelState) {
+  constructor(modelState?: ModelState) {
     super();
-    this._state = modelState;
+    this._state = { ...DEFAULT_MODEL_STATE, ...modelState };
 
     const { minValue, maxValue, step } = this.state;
     this.steps = calculateSteps({ minValue, maxValue, step });
@@ -100,8 +100,6 @@ class Model extends Observer {
       value: validatedValue,
       range: Array.isArray(validatedValue),
     };
-
-    deleteUndef(validatedState);
 
     return validatedState;
   }

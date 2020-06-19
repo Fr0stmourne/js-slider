@@ -38,7 +38,7 @@ function getViewState(options: Options): ViewState {
 
 $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
   interface API {
-    init(): void;
+    init(this: JQuery, methodOrOptions: Options): JQuery;
     updateValue(value: number | number[]): void;
     update(options: Options): void;
     onValueChange(callback: Function): void;
@@ -83,13 +83,10 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
     getValue() {
       return $(this).data().slider.value;
     },
-    init(this: JQuery, methodOrOptions = DEFAULT_CONFIG): JQuery {
+    init(this: JQuery, methodOrOptions: Options): JQuery {
       return this.each((_: number, el: HTMLElement) => {
-        const viewState = getViewState(DEFAULT_CONFIG);
-        const modelState = getModelState(DEFAULT_CONFIG);
-
-        const model = new Model(modelState);
-        const view = new View(viewState, modelState);
+        const model = new Model();
+        const view = new View(model.state);
         const controller = new Controller(model, view);
 
         $(el).data('slider', controller);

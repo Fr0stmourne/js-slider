@@ -66,9 +66,9 @@ let callback: Function;
 
 let defaultView: View, verticalView: View, rangeView: View;
 beforeEach(() => {
-  defaultView = new View(testOptions.normal.viewState, testOptions.normal.modelState);
-  verticalView = new View(testOptions.vertical.viewState, testOptions.vertical.modelState);
-  rangeView = new View(testOptions.range.viewState, testOptions.range.modelState);
+  defaultView = new View(testOptions.normal.modelState, testOptions.normal.viewState);
+  verticalView = new View(testOptions.vertical.modelState, testOptions.vertical.viewState);
+  rangeView = new View(testOptions.range.modelState, testOptions.range.viewState);
 });
 
 describe('View constructor', () => {

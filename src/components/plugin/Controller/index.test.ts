@@ -9,7 +9,7 @@ let view: View;
 let model: Model;
 describe('Controller constructor', () => {
   beforeEach(() => {
-    view = new View(DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE);
+    view = new View(DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE);
     model = new Model(DEFAULT_MODEL_STATE);
     controller = new Controller(model, view);
   });
