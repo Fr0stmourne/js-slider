@@ -1,58 +1,45 @@
-import deleteUndef from './utils/deleteUndef';
 import View from './View';
 import Model from './Models';
 import Controller from './Controller';
-import { Options, ModelState, ViewState } from './types';
-import { DEFAULT_CONFIG } from './defaults';
+import { Options, ModelState, ViewState, API } from './types';
 import './slider.scss';
+import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';
 
 declare global {
   interface JQuery {
-    slider: (options?: Options | string, ...params: any) => void;
+    slider: (options?: Options | keyof API, ...params: any) => void;
   }
 }
 
-function getModelState(options: Options): ModelState {
-  const state: ModelState = {
-    minValue: options.minValue,
-    maxValue: options.maxValue,
-    step: options.step,
-    value: options.value,
-    range: options.value ? Array.isArray(options.value) : undefined,
-  };
-  deleteUndef(state);
+function getModelState(options: Options): Partial<ModelState> {
+  const state: {
+    [key: string]: string | number | number[] | boolean;
+  } = {};
+  Object.keys(options).forEach(option => {
+    if (Object.keys(DEFAULT_MODEL_STATE).includes(option)) state[option] = options[option as keyof ModelState];
+  });
   return state;
 }
 
 function getViewState(options: Options): ViewState {
-  const state: ViewState = {
-    scaleOptionsNum: options.scaleOptionsNum,
-    isTooltipDisabled: options.isTooltipDisabled,
-    isVertical: options.isVertical,
-    sliderSize: options.sliderSize,
-  };
-
-  deleteUndef(state);
+  const state: {
+    [key: string]: number | boolean | DOMRect;
+  } = {};
+  Object.keys(options).forEach(option => {
+    if (Object.keys(DEFAULT_VIEW_STATE).includes(option)) state[option] = options[option as keyof ViewState];
+  });
   return state;
 }
 
-$.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
-  interface API {
-    init(this: JQuery, methodOrOptions: Options): JQuery;
-    updateValue(value: number | number[]): void;
-    update(options: Options): void;
-    onValueChange(callback: Function): void;
-    getValue(): number | number[];
-  }
-
+$.fn.slider = function(methodOrOptions, ...params: any) {
   const pluginAPI: API = {
-    updateValue(value: number | number[]): void {
+    updateValue(this: JQuery, value: number | number[]): JQuery {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
         slider.value = value;
       });
     },
-    update(options: Options) {
+    update(this: JQuery, options: Options) {
       return this.each((_: number, el: HTMLElement) => {
         const controller: Controller = $(el).data().slider;
         const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
@@ -61,8 +48,8 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
         });
         const updatedModelState = getModelState({ ...newOptions });
 
-        controller.modelState = updatedModelState;
-        controller.setViewState(updatedViewState, controller.modelState);
+        controller.setModelState(updatedModelState);
+        controller.setViewState(updatedViewState, controller.getModelState());
         controller.render();
         controller.connect();
 
@@ -71,7 +58,7 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
           .first()
           .replaceWith(controller.element);
 
-        controller.value = controller.modelState.value;
+        controller.value = controller.getModelState().value;
       });
     },
     onValueChange(this: JQuery, callback: Function): JQuery {
@@ -83,7 +70,7 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
     getValue() {
       return $(this).data().slider.value;
     },
-    init(this: JQuery, methodOrOptions: Options): JQuery {
+    init(this: JQuery, methodOrOptions?: Options): JQuery {
       return this.each((_: number, el: HTMLElement) => {
         const model = new Model();
         const view = new View(model.getState());
@@ -98,6 +85,9 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
     },
   };
 
+  // if (typeof methodOrOptions === 'object') {
+  //   pluginAPI[methodOrOptions as keyof API];
+  // }
   if (pluginAPI[methodOrOptions as keyof API]) {
     return pluginAPI[methodOrOptions as keyof API].apply(this, params);
   } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {

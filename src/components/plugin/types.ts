@@ -3,7 +3,7 @@ import PinView from './View/components/PinView';
 import InputView from './View/components/InputView';
 import ScaleView from './View/components/ScaleView';
 
-type Options = ViewState & ModelState;
+type Options = ViewState & Partial<ModelState>;
 
 type ViewState = {
   scaleOptionsNum?: number;
@@ -19,11 +19,11 @@ type Events = {
 };
 
 type ModelState = {
-  minValue?: number;
-  maxValue?: number;
-  step?: number;
-  value?: number | number[];
-  range?: boolean;
+  minValue: number;
+  maxValue: number;
+  step: number;
+  value: number | number[];
+  range: boolean;
 };
 
 type PinData = {
@@ -68,6 +68,14 @@ enum EventTypes {
   NewBarValue = 'NewBarValue',
 }
 
+type API = {
+  init(this: JQuery, methodOrOptions: Options): JQuery;
+  updateValue(value: number | number[]): void;
+  update(options: Options): void;
+  onValueChange(callback: Function): void;
+  getValue(): number | number[];
+};
+
 export {
   Options,
   ViewState,
@@ -80,4 +88,5 @@ export {
   Objects,
   MouseMoveData,
   EventTypes,
+  API,
 };

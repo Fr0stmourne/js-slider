@@ -45,11 +45,11 @@ class Controller {
     this.view.setState(viewState, modelState);
   }
 
-  get modelState(): ModelState {
+  getModelState(): ModelState {
     return { ...this.model.getState() };
   }
 
-  set modelState(state: ModelState) {
+  setModelState(state: Partial<ModelState>): void {
     this.model.setState(state);
   }
 

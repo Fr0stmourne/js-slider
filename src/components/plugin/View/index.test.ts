@@ -119,30 +119,30 @@ describe('Update value()', () => {
   });
 });
 
-describe('setState()', () => {
-  beforeEach(() => {
-    callback = jest.fn();
-  });
-  test('should merge current and new states', () => {
-    defaultView.setState(
-      {
-        isVertical: true,
-      },
-      {
-        step: 10,
-      },
-    );
-    expect(defaultView.state.viewState).toStrictEqual({
-      ...testOptions.normal.viewState,
-      isVertical: true,
-    });
+// describe('setState()', () => {
+//   beforeEach(() => {
+//     callback = jest.fn();
+//   });
+//   test('should merge current and new states', () => {
+//     defaultView.setState(
+//       {
+//         isVertical: true,
+//       },
+//       {
+//         step: 10,
+//       },
+//     );
+//     expect(defaultView.state.viewState).toStrictEqual({
+//       ...testOptions.normal.viewState,
+//       isVertical: true,
+//     });
 
-    expect(defaultView.state.modelState).toStrictEqual({
-      ...testOptions.normal.modelState,
-      step: 10,
-    });
-  });
-});
+//     expect(defaultView.state.modelState).toStrictEqual({
+//       ...testOptions.normal.modelState,
+//       step: 10,
+//     });
+//   });
+// });
 
 describe('render()', () => {
   beforeEach(() => {

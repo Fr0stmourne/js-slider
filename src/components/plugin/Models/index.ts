@@ -19,7 +19,7 @@ class Model extends Observer {
     return { ...this.state };
   }
 
-  setState(modelState: ModelState): void {
+  setState(modelState: Partial<ModelState>): void {
     this.state = this.validateState(modelState);
 
     const { minValue, maxValue, step } = this.getState();
@@ -32,7 +32,7 @@ class Model extends Observer {
     return this.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
-  private validateValue(newValue: number | number[], state: ModelState): number | number[] {
+  private validateValue(state: ModelState, newValue?: number | number[]): number | number[] {
     if (newValue === undefined) return this.state.value;
     let validatedValue;
 
@@ -55,7 +55,7 @@ class Model extends Observer {
     return validatedValue;
   }
 
-  private validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
+  private validateMinMaxValues(minValue?: number, maxValue?: number): { minValue: number; maxValue: number } {
     if (minValue === undefined || maxValue === undefined) {
       return {
         minValue: this.state.minValue,
@@ -73,11 +73,12 @@ class Model extends Observer {
         };
   }
 
-  private validateStep(step: number): number {
-    return Math.abs(step) || this.state.step;
+  private validateStep(step?: number): number {
+    if (step === undefined) return this.state.step;
+    return Math.abs(step);
   }
 
-  private validateState(newState: ModelState): ModelState {
+  private validateState(newState: Partial<ModelState>): ModelState {
     const stateToValidate = { ...newState };
 
     const validatedStep = this.validateStep(stateToValidate.step);
@@ -87,11 +88,14 @@ class Model extends Observer {
       maxValue: validatedMinMaxValues.maxValue,
       step: validatedStep,
     });
-    const validatedValue = this.validateValue(stateToValidate.value, {
-      ...this.state,
-      step: validatedStep,
-      ...validatedMinMaxValues,
-    });
+    const validatedValue = this.validateValue(
+      {
+        ...this.state,
+        step: validatedStep,
+        ...validatedMinMaxValues,
+      },
+      stateToValidate.value,
+    );
 
     const validatedState = {
       ...this.state,
