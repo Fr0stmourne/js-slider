@@ -1,7 +1,7 @@
 import render from '../../utils/render';
 import DefaultView from '../DefaultView';
 
-export default class InputView extends DefaultView {
+class InputView extends DefaultView {
   private _value: number | number[];
   constructor(defaultValue: number | number[]) {
     super();
@@ -27,3 +27,5 @@ export default class InputView extends DefaultView {
     );
   }
 }
+
+export default InputView;

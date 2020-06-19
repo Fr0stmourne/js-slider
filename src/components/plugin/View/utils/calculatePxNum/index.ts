@@ -1,4 +1,4 @@
-export default function calculatePxNum({
+function calculatePxNum({
   value,
   minValue,
   maxValue,
@@ -14,3 +14,5 @@ export default function calculatePxNum({
   if (value < minValue || value > maxValue) throw new Error('Value should be in stated boundaries');
   return (Math.abs(value - minValue) / Math.abs(maxValue - minValue)) * elementSize;
 }
+
+export default calculatePxNum;

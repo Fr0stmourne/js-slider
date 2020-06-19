@@ -3,7 +3,7 @@ import render from '../../utils/render';
 import { EventTypes, BarData } from '../../../types';
 import DefaultView from '../DefaultView';
 
-export default class BarView extends DefaultView {
+class BarView extends DefaultView {
   minValue: number;
   maxValue: number;
   isVertical: boolean;
@@ -43,3 +43,5 @@ export default class BarView extends DefaultView {
     this._element.addEventListener('mousedown', handleBarClick);
   }
 }
+
+export default BarView;

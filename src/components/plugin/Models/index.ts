@@ -3,7 +3,7 @@ import calculateSteps from '../utils/calculateSteps';
 import Observer from '../Observer';
 import { ModelState, EventTypes } from '../types';
 
-export default class Model extends Observer {
+class Model extends Observer {
   private _state: ModelState;
   private steps: number[];
 
@@ -42,7 +42,6 @@ export default class Model extends Observer {
       const secondValue = this.findClosestStep(newValue[1]);
       validatedValue = [firstValue, secondValue];
 
-      // TODO
       if (firstValue >= secondValue) {
         validatedValue =
           (prevValue as number[])[0] !== newValue[0]
@@ -107,3 +106,5 @@ export default class Model extends Observer {
     return validatedState;
   }
 }
+
+export default Model;

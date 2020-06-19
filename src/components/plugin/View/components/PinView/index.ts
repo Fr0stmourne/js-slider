@@ -3,7 +3,7 @@ import render from '../../utils/render';
 import movePin from './utils/movePin';
 import DefaultView from '../DefaultView';
 
-export default class PinView extends DefaultView {
+class PinView extends DefaultView {
   pinNumber: number;
   isTooltipDisabled: boolean;
   isVertical: boolean;
@@ -52,3 +52,5 @@ export default class PinView extends DefaultView {
     movePin({ pinElement: this._elements.pin, value, isVertical });
   }
 }
+
+export default PinView;

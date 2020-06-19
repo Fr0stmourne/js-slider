@@ -1,6 +1,6 @@
 import { Events, EventTypes, EventCallback } from '../types';
 
-export default class Observer {
+class Observer {
   constructor(public events: Events = {}) {}
 
   on(eventName: keyof typeof EventTypes, callback: EventCallback): void {
@@ -21,3 +21,5 @@ export default class Observer {
     }
   }
 }
+
+export default Observer;

@@ -9,7 +9,7 @@ import ScaleView from './components/ScaleView';
 import Observer from '../Observer';
 import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes, BarData } from '../types';
 
-export default class View extends Observer {
+class View extends Observer {
   private _sliderSize: number;
   private _element: HTMLElement;
   private _viewState: ViewState;
@@ -265,3 +265,5 @@ export default class View extends Observer {
     this.emit(EventTypes.ValueChanged, { value: resultValue });
   }
 }
+
+export default View;

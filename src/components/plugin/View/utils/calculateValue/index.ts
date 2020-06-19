@@ -1,4 +1,4 @@
-export default function calculateValue({
+function calculateValue({
   percentage,
   minValue,
   maxValue,
@@ -11,3 +11,5 @@ export default function calculateValue({
   if (maxValue <= minValue) throw new Error('Max value should be greater than min value');
   return minValue + percentage * Math.abs(maxValue - minValue);
 }
+
+export default calculateValue;

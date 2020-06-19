@@ -4,7 +4,7 @@ import calculatePxNum from '../../utils/calculatePxNum';
 import calculateSteps from '../../../utils/calculateSteps';
 import DefaultView from '../DefaultView';
 
-export default class ScaleView extends DefaultView {
+class ScaleView extends DefaultView {
   scaleOptionsNum: number;
   isVertical: boolean;
   step: number;
@@ -92,3 +92,5 @@ export default class ScaleView extends DefaultView {
     return filteredSteps;
   }
 }
+
+export default ScaleView;

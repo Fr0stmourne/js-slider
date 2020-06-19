@@ -1,6 +1,6 @@
 import Observer from '../../../Observer';
 
-export default class DefaultView extends Observer {
+class DefaultView extends Observer {
   protected _element: HTMLElement;
 
   get element(): HTMLElement {
@@ -11,3 +11,5 @@ export default class DefaultView extends Observer {
     // set _element
   }
 }
+
+export default DefaultView;

@@ -1,4 +1,4 @@
-export default function movePin({
+function movePin({
   pinElement,
   value,
   isVertical,
@@ -10,3 +10,5 @@ export default function movePin({
   isVertical = isVertical || false;
   pinElement.style[isVertical ? 'bottom' : 'left'] = `${value}px`;
 }
+
+export default movePin;

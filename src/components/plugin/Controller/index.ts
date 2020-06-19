@@ -4,7 +4,7 @@ import Model from '../Models';
 import View from '../View';
 import { EventTypes, ModelState, ViewState } from '../types';
 
-export default class Controller {
+class Controller {
   private _userCallback!: Function;
 
   constructor(public model: Model, public view: View) {
@@ -79,3 +79,5 @@ export default class Controller {
     this.view.updateValue(Array.isArray(value) ? [...value] : value);
   }
 }
+
+export default Controller;
