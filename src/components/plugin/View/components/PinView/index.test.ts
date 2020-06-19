@@ -22,23 +22,23 @@ describe('PinView', () => {
     pin = new PinView(options);
     pin1 = new PinView(options1);
   });
-  test('should store HTML element as _element property', () => {
+  test('should store HTML element as element property', () => {
     expect(pin.element).toBeInstanceOf(HTMLElement);
     expect(pin1.element).toBeInstanceOf(HTMLElement);
   });
 
   describe('value getter', () => {
     test('should return correct value after an instance initialization', () => {
-      expect(pin.value).toBe(50);
-      expect(pin1.value).toBe(70);
+      expect(pin.getValue()).toBe(50);
+      expect(pin1.getValue()).toBe(70);
     });
 
     test('should correctly update the value after updateValue method call', () => {
       pin.updateValue(pxNum, 52);
-      expect(pin.value).toBe(52);
+      expect(pin.getValue()).toBe(52);
 
       pin1.updateValue(pxNum, 74);
-      expect(pin1.value).toBe(74);
+      expect(pin1.getValue()).toBe(74);
     });
 
     test('should correctly update textContent prop after updateValue method call', () => {

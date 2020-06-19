@@ -22,14 +22,14 @@ describe('Controller constructor', () => {
 describe('setUserCallback', () => {
   test('should store passed user callback', () => {
     const userCallback = jest.fn();
-    controller.userCallback = userCallback;
+    controller.setUserCallback(userCallback);
 
-    expect(controller.userCallback).toStrictEqual(userCallback);
+    expect(controller.getUserCallback()).toStrictEqual(userCallback);
   });
 
   test('should run passed user callback on event emit', () => {
     const userCallback = jest.fn();
-    controller.userCallback = userCallback;
+    controller.setUserCallback(userCallback);
 
     controller.model.emit(EventTypes.StateChanged, { value: 5 });
 

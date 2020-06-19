@@ -17,7 +17,7 @@ class BarView extends DefaultView {
   }
 
   render(): void {
-    this._element = render(
+    this.element = render(
       `
       <div class="slider-plugin__bar js-slider-bar"></div>
       `,
@@ -40,7 +40,7 @@ class BarView extends DefaultView {
       }
     };
 
-    this._element.addEventListener('mousedown', handleBarClick);
+    this.element.addEventListener('mousedown', handleBarClick);
   }
 }
 

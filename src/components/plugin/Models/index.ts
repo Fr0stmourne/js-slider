@@ -4,28 +4,28 @@ import { ModelState, EventTypes } from '../types';
 import { DEFAULT_MODEL_STATE } from '../defaults';
 
 class Model extends Observer {
-  private _state: ModelState;
+  private state: ModelState;
   private steps: number[];
 
   constructor(modelState?: ModelState) {
     super();
-    this._state = { ...DEFAULT_MODEL_STATE, ...modelState };
+    this.state = { ...DEFAULT_MODEL_STATE, ...modelState };
 
-    const { minValue, maxValue, step } = this.state;
+    const { minValue, maxValue, step } = this.getState();
     this.steps = calculateSteps({ minValue, maxValue, step });
   }
 
-  get state(): ModelState {
-    return { ...this._state };
+  getState(): ModelState {
+    return { ...this.state };
   }
 
-  set state(modelState: ModelState) {
-    this._state = this.validateState(modelState);
+  setState(modelState: ModelState): void {
+    this.state = this.validateState(modelState);
 
-    const { minValue, maxValue, step } = this.state;
+    const { minValue, maxValue, step } = this.getState();
     this.steps = calculateSteps({ minValue, maxValue, step });
 
-    this.emit(EventTypes.StateChanged, { value: this.state.value });
+    this.emit(EventTypes.StateChanged, { value: this.getState().value });
   }
 
   private findClosestStep(value: number): number {
@@ -33,7 +33,7 @@ class Model extends Observer {
   }
 
   private validateValue(newValue: number | number[], state: ModelState): number | number[] {
-    if (newValue === undefined) return this._state.value;
+    if (newValue === undefined) return this.state.value;
     let validatedValue;
 
     if (Array.isArray(newValue)) {
@@ -58,8 +58,8 @@ class Model extends Observer {
   private validateMinMaxValues(minValue: number, maxValue: number): { minValue: number; maxValue: number } {
     if (minValue === undefined || maxValue === undefined) {
       return {
-        minValue: this._state.minValue,
-        maxValue: this._state.maxValue,
+        minValue: this.state.minValue,
+        maxValue: this.state.maxValue,
       };
     }
     return minValue > maxValue
@@ -74,7 +74,7 @@ class Model extends Observer {
   }
 
   private validateStep(step: number): number {
-    return Math.abs(step) || this._state.step;
+    return Math.abs(step) || this.state.step;
   }
 
   private validateState(newState: ModelState): ModelState {
@@ -88,13 +88,13 @@ class Model extends Observer {
       step: validatedStep,
     });
     const validatedValue = this.validateValue(stateToValidate.value, {
-      ...this._state,
+      ...this.state,
       step: validatedStep,
       ...validatedMinMaxValues,
     });
 
     const validatedState = {
-      ...this._state,
+      ...this.state,
       step: validatedStep,
       ...validatedMinMaxValues,
       value: validatedValue,

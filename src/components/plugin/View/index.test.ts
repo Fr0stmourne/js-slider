@@ -73,25 +73,25 @@ beforeEach(() => {
 
 describe('View constructor', () => {
   test('should return HTMLElement instance as view.element', () => {
-    expect(defaultView.element).toBeInstanceOf(HTMLElement);
-    expect(verticalView.element).toBeInstanceOf(HTMLElement);
-    expect(rangeView.element).toBeInstanceOf(HTMLElement);
+    expect(defaultView.getElement()).toBeInstanceOf(HTMLElement);
+    expect(verticalView.getElement()).toBeInstanceOf(HTMLElement);
+    expect(rangeView.getElement()).toBeInstanceOf(HTMLElement);
   });
 });
 
 describe('Update value()', () => {
   test('should correctly update pin value', () => {
     defaultView.updateValue(100);
-    expect(defaultView.objects.firstPin.value).toBe(100);
+    expect(defaultView.getObjects().firstPin.getValue()).toBe(100);
     expect(defaultView.state.modelState.value).toBe(100);
 
     verticalView.updateValue(-30);
-    expect(verticalView.objects.firstPin.value).toBe(-30);
+    expect(verticalView.getObjects().firstPin.getValue()).toBe(-30);
     expect(verticalView.state.modelState.value).toBe(-30);
 
     rangeView.updateValue([30, 50]);
-    expect(rangeView.objects.firstPin.value).toBe(30);
-    expect(rangeView.objects.secondPin.value).toBe(50);
+    expect(rangeView.getObjects().firstPin.getValue()).toBe(30);
+    expect(rangeView.getObjects().secondPin.getValue()).toBe(50);
     expect(rangeView.state.modelState.value).toStrictEqual([30, 50]);
   });
 
@@ -109,13 +109,13 @@ describe('Update value()', () => {
 
   test('should update hidden input.element', () => {
     defaultView.updateValue(50);
-    expect((defaultView.objects.input.element as HTMLInputElement).value).toBe('50');
+    expect((defaultView.getObjects().input.element as HTMLInputElement).value).toBe('50');
 
     verticalView.updateValue(30);
-    expect((verticalView.objects.input.element as HTMLInputElement).value).toBe('30');
+    expect((verticalView.getObjects().input.element as HTMLInputElement).value).toBe('30');
 
     rangeView.updateValue([50, 70]);
-    expect((rangeView.objects.input.element as HTMLInputElement).value).toBe('50,70');
+    expect((rangeView.getObjects().input.element as HTMLInputElement).value).toBe('50,70');
   });
 });
 
@@ -150,27 +150,27 @@ describe('render()', () => {
     defaultView.on(EventTypes.ValueChanged, callback as EventCallback);
     rangeView.on(EventTypes.ValueChanged, callback as EventCallback);
   });
-  describe('should bind callbacks to needed slider objects', () => {
+  describe('should bind callbacks to needed slider getObjects()', () => {
     test('bar', () => {
-      const objects = defaultView.objects;
+      const objects = defaultView.getObjects();
       objects.bar.element.dispatchEvent(new Event('mousedown'));
       expect(callback).toBeCalled();
     });
 
     test('bar: range case', () => {
-      const objects = rangeView.objects;
+      const objects = rangeView.getObjects();
       objects.bar.element.dispatchEvent(new Event('mousedown'));
       expect(callback).toBeCalled();
     });
 
     test('scale', () => {
-      const objects = defaultView.objects;
+      const objects = defaultView.getObjects();
       (objects.scale.element.firstElementChild as HTMLElement).click();
       expect(callback).toBeCalled();
     });
 
     test('pin', () => {
-      const objects = defaultView.objects;
+      const objects = defaultView.getObjects();
       objects.firstPin.element.dispatchEvent(new Event('mousedown'));
       document.dispatchEvent(new Event('mousemove'));
       document.dispatchEvent(new Event('mouseup'));
@@ -178,7 +178,7 @@ describe('render()', () => {
     });
 
     test('pin: range case', () => {
-      const objects = rangeView.objects;
+      const objects = rangeView.getObjects();
       objects.firstPin.element.dispatchEvent(new Event('mousedown'));
       document.dispatchEvent(new Event('mousemove'));
       document.dispatchEvent(new Event('mouseup'));

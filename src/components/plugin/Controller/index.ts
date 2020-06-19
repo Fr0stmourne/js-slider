@@ -5,36 +5,36 @@ import View from '../View';
 import { EventTypes, ModelState, ViewState } from '../types';
 
 class Controller {
-  private _userCallback!: Function;
+  private userCallback!: Function;
 
   constructor(public model: Model, public view: View) {
     this.view.render();
     this.connect();
   }
 
-  set userCallback(callback: Function) {
-    this._userCallback = callback;
+  setUserCallback(callback: Function): void {
+    this.userCallback = callback;
 
     const callUserCallback = ({ value }: { value: number | number[] }): void => {
-      this._userCallback(value);
+      this.userCallback(value);
     };
 
     this.model.on(EventTypes.StateChanged, callUserCallback);
   }
 
-  get userCallback(): Function {
-    return this._userCallback;
+  getUserCallback(): Function {
+    return this.userCallback;
   }
 
   get value(): number | number[] {
-    return this.model.state.value;
+    return this.model.getState().value;
   }
 
   set value(value: number | number[]) {
-    this.model.state = {
-      ...this.model.state,
+    this.model.setState({
+      ...this.model.getState(),
       value,
-    };
+    });
   }
 
   get viewState(): ViewState {
@@ -46,15 +46,15 @@ class Controller {
   }
 
   get modelState(): ModelState {
-    return { ...this.model.state };
+    return { ...this.model.getState() };
   }
 
   set modelState(state: ModelState) {
-    this.model.state = state;
+    this.model.setState(state);
   }
 
   get element(): HTMLElement {
-    return this.view.element;
+    return this.view.getElement();
   }
 
   render(): void {
@@ -71,7 +71,7 @@ class Controller {
   @boundMethod
   private setModelValue(data: ModelState): void {
     const { model } = this;
-    model.state = { ...model.state, ...data };
+    model.setState({ ...model.getState(), ...data });
   }
 
   @boundMethod

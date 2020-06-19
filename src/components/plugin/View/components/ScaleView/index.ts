@@ -39,19 +39,19 @@ class ScaleView extends DefaultView {
       optionNode.style[isVertical ? 'bottom' : 'left'] = `${optionPositions[index]}px`;
       return optionNode;
     });
-    this._element = render(
+    this.element = render(
       `
       <div class="slider-plugin__scale js-scale">
       </div>
       `,
     );
     if (isVertical) {
-      optionNodes.reverse().forEach(node => this._element.append(node));
+      optionNodes.reverse().forEach(node => this.element.append(node));
     } else {
-      optionNodes.forEach(node => this._element.append(node));
+      optionNodes.forEach(node => this.element.append(node));
     }
 
-    this._element.append();
+    this.element.append();
 
     const handleOptionClick = (e: Event): void => {
       e.stopPropagation();
@@ -60,7 +60,7 @@ class ScaleView extends DefaultView {
       this.emit(EventTypes.NewScaleValue, { value: Number(target.textContent) });
     };
 
-    this._element.querySelectorAll('.js-option').forEach(el => {
+    this.element.querySelectorAll('.js-option').forEach(el => {
       el.addEventListener('click', handleOptionClick);
     });
   }

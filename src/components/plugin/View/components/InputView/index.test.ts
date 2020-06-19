@@ -7,7 +7,7 @@ describe('InputView', () => {
     input = new InputView(45);
     input2 = new InputView([45, 94]);
   });
-  test('should store HTML element as _element property', () => {
+  test('should store HTML element as element property', () => {
     expect(input.element).toBeInstanceOf(HTMLElement);
     expect(input2.element).toBeInstanceOf(HTMLElement);
   });

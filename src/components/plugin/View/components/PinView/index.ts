@@ -7,49 +7,49 @@ class PinView extends DefaultView {
   pinNumber: number;
   isTooltipDisabled: boolean;
   isVertical: boolean;
-  private _value: number;
-  private _elements: { pin: HTMLElement; tooltip: HTMLElement };
+  private value: number;
+  private elements: { pin: HTMLElement; tooltip: HTMLElement };
 
   constructor(options: PinData) {
     super();
     this.pinNumber = options.pinNumber;
     this.isTooltipDisabled = options.isTooltipDisabled;
     this.isVertical = options.isVertical;
-    this._value = options.value;
+    this.value = options.value;
 
     this.render();
   }
 
-  get value(): number {
-    return Number(this._elements.tooltip.textContent.trim());
+  getValue(): number {
+    return Number(this.elements.tooltip.textContent.trim());
   }
 
   updateValue(pxNum: number, value: number): void {
     this.movePin(pxNum);
 
-    this._elements.tooltip.textContent = String(value);
+    this.elements.tooltip.textContent = String(value);
   }
 
   render(): void {
-    this._element = render(
+    this.element = render(
       `
       <div class="slider-plugin__pin js-slider-pin js-slider-pin-${this.pinNumber}">
         <div class="slider-plugin__value ${
           this.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
-        } js-slider-value">${this._value}</div>
+        } js-slider-value">${this.value}</div>
       </div>
       `,
     );
 
-    this._elements = {
-      pin: this._element,
-      tooltip: this._element.querySelector(`.js-slider-value`),
+    this.elements = {
+      pin: this.element,
+      tooltip: this.element.querySelector(`.js-slider-value`),
     };
   }
 
   private movePin(value: number): void {
     const { isVertical } = this;
-    movePin({ pinElement: this._elements.pin, value, isVertical });
+    movePin({ pinElement: this.elements.pin, value, isVertical });
   }
 }
 

@@ -11,37 +11,37 @@ import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, Even
 import { DEFAULT_VIEW_STATE } from '../defaults';
 
 class View extends Observer {
-  private _sliderSize: number;
-  private _element: HTMLElement;
-  private _viewState: ViewState;
-  private _modelState: ModelState;
-  private _objects: Objects;
+  private sliderSize: number;
+  private element: HTMLElement;
+  private viewState: ViewState;
+  private modelState: ModelState;
+  private objects: Objects;
 
   constructor(modelState: ModelState, viewState?: ViewState) {
     super();
-    this._viewState = { ...DEFAULT_VIEW_STATE, ...viewState };
-    this._modelState = modelState;
+    this.viewState = { ...DEFAULT_VIEW_STATE, ...viewState };
+    this.modelState = modelState;
     this.render();
   }
 
-  get element(): HTMLElement {
-    return this._element;
+  getElement(): HTMLElement {
+    return this.element;
   }
 
-  get objects(): Objects {
-    return this._objects;
+  getObjects(): Objects {
+    return this.objects;
   }
 
   get state(): { viewState: ViewState; modelState: ModelState } {
     return {
-      viewState: { ...this._viewState },
-      modelState: { ...this._modelState },
+      viewState: { ...this.viewState },
+      modelState: { ...this.modelState },
     };
   }
 
   setState(viewState: ViewState, modelState: ModelState): void {
-    this._viewState = { ...this._viewState, ...viewState };
-    this._modelState = { ...this._modelState, ...modelState };
+    this.viewState = { ...this.viewState, ...viewState };
+    this.modelState = { ...this.modelState, ...modelState };
   }
 
   bindListeners(): void {
@@ -51,10 +51,10 @@ class View extends Observer {
   }
 
   updateValue(value: number | number[]): void {
-    const { isVertical } = this._viewState;
-    const { _modelState: modelState, _viewState: viewState } = this;
+    const { isVertical } = this.viewState;
+    const { modelState: modelState, viewState: viewState } = this;
     const { minValue, maxValue, range } = modelState;
-    const { input, firstPin, secondPin, bar } = this._objects;
+    const { input, firstPin, secondPin, bar } = this.objects;
 
     const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
     if (range) {
@@ -71,13 +71,13 @@ class View extends Observer {
     }
 
     input.value = value;
-    this._modelState.value = value;
+    this.modelState.value = value;
 
     const dataAttributes = { ...modelState, ...viewState };
 
     Object.keys(dataAttributes).forEach((option: keyof typeof dataAttributes) => {
       if (option !== 'sliderSize')
-        this._element.setAttribute(
+        this.element.setAttribute(
           `data-${camelToHyphen(option)}`,
           String(dataAttributes[option as keyof ModelState | keyof ViewState]),
         );
@@ -85,16 +85,16 @@ class View extends Observer {
   }
 
   render(): void {
-    const { isVertical, scaleOptionsNum, isTooltipDisabled, sliderSize } = this._viewState;
-    const { value, minValue, maxValue, range, step } = this._modelState;
-    this._element = render(
+    const { isVertical, scaleOptionsNum, isTooltipDisabled, sliderSize } = this.viewState;
+    const { value, minValue, maxValue, range, step } = this.modelState;
+    this.element = render(
       `
     <div class="slider-plugin js-slider ${isVertical ? 'slider-plugin--vertical' : ''}">
     </div>
     `,
     );
 
-    this._sliderSize = sliderSize && Math.max(sliderSize.height, sliderSize.width);
+    this.sliderSize = sliderSize && Math.max(sliderSize.height, sliderSize.width);
 
     const firstPinData: PinData = {
       pinNumber: 1,
@@ -109,22 +109,22 @@ class View extends Observer {
       isVertical,
     };
 
-    this._objects = {
+    this.objects = {
       bar: new BarView(barData),
       firstPin: new PinView(firstPinData),
       input: new InputView(value),
     };
 
-    if (scaleOptionsNum && this._sliderSize) {
+    if (scaleOptionsNum && this.sliderSize) {
       const scaleData: ScaleData = {
         scaleOptionsNum: scaleOptionsNum,
         step,
         isVertical,
         minValue,
         maxValue,
-        sliderSize: this._sliderSize,
+        sliderSize: this.sliderSize,
       };
-      this._objects.scale = new ScaleView(scaleData);
+      this.objects.scale = new ScaleView(scaleData);
     }
 
     if (range) {
@@ -134,35 +134,35 @@ class View extends Observer {
         isVertical,
         value: (value as number[])[1],
       };
-      this._objects.secondPin = new PinView(secondPinData);
+      this.objects.secondPin = new PinView(secondPinData);
     }
 
-    const { firstPin, secondPin, scale, bar, input } = this._objects;
+    const { firstPin, secondPin, scale, bar, input } = this.objects;
     bar.element.append(firstPin.element);
     if (range) {
       bar.element.append(secondPin.element);
     }
-    this._element.append(bar.element);
-    this._element.append(input.element);
+    this.element.append(bar.element);
+    this.element.append(input.element);
 
-    if (scale) this._element.append(scale.element);
+    if (scale) this.element.append(scale.element);
 
     this.bindListeners();
   }
 
   private applyToCorrectPin(value: number): number[] {
-    const { firstPin, secondPin } = this._objects;
-    const pinValues = [firstPin.value, secondPin.value];
-    const chosenPin = Math.abs(value - firstPin.value) < Math.abs(value - secondPin.value) ? 0 : 1;
+    const { firstPin, secondPin } = this.objects;
+    const pinValues = [firstPin.getValue(), secondPin.getValue()];
+    const chosenPin = Math.abs(value - firstPin.getValue()) < Math.abs(value - secondPin.getValue()) ? 0 : 1;
     pinValues[chosenPin] = value;
     return pinValues;
   }
 
   private bindScaleClick(): void {
-    const { scale } = this._objects;
+    const { scale } = this.objects;
     if (scale) {
       const handleScaleClick = ({ value }: { value: number }): void => {
-        const { range } = this._modelState;
+        const { range } = this.modelState;
 
         this.emit(EventTypes.ValueChanged, { value: range ? this.applyToCorrectPin(value) : value });
       };
@@ -171,21 +171,21 @@ class View extends Observer {
   }
 
   private bindMovePin(): void {
-    const { range } = this._modelState;
-    const { firstPin, secondPin } = this._objects;
+    const { range } = this.modelState;
+    const { firstPin, secondPin } = this.objects;
 
     this.bindListenersToPin(firstPin);
     if (range) this.bindListenersToPin(secondPin);
   }
 
   private bindBarClick(): void {
-    const { range } = this._modelState;
-    const { bar } = this._objects;
+    const { range } = this.modelState;
+    const { bar } = this.objects;
 
     const handleBarClick = ({ e, value }: { e: MouseEvent; value: number }): void => {
       if (range) {
-        const { firstPin, secondPin } = this._objects;
-        const prevValues = [firstPin.value, secondPin.value];
+        const { firstPin, secondPin } = this.objects;
+        const prevValues = [firstPin.getValue(), secondPin.getValue()];
         const updatedValues = this.applyToCorrectPin(value);
         const updatedPin = prevValues[0] === updatedValues[0] ? secondPin : firstPin;
         this.emit(EventTypes.ValueChanged, { value: updatedValues });
@@ -193,7 +193,7 @@ class View extends Observer {
         this.handleMouseDown(e, updatedPin);
       } else {
         this.emit(EventTypes.ValueChanged, { value: value });
-        this.handleMouseDown(e, this._objects.firstPin);
+        this.handleMouseDown(e, this.objects.firstPin);
       }
     };
 
@@ -208,7 +208,7 @@ class View extends Observer {
   private handleMouseDown(event: MouseEvent, pin: PinView): void {
     event.preventDefault();
 
-    const { isVertical } = this._viewState;
+    const { isVertical } = this.viewState;
     const target = event.target as HTMLElement;
     let shift = isVertical ? event.offsetY : event.clientX - target.getBoundingClientRect().left;
 
@@ -239,10 +239,10 @@ class View extends Observer {
   }
 
   private handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
-    const { isVertical } = this._viewState;
-    const { minValue, maxValue, range, value } = this._modelState;
+    const { isVertical } = this.viewState;
+    const { minValue, maxValue, range, value } = this.modelState;
     const { pin, shift } = data;
-    const slider = this._objects.bar.element;
+    const slider = this.objects.bar.element;
 
     let newValue = isVertical
       ? -(e.clientY - shift / 2 - slider.getBoundingClientRect().bottom)

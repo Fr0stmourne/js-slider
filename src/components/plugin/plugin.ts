@@ -77,7 +77,7 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
     onValueChange(this: JQuery, callback: Function): JQuery {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
-        slider.userCallback = callback;
+        slider.setUserCallback(callback);
       });
     },
     getValue() {
@@ -86,7 +86,7 @@ $.fn.slider = function(methodOrOptions?: string | Options, ...params: any) {
     init(this: JQuery, methodOrOptions: Options): JQuery {
       return this.each((_: number, el: HTMLElement) => {
         const model = new Model();
-        const view = new View(model.state);
+        const view = new View(model.getState());
         const controller = new Controller(model, view);
 
         $(el).data('slider', controller);

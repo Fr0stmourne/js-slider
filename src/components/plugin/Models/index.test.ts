@@ -29,75 +29,75 @@ describe('state setter', () => {
   });
   describe('should correctly update model value', () => {
     test('default case', () => {
-      defaultModel.state = {
+      defaultModel.setState({
         value: 50,
-      };
-      expect(defaultModel.state.value).toBe(50);
+      });
+      expect(defaultModel.getState().value).toBe(50);
 
-      defaultModel.state = {
+      defaultModel.setState({
         value: 20,
-      };
-      expect(defaultModel.state.value).toBe(20);
+      });
+      expect(defaultModel.getState().value).toBe(20);
     });
 
     test('range case', () => {
-      rangeModel.state = {
+      rangeModel.setState({
         value: [50, 70],
-      };
-      expect(rangeModel.state.value).toStrictEqual([50, 70]);
+      });
+      expect(rangeModel.getState().value).toStrictEqual([50, 70]);
 
-      rangeModel.state = {
+      rangeModel.setState({
         value: [0, 100],
-      };
-      expect(rangeModel.state.value).toStrictEqual([0, 100]);
+      });
+      expect(rangeModel.getState().value).toStrictEqual([0, 100]);
     });
   });
 
   describe('should replace newValue with a min/max value if newValue is not in the interval', () => {
     test('default case', () => {
-      defaultModel.state = {
+      defaultModel.setState({
         value: 1000,
-      };
-      expect(defaultModel.state.value).toEqual(100);
+      });
+      expect(defaultModel.getState().value).toEqual(100);
 
-      defaultModel.state = {
+      defaultModel.setState({
         value: -70,
-      };
-      expect(defaultModel.state.value).toEqual(-30);
+      });
+      expect(defaultModel.getState().value).toEqual(-30);
     });
 
     test('range case', () => {
-      rangeModel.state = {
+      rangeModel.setState({
         value: [-90, 70],
-      };
-      expect(rangeModel.state.value).toStrictEqual([0, 70]);
+      });
+      expect(rangeModel.getState().value).toStrictEqual([0, 70]);
 
-      rangeModel.state = {
+      rangeModel.setState({
         value: [0, 200],
-      };
-      expect(rangeModel.state.value).toStrictEqual([0, 100]);
+      });
+      expect(rangeModel.getState().value).toStrictEqual([0, 100]);
     });
   });
   describe('should round the values if they are not multiples of the step value', () => {
     test('default case', () => {
-      defaultModel.state = {
+      defaultModel.setState({
         value: 51,
-      };
-      expect(defaultModel.state.value).toEqual(50);
+      });
+      expect(defaultModel.getState().value).toEqual(50);
     });
 
     test('range case', () => {
-      rangeModel.state = {
+      rangeModel.setState({
         value: [31, 77],
-      };
-      expect(rangeModel.state.value).toStrictEqual([30, 76]);
+      });
+      expect(rangeModel.getState().value).toStrictEqual([30, 76]);
     });
   });
   test('should handle the case for range model when min value > max value', () => {
-    rangeModel.state = {
+    rangeModel.setState({
       value: [70, 64],
-    };
-    expect(rangeModel.state.value).toStrictEqual([62, 64]);
+    });
+    expect(rangeModel.getState().value).toStrictEqual([62, 64]);
   });
 });
 
@@ -108,7 +108,7 @@ describe('state getter', () => {
   });
 
   test('should return options object', () => {
-    expect(defaultModel.state).toEqual(testOptions.normal);
-    expect(rangeModel.state).toEqual(testOptions.range);
+    expect(defaultModel.getState()).toEqual(testOptions.normal);
+    expect(rangeModel.getState()).toEqual(testOptions.range);
   });
 });
