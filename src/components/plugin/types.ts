@@ -1,7 +1,7 @@
-import BarView from './Views/subviews/BarView/BarView';
-import PinView from './Views/subviews/PinView/PinView';
-import InputView from './Views/subviews/InputView/InputView';
-import ScaleView from './Views/subviews/ScaleView/ScaleView';
+import BarView from './View/components/BarView';
+import PinView from './View/components/PinView';
+import InputView from './View/components/InputView';
+import ScaleView from './View/components/ScaleView';
 
 export type Options = ViewState & ModelState;
 

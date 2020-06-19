@@ -1,7 +1,7 @@
-import deleteUndef from './utils/deleteUndef/deleteUndef';
-import View from './Views/View/View';
-import Model from './Models/Model';
-import Controller from './Controller/Controller';
+import deleteUndef from './utils/deleteUndef';
+import View from './View';
+import Model from './Models';
+import Controller from './Controller';
 import { Options, ModelState, ViewState } from './types';
 import { DEFAULT_CONFIG } from './defaults';
 import './slider.scss';
