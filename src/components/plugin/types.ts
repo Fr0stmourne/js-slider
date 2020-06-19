@@ -3,13 +3,13 @@ import PinView from './View/components/PinView';
 import InputView from './View/components/InputView';
 import ScaleView from './View/components/ScaleView';
 
-type Options = ViewState & Partial<ModelState>;
+type Options = Partial<ViewState> & Partial<ModelState>;
 
 type ViewState = {
-  scaleOptionsNum?: number;
-  isTooltipDisabled?: boolean;
-  isVertical?: boolean;
-  sliderSize?: DOMRect;
+  scaleOptionsNum: number;
+  isTooltipDisabled: boolean;
+  isVertical: boolean;
+  sliderSize: DOMRect;
 };
 
 type EventCallback = (data: any) => void;

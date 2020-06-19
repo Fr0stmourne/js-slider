@@ -11,11 +11,11 @@ import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, Even
 import { DEFAULT_VIEW_STATE } from '../defaults';
 
 class View extends Observer {
-  private sliderSize: number;
-  private element: HTMLElement;
+  private sliderSize!: number;
+  private element!: HTMLElement;
   private viewState: ViewState;
   private modelState: ModelState;
-  private objects: Objects;
+  private objects!: Objects;
 
   constructor(modelState: ModelState, viewState?: ViewState) {
     super();
@@ -39,7 +39,7 @@ class View extends Observer {
     };
   }
 
-  setState(viewState: ViewState, modelState: ModelState): void {
+  setState(viewState: Partial<ViewState>, modelState: ModelState): void {
     this.viewState = { ...this.viewState, ...viewState };
     this.modelState = { ...this.modelState, ...modelState };
   }
@@ -64,7 +64,7 @@ class View extends Observer {
       );
 
       firstPin.updateValue(pxNums[0], (value as number[])[0]);
-      secondPin.updateValue(pxNums[1], (value as number[])[1]);
+      secondPin?.updateValue(pxNums[1], (value as number[])[1]);
     } else {
       const pxNum = calculatePxNum({ value: value as number, minValue, maxValue, elementSize: sliderSize });
       firstPin.updateValue(pxNum, value as number);
@@ -75,8 +75,8 @@ class View extends Observer {
 
     const dataAttributes = { ...modelState, ...viewState };
 
-    Object.keys(dataAttributes).forEach((option: keyof typeof dataAttributes) => {
-      if (option !== 'sliderSize')
+    Object.keys(dataAttributes).forEach((option: string) => {
+      if ((option as keyof typeof dataAttributes) !== 'sliderSize')
         this.element.setAttribute(
           `data-${camelToHyphen(option)}`,
           String(dataAttributes[option as keyof ModelState | keyof ViewState]),
@@ -140,7 +140,7 @@ class View extends Observer {
     const { firstPin, secondPin, scale, bar, input } = this.objects;
     bar.element.append(firstPin.element);
     if (range) {
-      bar.element.append(secondPin.element);
+      bar.element.append(secondPin?.element as HTMLElement);
     }
     this.element.append(bar.element);
     this.element.append(input.element);
@@ -152,10 +152,14 @@ class View extends Observer {
 
   private applyToCorrectPin(value: number): number[] {
     const { firstPin, secondPin } = this.objects;
-    const pinValues = [firstPin.getValue(), secondPin.getValue()];
-    const chosenPin = Math.abs(value - firstPin.getValue()) < Math.abs(value - secondPin.getValue()) ? 0 : 1;
-    pinValues[chosenPin] = value;
-    return pinValues;
+    let pinValues: number[];
+    if (secondPin) {
+      pinValues = [firstPin.getValue(), secondPin.getValue()];
+      const chosenPin = Math.abs(value - firstPin.getValue()) < Math.abs(value - secondPin.getValue()) ? 0 : 1;
+      pinValues[chosenPin] = value;
+      return pinValues;
+    }
+    return [firstPin.getValue()];
   }
 
   private bindScaleClick(): void {
@@ -175,7 +179,7 @@ class View extends Observer {
     const { firstPin, secondPin } = this.objects;
 
     this.bindListenersToPin(firstPin);
-    if (range) this.bindListenersToPin(secondPin);
+    if (range && secondPin) this.bindListenersToPin(secondPin);
   }
 
   private bindBarClick(): void {
@@ -183,8 +187,8 @@ class View extends Observer {
     const { bar } = this.objects;
 
     const handleBarClick = ({ e, value }: { e: MouseEvent; value: number }): void => {
-      if (range) {
-        const { firstPin, secondPin } = this.objects;
+      const { firstPin, secondPin } = this.objects;
+      if (range && secondPin) {
         const prevValues = [firstPin.getValue(), secondPin.getValue()];
         const updatedValues = this.applyToCorrectPin(value);
         const updatedPin = prevValues[0] === updatedValues[0] ? secondPin : firstPin;
@@ -193,7 +197,7 @@ class View extends Observer {
         this.handleMouseDown(e, updatedPin);
       } else {
         this.emit(EventTypes.ValueChanged, { value: value });
-        this.handleMouseDown(e, this.objects.firstPin);
+        this.handleMouseDown(e, firstPin);
       }
     };
 

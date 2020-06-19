@@ -41,7 +41,7 @@ class Controller {
     return { ...this.view.state.viewState };
   }
 
-  setViewState(viewState: ViewState, modelState: ModelState): void {
+  setViewState(viewState: Partial<ViewState>, modelState: ModelState): void {
     this.view.setState(viewState, modelState);
   }
 

@@ -7,7 +7,10 @@ import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';
 
 declare global {
   interface JQuery {
-    slider: (options?: Options | keyof API, ...params: any) => JQuery<HTMLElement> | number | number[] | undefined;
+    slider: (
+      methodOrOptions?: Options | keyof API,
+      ...params: any
+    ) => JQuery<HTMLElement> | number | number[] | undefined;
   }
 }
 
@@ -21,7 +24,7 @@ function getModelState(options: Options): Partial<ModelState> {
   return state;
 }
 
-function getViewState(options: Options): ViewState {
+function getViewState(options: Options): Partial<ViewState> {
   const state: {
     [key: string]: any;
   } = {};
@@ -33,13 +36,13 @@ function getViewState(options: Options): ViewState {
 
 $.fn.slider = function(methodOrOptions, ...params) {
   const pluginAPI: API = {
-    updateValue(this: JQuery, value: number | number[]): JQuery {
+    updateValue(this: JQuery, value: number | number[]): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
         slider.value = value;
       });
     },
-    update(this: JQuery, options: Options) {
+    update(this: JQuery, options: Options): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const controller: Controller = $(el).data().slider;
         const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
@@ -61,16 +64,16 @@ $.fn.slider = function(methodOrOptions, ...params) {
         controller.value = controller.getModelState().value;
       });
     },
-    onValueChange(this: JQuery, callback: Function): JQuery {
+    onValueChange(this: JQuery, callback: Function): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
         slider.setUserCallback(callback);
       });
     },
-    getValue() {
+    getValue(this: JQuery): number | number[] {
       return $(this).data().slider.value;
     },
-    init(this: JQuery, methodOrOptions?: Options): JQuery {
+    init(this: JQuery, methodOrOptions?: Options): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const model = new Model();
         const view = new View(model.getState());
@@ -88,7 +91,7 @@ $.fn.slider = function(methodOrOptions, ...params) {
   if (pluginAPI[methodOrOptions as keyof API]) {
     return pluginAPI[methodOrOptions as keyof API].apply(this, params);
   } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
-    return pluginAPI.init.call(this, methodOrOptions);
+    return pluginAPI.init.call(this, methodOrOptions as any);
   } else {
     $.error(`Method ${methodOrOptions} does not exist on $.slider`);
   }
