@@ -43,10 +43,10 @@ describe('PinView', () => {
 
     test('should correctly update textContent prop after updateValue method call', () => {
       pin.updateValue(pxNum, 52);
-      expect(pin.element.textContent.trim()).toBe('52');
+      expect(pin.element.textContent?.trim()).toBe('52');
 
       pin1.updateValue(pxNum, 74);
-      expect(pin1.element.textContent.trim()).toBe('74');
+      expect(pin1.element.textContent?.trim()).toBe('74');
     });
   });
 });

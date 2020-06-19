@@ -91,7 +91,7 @@ describe('Update value()', () => {
 
     rangeView.updateValue([30, 50]);
     expect(rangeView.getObjects().firstPin.getValue()).toBe(30);
-    expect(rangeView.getObjects().secondPin.getValue()).toBe(50);
+    expect(rangeView.getObjects().secondPin?.getValue()).toBe(50);
     expect(rangeView.state.modelState.value).toStrictEqual([30, 50]);
   });
 
@@ -165,7 +165,7 @@ describe('render()', () => {
 
     test('scale', () => {
       const objects = defaultView.getObjects();
-      (objects.scale.element.firstElementChild as HTMLElement).click();
+      (objects.scale?.element.firstElementChild as HTMLElement).click();
       expect(callback).toBeCalled();
     });
 

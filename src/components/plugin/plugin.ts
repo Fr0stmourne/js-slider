@@ -7,13 +7,13 @@ import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';
 
 declare global {
   interface JQuery {
-    slider: (options?: Options | keyof API, ...params: any) => void;
+    slider: (options?: Options | keyof API, ...params: any) => JQuery<HTMLElement> | number | number[] | undefined;
   }
 }
 
 function getModelState(options: Options): Partial<ModelState> {
   const state: {
-    [key: string]: string | number | number[] | boolean;
+    [key: string]: any;
   } = {};
   Object.keys(options).forEach(option => {
     if (Object.keys(DEFAULT_MODEL_STATE).includes(option)) state[option] = options[option as keyof ModelState];
@@ -23,7 +23,7 @@ function getModelState(options: Options): Partial<ModelState> {
 
 function getViewState(options: Options): ViewState {
   const state: {
-    [key: string]: number | boolean | DOMRect;
+    [key: string]: any;
   } = {};
   Object.keys(options).forEach(option => {
     if (Object.keys(DEFAULT_VIEW_STATE).includes(option)) state[option] = options[option as keyof ViewState];
@@ -31,7 +31,7 @@ function getViewState(options: Options): ViewState {
   return state;
 }
 
-$.fn.slider = function(methodOrOptions, ...params: any) {
+$.fn.slider = function(methodOrOptions, ...params) {
   const pluginAPI: API = {
     updateValue(this: JQuery, value: number | number[]): JQuery {
       return this.each((_: number, el: HTMLElement) => {
@@ -85,9 +85,6 @@ $.fn.slider = function(methodOrOptions, ...params: any) {
     },
   };
 
-  // if (typeof methodOrOptions === 'object') {
-  //   pluginAPI[methodOrOptions as keyof API];
-  // }
   if (pluginAPI[methodOrOptions as keyof API]) {
     return pluginAPI[methodOrOptions as keyof API].apply(this, params);
   } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {

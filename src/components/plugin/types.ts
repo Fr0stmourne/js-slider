@@ -39,7 +39,7 @@ type ScaleData = {
   isVertical: boolean;
   minValue: number;
   maxValue: number;
-  sliderSize?: number;
+  sliderSize: number;
 };
 
 type BarData = {

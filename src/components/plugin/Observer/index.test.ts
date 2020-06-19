@@ -17,7 +17,7 @@ describe('Observer', () => {
       observer.on(EventTypes.StateChanged, anotherCallback);
       observer.on(EventTypes.StateChanged, finalCallback);
 
-      expect(observer.events[EventTypes.StateChanged].length).toBe(3);
+      expect(observer.events[EventTypes.StateChanged]?.length).toBe(3);
     });
   });
 

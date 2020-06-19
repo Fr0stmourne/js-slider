@@ -46,6 +46,6 @@ describe('ScaleView', () => {
   });
 
   test('should correct place nodes in vertical case', () => {
-    expect(vScale.element.firstElementChild.textContent.trim()).toBe('100');
+    expect(vScale.element.firstElementChild?.textContent?.trim()).toBe('100');
   });
 });

@@ -39,7 +39,9 @@ $('.js-example-vr').slider(testOptions.vr);
 $('.js-example-r').slider(testOptions.r);
 $('.js-example-v').slider(testOptions.v);
 
-function createPanel(el: HTMLElement, initialOptions: Options): void {
+type OptionsWithoutSize = Omit<Options, 'sliderSize'>;
+
+function createPanel(el: HTMLElement, initialOptions: Required<OptionsWithoutSize>): void {
   const element = el;
 
   const inputs = {
@@ -52,7 +54,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     isVertical: element.querySelector('.js-direction') as HTMLInputElement,
   };
 
-  function setInitialInputValues(initialOptions: Options): void {
+  function setInitialInputValues(initialOptions: Required<OptionsWithoutSize>): void {
     inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled;
     inputs.isVertical.checked = initialOptions.isVertical;
     inputs.step.value = String(initialOptions.step);
@@ -62,7 +64,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     inputs.value.value = String(initialOptions.value);
   }
 
-  const slider = element.closest('.js-test').querySelector('.js-example');
+  const slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
   setInitialInputValues(initialOptions);
 
   function handlePanelChange(): void {
@@ -101,5 +103,5 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
 
 Object.values(testOptions).forEach((options, index) => {
   const panels = document.querySelectorAll('.js-control-panel');
-  createPanel(panels[index] as HTMLElement, options);
+  createPanel(panels[index] as HTMLElement, options as any);
 });

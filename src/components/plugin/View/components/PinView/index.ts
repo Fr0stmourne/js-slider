@@ -8,7 +8,7 @@ class PinView extends DefaultView {
   isTooltipDisabled: boolean;
   isVertical: boolean;
   private value: number;
-  private elements: { pin: HTMLElement; tooltip: HTMLElement };
+  private elements!: { pin: HTMLElement; tooltip: HTMLElement };
 
   constructor(options: PinData) {
     super();
@@ -21,7 +21,7 @@ class PinView extends DefaultView {
   }
 
   getValue(): number {
-    return Number(this.elements.tooltip.textContent.trim());
+    return Number(this.elements.tooltip.textContent?.trim());
   }
 
   updateValue(pxNum: number, value: number): void {
@@ -43,7 +43,7 @@ class PinView extends DefaultView {
 
     this.elements = {
       pin: this.element,
-      tooltip: this.element.querySelector(`.js-slider-value`),
+      tooltip: this.element.querySelector(`.js-slider-value`) as HTMLElement,
     };
   }
 
