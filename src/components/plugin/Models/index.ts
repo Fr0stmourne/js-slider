@@ -32,11 +32,11 @@ class Model extends Observer {
     return this.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
-  private validateValue(state: ModelState, newValue?: number | number[]): number | number[] {
+  private validateValue(state: ModelState, newValue?: number[]): number[] {
     if (newValue === undefined) return this.state.value;
-    let validatedValue;
+    let validatedValue: number[];
 
-    if (Array.isArray(newValue)) {
+    if (newValue.length === 2) {
       const { value: prevValue } = state;
       const firstValue = this.findClosestStep(newValue[0]);
       const secondValue = this.findClosestStep(newValue[1]);
@@ -44,12 +44,12 @@ class Model extends Observer {
 
       if (firstValue >= secondValue) {
         validatedValue =
-          (prevValue as number[])[0] !== newValue[0]
+          prevValue[0] !== newValue[0]
             ? [this.steps[this.steps.indexOf(secondValue) - 1], secondValue]
             : [firstValue, this.steps[this.steps.indexOf(firstValue) + 1]];
       }
     } else {
-      validatedValue = this.findClosestStep(newValue);
+      validatedValue = [this.findClosestStep(newValue[0])];
     }
 
     return validatedValue;
@@ -102,7 +102,7 @@ class Model extends Observer {
       step: validatedStep,
       ...validatedMinMaxValues,
       value: validatedValue,
-      range: Array.isArray(validatedValue),
+      range: validatedValue.length === 2,
     };
 
     return validatedState;

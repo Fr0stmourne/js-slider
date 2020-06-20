@@ -22,7 +22,7 @@ type ModelState = {
   minValue: number;
   maxValue: number;
   step: number;
-  value: number | number[];
+  value: number[];
   range: boolean;
 };
 

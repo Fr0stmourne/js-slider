@@ -31,7 +31,7 @@ describe('setUserCallback', () => {
     const userCallback = jest.fn();
     controller.setUserCallback(userCallback);
 
-    controller.model.emit(EventTypes.StateChanged, { value: 5 });
+    controller.model.emit(EventTypes.StateChanged, { value: [5] });
 
     expect(userCallback).toBeCalled();
   });

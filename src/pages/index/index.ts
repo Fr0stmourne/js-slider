@@ -6,7 +6,7 @@ const testOptions = {
     minValue: -33,
     maxValue: 103,
     step: 1,
-    value: 72,
+    value: [72],
     scaleOptionsNum: 9,
   },
   vr: {
@@ -28,7 +28,7 @@ const testOptions = {
     minValue: 0,
     maxValue: 100,
     step: 7,
-    value: 49,
+    value: [49],
     isVertical: true,
     scaleOptionsNum: 5,
   },
@@ -94,7 +94,7 @@ function createPanel(el: HTMLElement, initialOptions: Required<OptionsWithoutSiz
       isVertical: inputs.isVertical.checked,
       value: inputs.value.value.includes(',')
         ? inputs.value.value.split(',').map(el => Number(el))
-        : Number(inputs.value.value),
+        : [Number(inputs.value.value)],
     };
   }
 

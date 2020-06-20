@@ -6,7 +6,7 @@ const testOptions: { normal: ModelState; range: ModelState } = {
     minValue: -30,
     maxValue: 100,
     step: 5,
-    value: 45,
+    value: [45],
     range: false,
   },
 
@@ -30,12 +30,12 @@ describe('state setter', () => {
   describe('should correctly update model value', () => {
     test('default case', () => {
       defaultModel.setState({
-        value: 50,
+        value: [50],
       });
       expect(defaultModel.getState().value).toBe(50);
 
       defaultModel.setState({
-        value: 20,
+        value: [20],
       });
       expect(defaultModel.getState().value).toBe(20);
     });
@@ -56,12 +56,12 @@ describe('state setter', () => {
   describe('should replace newValue with a min/max value if newValue is not in the interval', () => {
     test('default case', () => {
       defaultModel.setState({
-        value: 1000,
+        value: [1000],
       });
       expect(defaultModel.getState().value).toEqual(100);
 
       defaultModel.setState({
-        value: -70,
+        value: [-70],
       });
       expect(defaultModel.getState().value).toEqual(-30);
     });
@@ -81,7 +81,7 @@ describe('state setter', () => {
   describe('should round the values if they are not multiples of the step value', () => {
     test('default case', () => {
       defaultModel.setState({
-        value: 51,
+        value: [51],
       });
       expect(defaultModel.getState().value).toEqual(50);
     });

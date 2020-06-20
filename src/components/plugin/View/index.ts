@@ -50,38 +50,42 @@ class View extends Observer {
     this.bindScaleClick();
   }
 
-  updateValue(value: number | number[]): void {
+  updateValue(value: number[]): void {
     const { isVertical } = this.viewState;
-    const { modelState: modelState, viewState: viewState } = this;
+    const { modelState, viewState } = this;
+    // debugger;
+    const isNewValueRange = value.length === 2;
     const { minValue, maxValue, range } = modelState;
-    const { input, firstPin, secondPin, bar } = this.objects;
+    if (range === isNewValueRange) {
+      const { input, firstPin, secondPin, bar } = this.objects;
 
-    const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
-    if (range) {
-      const pins = [1, 2];
-      const pxNums = pins.map((el, idx) =>
-        calculatePxNum({ value: (value as number[])[idx], minValue, maxValue, elementSize: sliderSize }),
-      );
-
-      firstPin.updateValue(pxNums[0], (value as number[])[0]);
-      secondPin?.updateValue(pxNums[1], (value as number[])[1]);
-    } else {
-      const pxNum = calculatePxNum({ value: value as number, minValue, maxValue, elementSize: sliderSize });
-      firstPin.updateValue(pxNum, value as number);
-    }
-
-    input.value = value;
-    this.modelState.value = value;
-
-    const dataAttributes = { ...modelState, ...viewState };
-
-    Object.keys(dataAttributes).forEach((option: string) => {
-      if ((option as keyof typeof dataAttributes) !== 'sliderSize')
-        this.element.setAttribute(
-          `data-${camelToHyphen(option)}`,
-          String(dataAttributes[option as keyof ModelState | keyof ViewState]),
+      const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
+      if (range) {
+        const pins = [1, 2];
+        const pxNums = pins.map((el, idx) =>
+          calculatePxNum({ value: value[idx], minValue, maxValue, elementSize: sliderSize }),
         );
-    });
+
+        firstPin.updateValue(pxNums[0], value[0]);
+        secondPin?.updateValue(pxNums[1], value[1]);
+      } else {
+        const pxNum = calculatePxNum({ value: value[0], minValue, maxValue, elementSize: sliderSize });
+        firstPin.updateValue(pxNum, value[0]);
+      }
+
+      input.value = value;
+      this.modelState.value = value;
+
+      const dataAttributes = { ...modelState, ...viewState };
+
+      Object.keys(dataAttributes).forEach((option: string) => {
+        if ((option as keyof typeof dataAttributes) !== 'sliderSize')
+          this.element.setAttribute(
+            `data-${camelToHyphen(option)}`,
+            String(dataAttributes[option as keyof ModelState | keyof ViewState]),
+          );
+      });
+    }
   }
 
   render(): void {
@@ -100,7 +104,7 @@ class View extends Observer {
       pinNumber: 1,
       isTooltipDisabled,
       isVertical,
-      value: (range ? (value as number[])[0] : value) as number,
+      value: value[0],
     };
 
     const barData: BarData = {
@@ -132,7 +136,7 @@ class View extends Observer {
         pinNumber: 2,
         isTooltipDisabled,
         isVertical,
-        value: (value as number[])[1],
+        value: value[1],
       };
       this.objects.secondPin = new PinView(secondPinData);
     }
@@ -159,16 +163,14 @@ class View extends Observer {
       pinValues[chosenPin] = value;
       return pinValues;
     }
-    return [firstPin.getValue()];
+    return [value];
   }
 
   private bindScaleClick(): void {
     const { scale } = this.objects;
     if (scale) {
       const handleScaleClick = ({ value }: { value: number }): void => {
-        const { range } = this.modelState;
-
-        this.emit(EventTypes.ValueChanged, { value: range ? this.applyToCorrectPin(value) : value });
+        this.emit(EventTypes.ValueChanged, { value: this.applyToCorrectPin(value) });
       };
       scale.on(EventTypes.NewScaleValue, handleScaleClick);
     }
@@ -196,7 +198,7 @@ class View extends Observer {
 
         this.handleMouseDown(e, updatedPin);
       } else {
-        this.emit(EventTypes.ValueChanged, { value: value });
+        this.emit(EventTypes.ValueChanged, { value: [value] });
         this.handleMouseDown(e, firstPin);
       }
     };
@@ -262,9 +264,9 @@ class View extends Observer {
     const calculatedValue = calculateValue({ percentage, minValue, maxValue });
     let resultValue = value;
     if (range) {
-      (resultValue as number[])[pin.pinNumber - 1] = calculatedValue;
+      resultValue[pin.pinNumber - 1] = calculatedValue;
     } else {
-      resultValue = calculatedValue;
+      resultValue = [calculatedValue];
     }
 
     this.emit(EventTypes.ValueChanged, { value: resultValue });

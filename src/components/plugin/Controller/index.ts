@@ -26,11 +26,11 @@ class Controller {
     return this.userCallback;
   }
 
-  get value(): number | number[] {
+  get value(): number[] {
     return this.model.getState().value;
   }
 
-  set value(value: number | number[]) {
+  set value(value: number[]) {
     this.model.setState({
       ...this.model.getState(),
       value,
@@ -75,8 +75,8 @@ class Controller {
   }
 
   @boundMethod
-  private updateView({ value }: { value: number | number[] }): void {
-    this.view.updateValue(Array.isArray(value) ? [...value] : value);
+  private updateView({ value }: { value: number[] }): void {
+    this.view.updateValue([...value]);
   }
 }
 

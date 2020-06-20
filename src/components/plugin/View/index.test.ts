@@ -26,7 +26,7 @@ const testOptions: {
       minValue: -30,
       maxValue: 100,
       step: 5,
-      value: 45,
+      value: [45],
       range: false,
     },
   },
@@ -51,7 +51,7 @@ const testOptions: {
       minValue: -30,
       maxValue: 100,
       step: 5,
-      value: 45,
+      value: [45],
       range: false,
     },
   },
@@ -101,11 +101,11 @@ describe('View constructor', () => {
 
 describe('Update value()', () => {
   test('should correctly update pin value', () => {
-    defaultView.updateValue(100);
+    defaultView.updateValue([100]);
     expect(defaultView.getObjects().firstPin.getValue()).toBe(100);
     expect(defaultView.state.modelState.value).toBe(100);
 
-    verticalView.updateValue(-30);
+    verticalView.updateValue([-30]);
     expect(verticalView.getObjects().firstPin.getValue()).toBe(-30);
     expect(verticalView.state.modelState.value).toBe(-30);
 
@@ -117,10 +117,10 @@ describe('Update value()', () => {
 
   test('should throw an error if the passed value is not correct', () => {
     expect(() => {
-      defaultView.updateValue(120);
+      defaultView.updateValue([120]);
     }).toThrow(Error);
     expect(() => {
-      verticalView.updateValue(-1000);
+      verticalView.updateValue([-1000]);
     }).toThrow(Error);
     expect(() => {
       rangeView.updateValue([-900, -700]);
@@ -128,10 +128,10 @@ describe('Update value()', () => {
   });
 
   test('should update hidden input.element', () => {
-    defaultView.updateValue(50);
+    defaultView.updateValue([50]);
     expect((defaultView.getObjects().input.element as HTMLInputElement).value).toBe('50');
 
-    verticalView.updateValue(30);
+    verticalView.updateValue([30]);
     expect((verticalView.getObjects().input.element as HTMLInputElement).value).toBe('30');
 
     rangeView.updateValue([50, 70]);
