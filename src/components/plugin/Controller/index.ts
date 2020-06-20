@@ -7,7 +7,7 @@ import { EventTypes, ModelState, ViewState } from '../types';
 class Controller {
   private userCallback!: Function;
 
-  constructor(public model: Model, public view: View) {
+  constructor(private model: Model, private view: View) {
     this.view.render();
     this.connect();
   }
@@ -37,7 +37,7 @@ class Controller {
     });
   }
 
-  get viewState(): ViewState {
+  getViewState(): ViewState {
     return { ...this.view.state.viewState };
   }
 

@@ -103,11 +103,11 @@ describe('Update value()', () => {
   test('should correctly update pin value', () => {
     defaultView.updateValue([100]);
     expect(defaultView.getObjects().firstPin.getValue()).toBe(100);
-    expect(defaultView.state.modelState.value).toBe(100);
+    expect(defaultView.state.modelState.value).toStrictEqual([100]);
 
     verticalView.updateValue([-30]);
     expect(verticalView.getObjects().firstPin.getValue()).toBe(-30);
-    expect(verticalView.state.modelState.value).toBe(-30);
+    expect(verticalView.state.modelState.value).toStrictEqual([-30]);
 
     rangeView.updateValue([30, 50]);
     expect(rangeView.getObjects().firstPin.getValue()).toBe(30);

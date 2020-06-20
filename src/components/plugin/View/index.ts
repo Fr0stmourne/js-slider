@@ -53,7 +53,6 @@ class View extends Observer {
   updateValue(value: number[]): void {
     const { isVertical } = this.viewState;
     const { modelState, viewState } = this;
-    // debugger;
     const isNewValueRange = value.length === 2;
     const { minValue, maxValue, range } = modelState;
     if (range === isNewValueRange) {
