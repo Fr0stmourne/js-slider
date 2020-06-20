@@ -78,13 +78,12 @@ class View extends Observer {
 
       const dataAttributes = { ...modelState, ...viewState };
 
-      Object.keys(dataAttributes).forEach((option: string) => {
-        if ((option as keyof typeof dataAttributes) !== 'sliderSize')
-          this.element.setAttribute(
-            `data-${camelToHyphen(option)}`,
-            String(dataAttributes[option as keyof ModelState | keyof ViewState]),
-          );
-      });
+      Object.keys(dataAttributes)
+        .map(el => el as keyof typeof dataAttributes)
+        .forEach(option => {
+          if (option !== 'sliderSize')
+            this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
+        });
     }
   }
 

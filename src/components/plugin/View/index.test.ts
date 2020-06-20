@@ -82,7 +82,7 @@ const testOptions: {
   },
 };
 
-let callback: Function;
+let callback: EventCallback;
 
 let defaultView: View, verticalView: View, rangeView: View;
 beforeEach(() => {
@@ -142,8 +142,8 @@ describe('Update value()', () => {
 describe('render()', () => {
   beforeEach(() => {
     callback = jest.fn();
-    defaultView.on(EventTypes.ValueChanged, callback as EventCallback);
-    rangeView.on(EventTypes.ValueChanged, callback as EventCallback);
+    defaultView.on(EventTypes.ValueChanged, callback);
+    rangeView.on(EventTypes.ValueChanged, callback);
   });
   describe('should bind callbacks to needed slider getObjects()', () => {
     test('bar', () => {

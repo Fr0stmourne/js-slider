@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Options } from '../../components/plugin/types';
+import { DEFAULT_VIEW_STATE } from '../../components/plugin/defaults';
 
-const testOptions = {
+const testOptions: {
+  default: Options;
+  vr: Options;
+  r: Options;
+  v: Options;
+} = {
   default: {
     minValue: -33,
     maxValue: 103,
@@ -39,12 +45,20 @@ $('.js-example-vr').slider(testOptions.vr);
 $('.js-example-r').slider(testOptions.r);
 $('.js-example-v').slider(testOptions.v);
 
-type OptionsWithoutSize = Omit<Options, 'sliderSize'>;
-
-function createPanel(el: HTMLElement, initialOptions: Required<OptionsWithoutSize>): void {
+function createPanel(el: HTMLElement, initialOptions: Options): void {
   const element = el;
 
-  const inputs = {
+  type Inputs = {
+    isTooltipDisabled: HTMLInputElement;
+    step: HTMLInputElement;
+    minValue: HTMLInputElement;
+    maxValue: HTMLInputElement;
+    scaleOptionsNum: HTMLInputElement;
+    value: HTMLInputElement;
+    isVertical: HTMLInputElement;
+  };
+
+  const inputs: Inputs = {
     isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
     step: element.querySelector('.js-step') as HTMLInputElement,
     minValue: element.querySelector('.js-min-value') as HTMLInputElement,
@@ -54,9 +68,9 @@ function createPanel(el: HTMLElement, initialOptions: Required<OptionsWithoutSiz
     isVertical: element.querySelector('.js-direction') as HTMLInputElement,
   };
 
-  function setInitialInputValues(initialOptions: Required<OptionsWithoutSize>): void {
-    inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled;
-    inputs.isVertical.checked = initialOptions.isVertical;
+  function setInitialInputValues(initialOptions: Options): void {
+    inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled || DEFAULT_VIEW_STATE.isTooltipDisabled;
+    inputs.isVertical.checked = initialOptions.isVertical || DEFAULT_VIEW_STATE.isVertical;
     inputs.step.value = String(initialOptions.step);
     inputs.minValue.value = String(initialOptions.minValue);
     inputs.maxValue.value = String(initialOptions.maxValue);
@@ -73,12 +87,12 @@ function createPanel(el: HTMLElement, initialOptions: Required<OptionsWithoutSiz
     bindListeners(inputs);
   }
 
-  function bindListeners(inputs: any): void {
+  function bindListeners(inputs: Inputs): void {
     Object.values(inputs).forEach(input => {
       (input as HTMLInputElement).addEventListener('change', handlePanelChange);
     });
     function updateInputValue(value: number | number[]): void {
-      inputs.value.value = value;
+      inputs.value.value = String(value);
     }
 
     $(slider).slider('onValueChange', updateInputValue);
@@ -101,7 +115,7 @@ function createPanel(el: HTMLElement, initialOptions: Required<OptionsWithoutSiz
   bindListeners(inputs);
 }
 
-Object.values(testOptions).forEach((options, index) => {
+Object.values(testOptions).forEach((options: Options, index) => {
   const panels = document.querySelectorAll('.js-control-panel');
-  createPanel(panels[index] as HTMLElement, options as any);
+  createPanel(panels[index] as HTMLElement, options);
 });

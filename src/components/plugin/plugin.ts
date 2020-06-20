@@ -2,8 +2,8 @@ import View from './View';
 import Model from './Models';
 import Controller from './Controller';
 import { Options, ModelState, ViewState, API } from './types';
-import './slider.scss';
 import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';
+import './slider.scss';
 
 declare global {
   interface JQuery {
