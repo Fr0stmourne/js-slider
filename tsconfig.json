@@ -5,7 +5,7 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es6",
-    "strict": false,
+    "strict": true,
     "experimentalDecorators": true
   }
 }

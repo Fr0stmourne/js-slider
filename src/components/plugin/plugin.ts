@@ -9,7 +9,7 @@ declare global {
   interface JQuery {
     slider: (
       methodOrOptions?: Options | keyof API,
-      ...params: any
+      params?: Function | Options | Required<Pick<Options, 'value'>>,
     ) => JQuery<HTMLElement> | number | number[] | undefined;
   }
 }
@@ -34,9 +34,9 @@ function getViewState(options: Options): Partial<ViewState> {
   return state;
 }
 
-$.fn.slider = function(methodOrOptions, ...params) {
-  const pluginAPI: API = {
-    updateValue(this: JQuery, value: number | number[]): JQuery<HTMLElement> {
+$.fn.slider = function(methodOrOptions, params) {
+  const pluginAPI = {
+    updateValue(this: JQuery, { value }: { value: number | number[] }): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
         slider.value = value;
@@ -70,9 +70,6 @@ $.fn.slider = function(methodOrOptions, ...params) {
         slider.setUserCallback(callback);
       });
     },
-    getValue(this: JQuery): number | number[] {
-      return $(this).data().slider.value;
-    },
     init(this: JQuery, methodOrOptions?: Options): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const model = new Model();
@@ -88,11 +85,19 @@ $.fn.slider = function(methodOrOptions, ...params) {
     },
   };
 
-  if (pluginAPI[methodOrOptions as keyof API]) {
-    return pluginAPI[methodOrOptions as keyof API].apply(this, params);
-  } else if (typeof methodOrOptions === 'object' || !methodOrOptions) {
-    return pluginAPI.init.call(this, methodOrOptions as any);
-  } else {
-    $.error(`Method ${methodOrOptions} does not exist on $.slider`);
+  if (typeof methodOrOptions === 'string') {
+    if (methodOrOptions === 'onValueChange' && params instanceof Function) {
+      return pluginAPI[methodOrOptions].call(this, params);
+    } else if (methodOrOptions === 'updateValue' && params) {
+      return pluginAPI[methodOrOptions].call(this, params as Required<Pick<Options, 'value'>>);
+    } else if (methodOrOptions === 'update' && params) {
+      return pluginAPI[methodOrOptions].call(this, params as Options);
+    }
   }
+
+  if (typeof methodOrOptions === 'object') {
+    return pluginAPI.init.call(this, methodOrOptions);
+  }
+
+  $.error(`Method ${methodOrOptions} does not exist on $.slider`);
 };

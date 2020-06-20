@@ -70,10 +70,9 @@ enum EventTypes {
 
 type API = {
   init(this: JQuery, methodOrOptions: Options): JQuery;
-  updateValue(value: number | number[]): void;
+  updateValue({ value }: { value: number | number[] }): void;
   update(options: Options): void;
   onValueChange(callback: Function): void;
-  getValue(): number | number[];
 };
 
 export {
