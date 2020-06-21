@@ -103,6 +103,8 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
       (input as HTMLInputElement).addEventListener('change', handlePanelChange);
     });
     function updateInputValue(value: number[]): void {
+      // console.log(123);
+
       const range = $(slider)
         .children()
         .first()

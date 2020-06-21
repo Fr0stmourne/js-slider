@@ -38,19 +38,29 @@ class Model extends Observer {
 
     const { value: prevValue } = state;
     const firstValue = this.findClosestStep(newValue[0]);
-    let secondValue;
+    let secondValue: number;
     if (newValue.length === 2) {
       secondValue = this.findClosestStep(newValue[1] || prevValue[1]);
     } else {
       secondValue = state.maxValue;
     }
     validatedValue = [firstValue, secondValue];
+    const calculateValidatedValue = (): number[] => {
+      const { steps } = this;
+      if (newValue[0] === newValue[1]) return [steps[steps.indexOf(newValue[1]) - 1], newValue[1]];
+      return prevValue[0] !== newValue[0]
+        ? [steps[steps.indexOf(secondValue) - 1], secondValue]
+        : [firstValue, steps[steps.indexOf(firstValue) + 1]];
+    };
 
-    if (firstValue > secondValue) {
-      validatedValue =
-        prevValue[0] !== newValue[0]
-          ? [this.steps[this.steps.indexOf(secondValue) - 1], secondValue]
-          : [firstValue, this.steps[this.steps.indexOf(firstValue) + 1]];
+    if (state.range) {
+      if (firstValue >= secondValue) {
+        validatedValue = calculateValidatedValue();
+      }
+    } else {
+      if (firstValue > secondValue) {
+        validatedValue = calculateValidatedValue();
+      }
     }
 
     return validatedValue;
