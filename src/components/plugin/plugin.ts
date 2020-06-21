@@ -1,5 +1,5 @@
 import View from './View';
-import Model from './Models';
+import Model from './Model';
 import Controller from './Controller';
 import { Options, ModelState, ViewState, API } from './types';
 import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';

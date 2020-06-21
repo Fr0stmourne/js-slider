@@ -1,6 +1,6 @@
 import { ViewState, ModelState, EventTypes, EventCallback } from 'types';
 import View from '.';
-import calculateSteps from '../Models/utils/calculateSteps';
+import calculateSteps from '../Model/utils/calculateSteps';
 
 const testOptions: {
   normal: { viewState: ViewState; modelState: ModelState };

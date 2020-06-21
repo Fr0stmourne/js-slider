@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Options } from '../../components/plugin/types';
-import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from '../../components/plugin/defaults';
+import { Options } from 'types';
+import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
 
 const testOptions: {
   default: Options;

@@ -1,6 +1,6 @@
 import { ScaleData, EventTypes } from 'types';
-import render from '../../utils/render';
-import calculatePxNum from '../../utils/calculatePxNum';
+import render from 'View/utils/render';
+import calculatePxNum from 'View/utils/calculatePxNum';
 import DefaultView from '../DefaultView';
 
 class ScaleView extends DefaultView {

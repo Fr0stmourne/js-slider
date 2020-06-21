@@ -1,5 +1,5 @@
 import { PinData } from 'types';
-import render from '../../utils/render';
+import render from 'View/utils/render';
 import DefaultView from '../DefaultView';
 
 class PinView extends DefaultView {

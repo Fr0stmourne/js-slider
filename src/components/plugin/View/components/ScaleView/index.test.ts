@@ -1,6 +1,6 @@
 import { ScaleData, EventTypes } from 'types';
 import ScaleView from '.';
-import calculateSteps from '../../../Models/utils/calculateSteps';
+import calculateSteps from 'Model/utils/calculateSteps';
 
 const options: ScaleData = {
   minValue: -30,
