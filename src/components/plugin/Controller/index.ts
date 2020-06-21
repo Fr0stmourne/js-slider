@@ -13,13 +13,15 @@ class Controller {
   }
 
   setUserCallback(callback: Function): void {
-    this.userCallback = callback;
+    if (!this.userCallback) {
+      this.userCallback = callback;
 
-    const callUserCallback = ({ value }: { value: number | number[] }): void => {
-      this.userCallback(value);
-    };
+      const callUserCallback = ({ value }: { value: number | number[] }): void => {
+        this.userCallback(value);
+      };
 
-    this.model.on(EventTypes.StateChanged, callUserCallback);
+      this.model.on(EventTypes.StateChanged, callUserCallback);
+    }
   }
 
   getUserCallback(): Function {

@@ -54,7 +54,6 @@ class View extends Observer {
     const { isVertical } = this.viewState;
     const { modelState, viewState } = this;
     const { minValue, maxValue, range } = modelState;
-    // if (range === isNewValueRange) {
     const { input, firstPin, secondPin, bar } = this.objects;
 
     const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
@@ -82,7 +81,6 @@ class View extends Observer {
         if (option !== 'sliderSize')
           this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
       });
-    // }
   }
 
   render(): void {

@@ -32,12 +32,12 @@ describe('state setter', () => {
       defaultModel.setState({
         value: [50],
       });
-      expect(defaultModel.getState().value).toStrictEqual([50]);
+      expect(defaultModel.getState().value).toStrictEqual([50, 100]);
 
       defaultModel.setState({
         value: [20],
       });
-      expect(defaultModel.getState().value).toStrictEqual([20]);
+      expect(defaultModel.getState().value).toStrictEqual([20, 100]);
     });
 
     test('range case', () => {
@@ -58,12 +58,12 @@ describe('state setter', () => {
       defaultModel.setState({
         value: [1000],
       });
-      expect(defaultModel.getState().value).toStrictEqual([100]);
+      expect(defaultModel.getState().value).toStrictEqual([100, 100]);
 
       defaultModel.setState({
         value: [-70],
       });
-      expect(defaultModel.getState().value).toStrictEqual([-30]);
+      expect(defaultModel.getState().value).toStrictEqual([-30, 100]);
     });
 
     test('range case', () => {
@@ -83,7 +83,7 @@ describe('state setter', () => {
       defaultModel.setState({
         value: [51],
       });
-      expect(defaultModel.getState().value).toStrictEqual([50]);
+      expect(defaultModel.getState().value).toStrictEqual([50, 100]);
     });
 
     test('range case', () => {

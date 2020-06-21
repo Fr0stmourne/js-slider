@@ -39,7 +39,7 @@ describe('setModelState', () => {
     controller.setModelState({
       value: [20],
     });
-    expect(controller.getModelState().value).toStrictEqual([20]);
+    expect(controller.getModelState().value).toStrictEqual([20, 100]);
   });
 });
 
@@ -58,6 +58,6 @@ describe('setViewState', () => {
 describe('get/set value', () => {
   test('should correctly set and return value', () => {
     controller.value = [70];
-    expect(controller.value).toStrictEqual([70]);
+    expect(controller.value).toStrictEqual([70, 100]);
   });
 });
