@@ -1,13 +1,13 @@
 import { ScaleData, EventTypes } from '../../../types';
 import render from '../../utils/render';
 import calculatePxNum from '../../utils/calculatePxNum';
-import calculateSteps from '../../../utils/calculateSteps';
+import calculateSteps from '../../../Models/utils/calculateSteps';
 import DefaultView from '../DefaultView';
 
 class ScaleView extends DefaultView {
   scaleOptionsNum: number;
   isVertical: boolean;
-  step: number;
+  steps: number[];
   minValue: number;
   maxValue: number;
   sliderSize: number;
@@ -16,7 +16,7 @@ class ScaleView extends DefaultView {
     this.scaleOptionsNum = options.scaleOptionsNum;
     this.isVertical = options.isVertical;
     this.minValue = options.minValue;
-    this.step = options.step;
+    this.steps = options.steps;
     this.maxValue = options.maxValue;
     this.sliderSize = options.sliderSize;
     this.render();
@@ -66,8 +66,7 @@ class ScaleView extends DefaultView {
   }
 
   private getMilestones(): number[] {
-    const { minValue, maxValue, scaleOptionsNum, step } = this;
-    const steps = calculateSteps({ minValue, maxValue, step });
+    const { scaleOptionsNum, steps } = this;
 
     function filterSteps(steps: number[], scaleOptionsNum: number): number[] {
       if (scaleOptionsNum >= steps.length) {

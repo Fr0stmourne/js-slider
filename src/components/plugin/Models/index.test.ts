@@ -1,11 +1,13 @@
 import { ModelState } from '../types';
 import Model from '.';
+import calculateSteps from './utils/calculateSteps';
 
 const testOptions: { normal: ModelState; range: ModelState } = {
   normal: {
     minValue: -30,
     maxValue: 100,
     step: 5,
+    steps: calculateSteps({ minValue: -30, maxValue: 100, step: 5 }),
     value: [45],
     range: false,
   },
@@ -14,6 +16,7 @@ const testOptions: { normal: ModelState; range: ModelState } = {
     minValue: 0,
     maxValue: 100,
     step: 2,
+    steps: calculateSteps({ minValue: 0, maxValue: 100, step: 2 }),
     range: true,
     value: [6, 64],
   },

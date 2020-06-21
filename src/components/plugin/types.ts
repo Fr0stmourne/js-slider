@@ -23,6 +23,7 @@ type ModelState = {
   maxValue: number;
   step: number;
   value: number[];
+  steps: number[];
   range: boolean;
 };
 
@@ -35,7 +36,7 @@ type PinData = {
 
 type ScaleData = {
   scaleOptionsNum: number;
-  step: number;
+  steps: number[];
   isVertical: boolean;
   minValue: number;
   maxValue: number;

@@ -85,7 +85,7 @@ class View extends Observer {
 
   render(): void {
     const { isVertical, scaleOptionsNum, isTooltipDisabled, sliderSize } = this.viewState;
-    const { value, minValue, maxValue, range, step } = this.modelState;
+    const { value, minValue, maxValue, range, steps } = this.modelState;
     this.element = render(
       `
     <div class="slider-plugin js-slider ${isVertical ? 'slider-plugin--vertical' : ''}">
@@ -117,7 +117,7 @@ class View extends Observer {
     if (scaleOptionsNum && this.sliderSize) {
       const scaleData: ScaleData = {
         scaleOptionsNum: scaleOptionsNum,
-        step,
+        steps,
         isVertical,
         minValue,
         maxValue,

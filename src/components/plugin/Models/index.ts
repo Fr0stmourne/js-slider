@@ -1,35 +1,33 @@
-import calculateSteps from '../utils/calculateSteps';
+import calculateSteps from './utils/calculateSteps';
 import Observer from '../Observer';
 import { ModelState, EventTypes } from '../types';
 import { DEFAULT_MODEL_STATE } from '../defaults';
 
 class Model extends Observer {
   private state: ModelState;
-  private steps: number[];
 
   constructor(modelState?: ModelState) {
     super();
     this.state = { ...DEFAULT_MODEL_STATE, ...modelState };
 
     const { minValue, maxValue, step } = this.getState();
-    this.steps = calculateSteps({ minValue, maxValue, step });
+    this.state.steps = calculateSteps({ minValue, maxValue, step });
   }
 
   getState(): ModelState {
     const { state } = this;
-    const result = { ...state };
-    return result;
+    return { ...state };
   }
 
   setState(modelState: Partial<ModelState>): void {
     this.state = this.validateState(modelState);
     const { minValue, maxValue, step } = this.getState();
-    this.steps = calculateSteps({ minValue, maxValue, step });
+    this.state.steps = calculateSteps({ minValue, maxValue, step });
     this.emit(EventTypes.StateChanged, { value: this.getState().value });
   }
 
   private findClosestStep(value: number): number {
-    return this.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
+    return this.state.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
   private validateValue(state: ModelState, newValue?: number[]): number[] {
@@ -46,7 +44,9 @@ class Model extends Observer {
     }
     validatedValue = [firstValue, secondValue];
     const calculateValidatedValue = (): number[] => {
-      const { steps } = this;
+      const {
+        state: { steps },
+      } = this;
       if (newValue[0] === newValue[1]) return [steps[steps.indexOf(newValue[1]) - 1], newValue[1]];
       return prevValue[0] !== newValue[0]
         ? [steps[steps.indexOf(secondValue) - 1], secondValue]
@@ -94,7 +94,7 @@ class Model extends Observer {
 
     const validatedStep = this.validateStep(stateToValidate.step);
     const validatedMinMaxValues = this.validateMinMaxValues(stateToValidate.minValue, stateToValidate.maxValue);
-    this.steps = calculateSteps({
+    this.state.steps = calculateSteps({
       minValue: validatedMinMaxValues.minValue,
       maxValue: validatedMinMaxValues.maxValue,
       step: validatedStep,

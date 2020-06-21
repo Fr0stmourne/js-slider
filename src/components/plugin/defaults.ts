@@ -1,10 +1,12 @@
 import { ModelState, ViewState, Options } from './types';
+import calculateSteps from './Models/utils/calculateSteps';
 
 const DEFAULT_MODEL_STATE: ModelState = {
   minValue: 0,
   maxValue: 100,
   step: 1,
   value: [50, 100],
+  steps: calculateSteps({ minValue: 50, maxValue: 100, step: 1 }),
   range: false,
 };
 

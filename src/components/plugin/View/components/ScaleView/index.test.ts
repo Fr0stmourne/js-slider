@@ -1,11 +1,12 @@
 import { ScaleData, EventTypes } from '../../../types';
 import ScaleView from '.';
+import calculateSteps from '../../../Models/utils/calculateSteps';
 
 const options: ScaleData = {
   minValue: -30,
   maxValue: 100,
   isVertical: false,
-  step: 5,
+  steps: calculateSteps({ minValue: -30, maxValue: 100, step: 5 }),
   scaleOptionsNum: 12,
   sliderSize: 300,
 };

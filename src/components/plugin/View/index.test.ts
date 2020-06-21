@@ -1,5 +1,6 @@
 import { ViewState, ModelState, EventTypes, EventCallback } from '../types';
 import View from '.';
+import calculateSteps from '../Models/utils/calculateSteps';
 
 const testOptions: {
   normal: { viewState: ViewState; modelState: ModelState };
@@ -26,6 +27,7 @@ const testOptions: {
       minValue: -30,
       maxValue: 100,
       step: 5,
+      steps: calculateSteps({ minValue: -30, maxValue: 100, step: 5 }),
       value: [45],
       range: false,
     },
@@ -51,6 +53,7 @@ const testOptions: {
       minValue: -30,
       maxValue: 100,
       step: 5,
+      steps: calculateSteps({ minValue: -30, maxValue: 100, step: 5 }),
       value: [45],
       range: false,
     },
@@ -76,6 +79,7 @@ const testOptions: {
       minValue: 0,
       maxValue: 100,
       step: 1,
+      steps: calculateSteps({ minValue: 0, maxValue: 100, step: 1 }),
       value: [45, 75],
       range: true,
     },
