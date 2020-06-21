@@ -58,7 +58,8 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     minValue: HTMLInputElement;
     maxValue: HTMLInputElement;
     scaleOptionsNum: HTMLInputElement;
-    value: HTMLInputElement;
+    firstValue: HTMLInputElement;
+    secondValue: HTMLInputElement;
     isVertical: HTMLInputElement;
     range: HTMLInputElement;
   };
@@ -69,7 +70,8 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     minValue: element.querySelector('.js-min-value') as HTMLInputElement,
     maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
     scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
-    value: element.querySelector('.js-control-input') as HTMLInputElement,
+    firstValue: element.querySelector('.js-first-value') as HTMLInputElement,
+    secondValue: element.querySelector('.js-second-value') as HTMLInputElement,
     isVertical: element.querySelector('.js-direction') as HTMLInputElement,
     range: element.querySelector('.js-range') as HTMLInputElement,
   };
@@ -82,11 +84,17 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     inputs.maxValue.value = String(initialOptions.maxValue);
     inputs.scaleOptionsNum.value = String(initialOptions.scaleOptionsNum);
     inputs.range.checked = Boolean(initialOptions.range);
-    inputs.value.value = initialOptions.range
-      ? String(initialOptions.value)
-      : String((initialOptions.value || DEFAULT_MODEL_STATE.value)[0]);
 
-    inputs.value.setAttribute('data-value', String(initialOptions.value));
+    if (initialOptions.value) {
+      inputs.firstValue.value = String(initialOptions.value[0] || DEFAULT_MODEL_STATE.value[0]);
+      inputs.secondValue.value = String(initialOptions.value[1] || initialOptions.maxValue);
+    }
+
+    if (!initialOptions.range) {
+      inputs.secondValue.disabled = true;
+    }
+
+    inputs.firstValue.setAttribute('data-value', String(initialOptions.value));
   }
 
   const slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
@@ -103,22 +111,22 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
       (input as HTMLInputElement).addEventListener('change', handlePanelChange);
     });
     function updateInputValue(value: number[]): void {
-      const range = $(slider)
+      const { range } = $(slider)
         .children()
         .first()
-        .data().range;
+        .data();
 
-      inputs.value.value = String(range ? value : value[0]);
-      inputs.value.setAttribute('data-value', String(value));
+      inputs.firstValue.value = String(value[0]);
+      inputs.secondValue.value = String(value[1]);
+
+      inputs.secondValue.disabled = !range;
     }
 
     $(slider).slider('onValueChange', updateInputValue);
   }
 
   function getInputsState(): Options {
-    const inputValue = inputs.value.getAttribute('data-value') || inputs.value.value;
-
-    const state = {
+    return {
       isTooltipDisabled: inputs.isTooltipDisabled.checked,
       step: Number(inputs.step.value),
       minValue: inputs.minValue.value !== '' ? Number(inputs.minValue.value) : undefined,
@@ -126,10 +134,8 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
       scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? Number(inputs.scaleOptionsNum.value) : undefined,
       isVertical: inputs.isVertical.checked,
       range: inputs.range.checked,
-      value: inputValue.split(',').map(el => Number(el)),
+      value: [inputs.firstValue.value, inputs.secondValue.value].map(el => Number(el)),
     };
-
-    return state;
   }
 
   bindListeners(inputs);
