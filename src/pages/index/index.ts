@@ -100,7 +100,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
   const slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
   setInitialInputValues(initialOptions);
 
-  function handlePanelChange(e: Event): void {
+  function handlePanelChange(): void {
     const newOptions = getInputsState();
     $(slider).slider('update', newOptions);
     bindListeners(inputs);
