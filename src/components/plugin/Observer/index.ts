@@ -7,8 +7,6 @@ class Observer {
     const callbacks = this.events[eventName];
 
     if (callbacks && !callbacks.includes(callback)) {
-      console.log(callbacks);
-
       callbacks.push(callback);
     } else {
       this.events[eventName] = [callback];
