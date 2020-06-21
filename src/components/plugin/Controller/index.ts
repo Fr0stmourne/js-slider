@@ -76,6 +76,7 @@ class Controller {
 
   @boundMethod
   private updateView({ value }: { value: number[] }): void {
+    this.view.setState({}, this.model.getState());
     this.view.updateValue([...value]);
   }
 }

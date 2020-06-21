@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Options } from '../../components/plugin/types';
-import { DEFAULT_VIEW_STATE } from '../../components/plugin/defaults';
+import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from '../../components/plugin/defaults';
 
 const testOptions: {
   default: Options;
@@ -14,12 +14,14 @@ const testOptions: {
     step: 1,
     value: [72],
     scaleOptionsNum: 9,
+    range: false,
   },
   vr: {
     minValue: -112,
     maxValue: 100,
     step: 8,
     value: [-56, 56],
+    range: false,
     isVertical: true,
     scaleOptionsNum: 5,
   },
@@ -28,6 +30,7 @@ const testOptions: {
     maxValue: 100,
     step: 2,
     value: [29, 79],
+    range: true,
     scaleOptionsNum: 5,
   },
   v: {
@@ -35,6 +38,7 @@ const testOptions: {
     maxValue: 100,
     step: 7,
     value: [49],
+    range: false,
     isVertical: true,
     scaleOptionsNum: 5,
   },
@@ -56,6 +60,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     scaleOptionsNum: HTMLInputElement;
     value: HTMLInputElement;
     isVertical: HTMLInputElement;
+    range: HTMLInputElement;
   };
 
   const inputs: Inputs = {
@@ -66,6 +71,7 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
     value: element.querySelector('.js-control-input') as HTMLInputElement,
     isVertical: element.querySelector('.js-direction') as HTMLInputElement,
+    range: element.querySelector('.js-range') as HTMLInputElement,
   };
 
   function setInitialInputValues(initialOptions: Options): void {
@@ -75,13 +81,18 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     inputs.minValue.value = String(initialOptions.minValue);
     inputs.maxValue.value = String(initialOptions.maxValue);
     inputs.scaleOptionsNum.value = String(initialOptions.scaleOptionsNum);
-    inputs.value.value = String(initialOptions.value);
+    inputs.range.checked = Boolean(initialOptions.range);
+    inputs.value.value = initialOptions.range
+      ? String(initialOptions.value)
+      : String((initialOptions.value || DEFAULT_MODEL_STATE.value)[0]);
+
+    inputs.value.setAttribute('data-value', String(initialOptions.value));
   }
 
   const slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
   setInitialInputValues(initialOptions);
 
-  function handlePanelChange(): void {
+  function handlePanelChange(e: Event): void {
     const newOptions = getInputsState();
     $(slider).slider('update', newOptions);
     bindListeners(inputs);
@@ -91,25 +102,34 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     Object.values(inputs).forEach(input => {
       (input as HTMLInputElement).addEventListener('change', handlePanelChange);
     });
-    function updateInputValue(value: number | number[]): void {
-      inputs.value.value = String(value);
+    function updateInputValue(value: number[]): void {
+      const range = $(slider)
+        .children()
+        .first()
+        .data().range;
+
+      inputs.value.value = String(range ? value : value[0]);
+      inputs.value.setAttribute('data-value', String(value));
     }
 
     $(slider).slider('onValueChange', updateInputValue);
   }
 
   function getInputsState(): Options {
-    return {
+    const inputValue = inputs.value.getAttribute('data-value') || inputs.value.value;
+
+    const state = {
       isTooltipDisabled: inputs.isTooltipDisabled.checked,
       step: Number(inputs.step.value),
       minValue: inputs.minValue.value !== '' ? Number(inputs.minValue.value) : undefined,
       maxValue: inputs.maxValue.value !== '' ? Number(inputs.maxValue.value) : undefined,
       scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? Number(inputs.scaleOptionsNum.value) : undefined,
       isVertical: inputs.isVertical.checked,
-      value: inputs.value.value.includes(',')
-        ? inputs.value.value.split(',').map(el => Number(el))
-        : [Number(inputs.value.value)],
+      range: inputs.range.checked,
+      value: inputValue.split(',').map(el => Number(el)),
     };
+
+    return state;
   }
 
   bindListeners(inputs);

@@ -53,37 +53,36 @@ class View extends Observer {
   updateValue(value: number[]): void {
     const { isVertical } = this.viewState;
     const { modelState, viewState } = this;
-    const isNewValueRange = value.length === 2;
     const { minValue, maxValue, range } = modelState;
-    if (range === isNewValueRange) {
-      const { input, firstPin, secondPin, bar } = this.objects;
+    // if (range === isNewValueRange) {
+    const { input, firstPin, secondPin, bar } = this.objects;
 
-      const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
-      if (range) {
-        const pins = [1, 2];
-        const pxNums = pins.map((el, idx) =>
-          calculatePxNum({ value: value[idx], minValue, maxValue, elementSize: sliderSize }),
-        );
+    const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
+    if (range) {
+      const pins = [1, 2];
+      const pxNums = pins.map((el, idx) =>
+        calculatePxNum({ value: value[idx], minValue, maxValue, elementSize: sliderSize }),
+      );
 
-        firstPin.updateValue(pxNums[0], value[0]);
-        secondPin?.updateValue(pxNums[1], value[1]);
-      } else {
-        const pxNum = calculatePxNum({ value: value[0], minValue, maxValue, elementSize: sliderSize });
-        firstPin.updateValue(pxNum, value[0]);
-      }
-
-      input.value = value;
-      this.modelState.value = value;
-
-      const dataAttributes = { ...modelState, ...viewState };
-
-      Object.keys(dataAttributes)
-        .map(el => el as keyof typeof dataAttributes)
-        .forEach(option => {
-          if (option !== 'sliderSize')
-            this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
-        });
+      firstPin.updateValue(pxNums[0], value[0]);
+      secondPin?.updateValue(pxNums[1], value[1]);
+    } else {
+      const pxNum = calculatePxNum({ value: value[0], minValue, maxValue, elementSize: sliderSize });
+      firstPin.updateValue(pxNum, value[0]);
     }
+
+    input.value = value;
+    this.modelState.value = value;
+
+    const dataAttributes = { ...modelState, ...viewState };
+
+    Object.keys(dataAttributes)
+      .map(el => el as keyof typeof dataAttributes)
+      .forEach(option => {
+        if (option !== 'sliderSize')
+          this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
+      });
+    // }
   }
 
   render(): void {

@@ -16,15 +16,19 @@ class Model extends Observer {
   }
 
   getState(): ModelState {
-    return { ...this.state };
+    const { state } = this;
+    // toDO
+    // const result = { ...state, value: state.range ? state.value : [state.value[0]] };
+    const result = { ...state };
+    return result;
   }
 
   setState(modelState: Partial<ModelState>): void {
+    // debugger;
     this.state = this.validateState(modelState);
-
+    // debugger;
     const { minValue, maxValue, step } = this.getState();
     this.steps = calculateSteps({ minValue, maxValue, step });
-
     this.emit(EventTypes.StateChanged, { value: this.getState().value });
   }
 
@@ -36,21 +40,26 @@ class Model extends Observer {
     if (newValue === undefined) return this.state.value;
     let validatedValue: number[];
 
+    // if (state.range) {
+    const { value: prevValue } = state;
+    const firstValue = this.findClosestStep(newValue[0]);
+    let secondValue;
     if (newValue.length === 2) {
-      const { value: prevValue } = state;
-      const firstValue = this.findClosestStep(newValue[0]);
-      const secondValue = this.findClosestStep(newValue[1]);
-      validatedValue = [firstValue, secondValue];
-
-      if (firstValue >= secondValue) {
-        validatedValue =
-          prevValue[0] !== newValue[0]
-            ? [this.steps[this.steps.indexOf(secondValue) - 1], secondValue]
-            : [firstValue, this.steps[this.steps.indexOf(firstValue) + 1]];
-      }
+      secondValue = this.findClosestStep(newValue[1] || prevValue[1]);
     } else {
-      validatedValue = [this.findClosestStep(newValue[0])];
+      secondValue = state.maxValue;
     }
+    validatedValue = [firstValue, secondValue];
+
+    if (firstValue >= secondValue) {
+      validatedValue =
+        prevValue[0] !== newValue[0]
+          ? [this.steps[this.steps.indexOf(secondValue) - 1], secondValue]
+          : [firstValue, this.steps[this.steps.indexOf(firstValue) + 1]];
+    }
+    // } else {
+    //   validatedValue = [this.findClosestStep(newValue[0])];
+    // }
 
     return validatedValue;
   }
@@ -93,6 +102,7 @@ class Model extends Observer {
         ...this.state,
         step: validatedStep,
         ...validatedMinMaxValues,
+        range: stateToValidate.range || false,
       },
       stateToValidate.value,
     );
@@ -102,7 +112,7 @@ class Model extends Observer {
       step: validatedStep,
       ...validatedMinMaxValues,
       value: validatedValue,
-      range: validatedValue.length === 2,
+      range: stateToValidate.range || false,
     };
 
     return validatedState;
