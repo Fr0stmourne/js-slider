@@ -1,4 +1,4 @@
-import { ViewState, ModelState, EventTypes, EventCallback } from '../types';
+import { ViewState, ModelState, EventTypes, EventCallback } from 'types';
 import View from '.';
 import calculateSteps from '../Models/utils/calculateSteps';
 

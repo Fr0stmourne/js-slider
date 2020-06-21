@@ -1,7 +1,7 @@
 import calculateValue from '../../utils/calculateValue';
 import render from '../../utils/render';
-import { EventTypes, BarData } from '../../../types';
 import DefaultView from '../DefaultView';
+import { EventTypes, BarData } from 'types';
 
 class BarView extends DefaultView {
   minValue: number;

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
+    "baseUrl": "./src/components/plugin",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",

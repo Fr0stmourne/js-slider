@@ -2,7 +2,7 @@ import { boundMethod } from 'autobind-decorator';
 
 import Model from '../Models';
 import View from '../View';
-import { EventTypes, ModelState, ViewState } from '../types';
+import { EventTypes, ModelState, ViewState } from 'types';
 
 class Controller {
   private userCallback!: Function;

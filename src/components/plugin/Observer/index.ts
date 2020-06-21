@@ -1,4 +1,4 @@
-import { Events, EventTypes, EventCallback } from '../types';
+import { Events, EventTypes, EventCallback } from 'types';
 
 class Observer {
   constructor(public events: Events = {}) {}

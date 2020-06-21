@@ -1,4 +1,4 @@
-import { ScaleData, EventTypes } from '../../../types';
+import { ScaleData, EventTypes } from 'types';
 import ScaleView from '.';
 import calculateSteps from '../../../Models/utils/calculateSteps';
 

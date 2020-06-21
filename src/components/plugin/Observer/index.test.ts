@@ -1,5 +1,5 @@
-import { EventTypes } from '../types';
 import Observer from '.';
+import { EventTypes } from 'types';
 
 describe('Observer', () => {
   let observer: Observer;

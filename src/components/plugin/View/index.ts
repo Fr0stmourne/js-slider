@@ -7,7 +7,7 @@ import BarView from './components/BarView';
 import InputView from './components/InputView';
 import ScaleView from './components/ScaleView';
 import Observer from '../Observer';
-import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes, BarData } from '../types';
+import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes, BarData } from 'types';
 import { DEFAULT_VIEW_STATE } from '../defaults';
 
 class View extends Observer {

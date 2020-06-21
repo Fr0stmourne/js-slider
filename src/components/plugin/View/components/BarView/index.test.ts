@@ -1,4 +1,4 @@
-import { BarData, EventTypes } from '../../../types';
+import { BarData, EventTypes } from 'types';
 import BarView from '.';
 
 describe('BarView', () => {

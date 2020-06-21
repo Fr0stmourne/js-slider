@@ -1,4 +1,4 @@
-import { PinData } from '../../../types';
+import { PinData } from 'types';
 import render from '../../utils/render';
 import DefaultView from '../DefaultView';
 
