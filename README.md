@@ -50,10 +50,11 @@ $(#slider).slider({
 | minValue          | number             | 0                     | Минимальное значение слайдера                                                                   |
 | maxValue          | number             | 100                   | Максимальное значение слайдера                                                                  |
 | step              | number             | 1                     | Шаг значений                                                                                    |
-| value             | number \| number[] | 50                    | Стартовое значение слайдера, при указании массива из 2 чисел будет создан слайдер с 2 бегунками |
+| value             | number[]           | 50                    | Стартовое значение слайдера, при указании массива из 2 чисел будет создан слайдер с 2 бегунками |
 | scaleOptionsNum   | number             | 5                     | Количество интерактивных меток под слайдером                                                    |
 | isTooltipDisabled | boolean            | false                 | Определяет, включен или нет элемент с цифрой над бегунком                                       |
 | isVertical        | boolean            | false                 | Определяет направление слайдера (горизонтальное/вертикальное)                                   |
+| range             | boolean            | false                 | Показывает/скрывает второй бегунок                                                              |
 
 ## API плагина
 
@@ -71,13 +72,13 @@ $(#slider).slider({
 
   ```
 
-* updateValue(value: number | number[])
+* updateValue({ value: number | number[] })
 
     Выделенный метод updateValue позволяет обновить только значение слайдера с сохранением остальных настроек
 
   ```
   
-  $(#slider).slider('updateValue', 90)
+  $(#slider).slider('updateValue', { value: 90 })
 
   ```
 

@@ -1,7 +1,7 @@
 import View from '../View';
 import Model from '../Models';
-import Controller from '.';
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from '../defaults';
+import Controller from '.';
 
 let controller: Controller;
 let view: View;
