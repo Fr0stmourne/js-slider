@@ -72,13 +72,14 @@ $(#slider).slider({
 
   ```
 
-* updateValue({ value: number | number[] })
+* updateValue(value: number[])
 
     Выделенный метод updateValue позволяет обновить только значение слайдера с сохранением остальных настроек
 
   ```
   
-  $(#slider).slider('updateValue', { value: 90 })
+  $(#slider).slider('updateValue', [90])
+  $(#slider).slider('updateValue', [75, 85])
 
   ```
 

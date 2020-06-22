@@ -1,3 +1,4 @@
+/* eslint-disable fsd/split-conditionals */
 import View from './View';
 import Model from './Model';
 import Controller from './Controller';
@@ -9,7 +10,7 @@ declare global {
   interface JQuery {
     slider: (
       methodOrOptions?: Options | keyof API,
-      params?: Function | Options | Required<Pick<Options, 'value'>>,
+      params?: Function | Options | number[],
     ) => JQuery<HTMLElement> | number | number[] | undefined;
   }
 }
@@ -28,18 +29,20 @@ function getViewState(options: Options): Partial<ViewState> {
   const state: {
     [key: string]: any;
   } = {};
-  Object.keys(options).forEach(option => {
-    if (Object.keys(DEFAULT_VIEW_STATE).includes(option)) state[option] = options[option as keyof ViewState];
-  });
+  Object.keys(options)
+    .map(el => el as keyof ViewState)
+    .forEach(option => {
+      if (Object.keys(DEFAULT_VIEW_STATE).includes(option)) state[option] = options[option];
+    });
   return state;
 }
 
 $.fn.slider = function(methodOrOptions, params) {
   const pluginAPI = {
-    updateValue(this: JQuery, { value }: { value: number | number[] }): JQuery<HTMLElement> {
+    updateValue(this: JQuery, { value }: { value: number[] }): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
-        slider.value = typeof value === 'number' ? [value] : value;
+        slider.value = value;
       });
     },
     update(this: JQuery, options: Options): JQuery<HTMLElement> {
@@ -89,10 +92,10 @@ $.fn.slider = function(methodOrOptions, params) {
   if (typeof methodOrOptions === 'string') {
     if (methodOrOptions === 'onValueChange' && params instanceof Function) {
       return pluginAPI[methodOrOptions].call(this, params);
-    } else if (methodOrOptions === 'updateValue' && params) {
-      return pluginAPI[methodOrOptions].call(this, params as Required<Pick<Options, 'value'>>);
-    } else if (methodOrOptions === 'update' && params) {
-      return pluginAPI[methodOrOptions].call(this, params as Options);
+    } else if (methodOrOptions === 'updateValue' && params && params instanceof Array) {
+      return pluginAPI[methodOrOptions].call(this, { value: params });
+    } else if (methodOrOptions === 'update' && params && !(params instanceof Function || params instanceof Array)) {
+      return pluginAPI[methodOrOptions].call(this, params);
     }
   }
 
