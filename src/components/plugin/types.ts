@@ -32,7 +32,6 @@ type PinData = {
   isTooltipDisabled: boolean;
   isVertical: boolean;
   value: number;
-  sliderSize: number;
 };
 
 type ScaleData = {

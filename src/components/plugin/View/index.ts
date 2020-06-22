@@ -93,7 +93,7 @@ class View extends Observer {
 
     this.objects = {
       bar: new BarView(minValue, maxValue, isVertical),
-      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical, this.sliderSize),
+      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical),
       input: new InputView(value),
     };
 
@@ -102,7 +102,7 @@ class View extends Observer {
     }
 
     if (range) {
-      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical, this.sliderSize);
+      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical);
     }
 
     const { firstPin, secondPin, scale, bar, input } = this.objects;

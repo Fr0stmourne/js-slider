@@ -9,7 +9,6 @@ class PinView extends DefaultView {
     private value: number,
     private isTooltipDisabled: boolean,
     private isVertical: boolean,
-    private sliderSize: number,
   ) {
     super();
 
@@ -46,10 +45,13 @@ class PinView extends DefaultView {
   private movePin(value: number): void {
     const {
       isVertical,
-      sliderSize,
       elements: { pin },
     } = this;
-    pin.style[isVertical ? 'bottom' : 'left'] = `${(value / sliderSize) * 100}%`;
+    const slider = pin.closest('.js-slider');
+    if (slider) {
+      const sliderSize = Math.max(slider.clientWidth, slider.clientHeight);
+      pin.style[isVertical ? 'bottom' : 'left'] = `${(value / sliderSize) * 100}%`;
+    }
   }
 }
 
