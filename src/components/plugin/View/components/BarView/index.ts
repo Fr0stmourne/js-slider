@@ -6,9 +6,6 @@ import { EventTypes } from 'types';
 class BarView extends DefaultView {
   constructor(private minValue: number, private maxValue: number, private isVertical: boolean) {
     super();
-    this.minValue = minValue;
-    this.maxValue = maxValue;
-    this.isVertical = isVertical;
     this.render();
   }
 
