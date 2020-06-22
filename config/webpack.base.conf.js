@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const keysTransformer = require('ts-transformer-keys/transformer').default;
 const glob = require('glob');
 
 const PATHS = {
@@ -77,6 +78,12 @@ module.exports = {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
         loader: 'ts-loader',
+        options: {
+          // make sure not to set `transpileOnly: true` here, otherwise it will not work
+          getCustomTransformers: program => ({
+            before: [keysTransformer(program)],
+          }),
+        },
       },
       {
         test: /\.js$/,

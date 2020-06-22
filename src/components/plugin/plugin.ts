@@ -1,9 +1,10 @@
 /* eslint-disable fsd/split-conditionals */
+import { keys } from 'ts-transformer-keys';
+
 import View from './View';
 import Model from './Model';
 import Controller from './Controller';
 import { Options, ModelState, ViewState, API } from './types';
-import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';
 import './slider.scss';
 
 type ReturnType = JQuery<HTMLElement> | number | number[] | undefined;
@@ -14,26 +15,20 @@ declare global {
   }
 }
 
-function getModelState(options: Options): Partial<ModelState> {
-  const state: {
-    [key: string]: any;
-  } = {};
-  Object.keys(options).forEach(option => {
-    if (Object.keys(DEFAULT_MODEL_STATE).includes(option)) state[option] = options[option as keyof ModelState];
-  });
-  return state;
+function getModelState<T extends Options, K extends keyof ModelState>(options: T, keys: K[]): Partial<T> {
+  const result: Partial<T> = {};
+  return keys.reduce((acc, key) => {
+    acc[key] = options[key];
+    return acc;
+  }, result);
 }
 
-function getViewState(options: Options): Partial<ViewState> {
-  const state: {
-    [key: string]: any;
-  } = {};
-  Object.keys(options)
-    .map(el => el as keyof ViewState)
-    .forEach(option => {
-      if (Object.keys(DEFAULT_VIEW_STATE).includes(option)) state[option] = options[option];
-    });
-  return state;
+function getViewState<T extends Options, K extends keyof ViewState>(options: T, keys: K[]): Partial<T> {
+  const result: Partial<T> = {};
+  return keys.reduce((acc, key) => {
+    acc[key] = options[key];
+    return acc;
+  }, result);
 }
 
 $.fn.slider = function(methodOrOptions, params): ReturnType {
@@ -48,10 +43,8 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
       return this.each((_: number, el: HTMLElement) => {
         const controller: Controller = $(el).data().slider;
         const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
-        const updatedViewState = getViewState({
-          ...newOptions,
-        });
-        const updatedModelState = getModelState({ ...newOptions });
+        const updatedViewState = getViewState({ ...newOptions }, keys<ViewState>());
+        const updatedModelState = getModelState({ ...newOptions }, keys<ModelState>());
 
         controller.setModelState(updatedModelState);
         controller.setViewState(updatedViewState, controller.getModelState());

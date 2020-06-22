@@ -6,6 +6,9 @@
     "module": "commonjs",
     "target": "es6",
     "strict": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "plugins": [{
+      "transform": "ts-transformer-keys/transformer"
+    }]
   }
 }
