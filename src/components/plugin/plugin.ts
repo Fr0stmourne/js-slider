@@ -6,12 +6,11 @@ import { Options, ModelState, ViewState, API } from './types';
 import { DEFAULT_MODEL_STATE, DEFAULT_VIEW_STATE } from './defaults';
 import './slider.scss';
 
+type ReturnType = JQuery<HTMLElement> | number | number[] | undefined;
+
 declare global {
   interface JQuery {
-    slider: (
-      methodOrOptions?: Options | keyof API,
-      params?: Function | Options | number[],
-    ) => JQuery<HTMLElement> | number | number[] | undefined;
+    slider: (methodOrOptions?: Options | keyof API, params?: Function | Options | number[]) => ReturnType;
   }
 }
 
@@ -37,7 +36,7 @@ function getViewState(options: Options): Partial<ViewState> {
   return state;
 }
 
-$.fn.slider = function(methodOrOptions, params) {
+$.fn.slider = function(methodOrOptions, params): ReturnType {
   const pluginAPI = {
     updateValue(this: JQuery, { value }: { value: number[] }): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {

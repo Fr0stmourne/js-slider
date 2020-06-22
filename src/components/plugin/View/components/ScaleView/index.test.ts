@@ -18,8 +18,22 @@ describe('ScaleView', () => {
   let vScale: ScaleView;
 
   beforeEach(() => {
-    scale = new ScaleView(options);
-    vScale = new ScaleView(verticalOptions);
+    scale = new ScaleView(
+      options.scaleOptionsNum,
+      options.isVertical,
+      options.steps,
+      options.minValue,
+      options.maxValue,
+      options.sliderSize,
+    );
+    vScale = new ScaleView(
+      verticalOptions.scaleOptionsNum,
+      verticalOptions.isVertical,
+      verticalOptions.steps,
+      verticalOptions.minValue,
+      verticalOptions.maxValue,
+      verticalOptions.sliderSize,
+    );
   });
 
   test('should store HTML element as .element property', () => {

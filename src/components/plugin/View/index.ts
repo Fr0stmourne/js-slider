@@ -13,11 +13,9 @@ import { DEFAULT_VIEW_STATE } from 'defaults';
 class View extends Observer {
   private sliderSize!: number;
   private element!: HTMLElement;
-  private viewState: ViewState;
-  private modelState: ModelState;
   private objects!: Objects;
 
-  constructor(modelState: ModelState, viewState?: ViewState) {
+  constructor(private modelState: ModelState, private viewState: ViewState = DEFAULT_VIEW_STATE) {
     super();
     this.viewState = { ...DEFAULT_VIEW_STATE, ...viewState };
     this.modelState = modelState;
@@ -75,12 +73,10 @@ class View extends Observer {
 
     const dataAttributes = { ...modelState, ...viewState };
 
-    Object.keys(dataAttributes)
-      .map(el => el as keyof typeof dataAttributes)
-      .forEach(option => {
-        if (option !== 'sliderSize')
-          this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
-      });
+    (Object.keys(dataAttributes) as Array<keyof typeof dataAttributes>).forEach(option => {
+      if (option !== 'sliderSize')
+        this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
+    });
   }
 
   render(): void {
@@ -95,45 +91,18 @@ class View extends Observer {
 
     this.sliderSize = sliderSize && Math.max(sliderSize.height, sliderSize.width);
 
-    const firstPinData: PinData = {
-      pinNumber: 1,
-      isTooltipDisabled,
-      isVertical,
-      value: value[0],
-    };
-
-    const barData: BarData = {
-      minValue,
-      maxValue,
-      isVertical,
-    };
-
     this.objects = {
-      bar: new BarView(barData),
-      firstPin: new PinView(firstPinData),
+      bar: new BarView(minValue, maxValue, isVertical),
+      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical),
       input: new InputView(value),
     };
 
     if (scaleOptionsNum && this.sliderSize) {
-      const scaleData: ScaleData = {
-        scaleOptionsNum: scaleOptionsNum,
-        steps,
-        isVertical,
-        minValue,
-        maxValue,
-        sliderSize: this.sliderSize,
-      };
-      this.objects.scale = new ScaleView(scaleData);
+      this.objects.scale = new ScaleView(scaleOptionsNum, isVertical, steps, minValue, maxValue, this.sliderSize);
     }
 
     if (range) {
-      const secondPinData: PinData = {
-        pinNumber: 2,
-        isTooltipDisabled,
-        isVertical,
-        value: value[1],
-      };
-      this.objects.secondPin = new PinView(secondPinData);
+      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical);
     }
 
     const { firstPin, secondPin, scale, bar, input } = this.objects;

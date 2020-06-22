@@ -4,11 +4,9 @@ import { DEFAULT_MODEL_STATE } from 'defaults';
 import { ModelState, EventTypes } from 'types';
 
 class Model extends Observer {
-  private state: ModelState;
-
-  constructor(modelState?: ModelState) {
+  constructor(private state: ModelState = DEFAULT_MODEL_STATE) {
     super();
-    this.state = { ...DEFAULT_MODEL_STATE, ...modelState };
+    this.state = { ...DEFAULT_MODEL_STATE, ...state };
 
     const { minValue, maxValue, step } = this.getState();
     this.state.steps = calculateSteps({ minValue, maxValue, step });

@@ -1,23 +1,19 @@
-import { ScaleData, EventTypes } from 'types';
+import { EventTypes } from 'types';
 import render from 'View/utils/render';
 import calculatePxNum from 'View/utils/calculatePxNum';
 import DefaultView from '../DefaultView';
 
 class ScaleView extends DefaultView {
-  scaleOptionsNum: number;
-  isVertical: boolean;
-  steps: number[];
-  minValue: number;
-  maxValue: number;
-  sliderSize: number;
-  constructor(options: ScaleData) {
+  constructor(
+    private scaleOptionsNum: number,
+    private isVertical: boolean,
+    private steps: number[],
+    private minValue: number,
+    private maxValue: number,
+    private sliderSize: number,
+  ) {
     super();
-    this.scaleOptionsNum = options.scaleOptionsNum;
-    this.isVertical = options.isVertical;
-    this.minValue = options.minValue;
-    this.steps = options.steps;
-    this.maxValue = options.maxValue;
-    this.sliderSize = options.sliderSize;
+
     this.render();
   }
 

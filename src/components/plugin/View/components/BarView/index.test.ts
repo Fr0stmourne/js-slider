@@ -1,16 +1,11 @@
-import { BarData, EventTypes } from 'types';
+import { EventTypes } from 'types';
 import BarView from '.';
 
 describe('BarView', () => {
   let bar: BarView;
 
   beforeEach(() => {
-    const barData: BarData = {
-      isVertical: false,
-      minValue: 0,
-      maxValue: 100,
-    };
-    bar = new BarView(barData);
+    bar = new BarView(0, 100, false);
   });
 
   test('should store HTML element as .element property', () => {

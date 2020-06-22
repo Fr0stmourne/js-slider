@@ -1,14 +1,10 @@
 import calculateValue from 'View/utils/calculateValue';
 import render from 'View/utils/render';
 import DefaultView from '../DefaultView';
-import { EventTypes, BarData } from 'types';
+import { EventTypes } from 'types';
 
 class BarView extends DefaultView {
-  minValue: number;
-  maxValue: number;
-  isVertical: boolean;
-
-  constructor({ minValue, maxValue, isVertical }: BarData) {
+  constructor(private minValue: number, private maxValue: number, private isVertical: boolean) {
     super();
     this.minValue = minValue;
     this.maxValue = maxValue;

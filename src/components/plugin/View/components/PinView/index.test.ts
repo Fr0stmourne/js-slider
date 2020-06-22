@@ -19,8 +19,8 @@ const pxNum = 10;
 describe('PinView', () => {
   let pin: PinView, pin1: PinView;
   beforeEach(() => {
-    pin = new PinView(options);
-    pin1 = new PinView(options1);
+    pin = new PinView(options.pinNumber, options.value, options.isTooltipDisabled, options.isVertical);
+    pin1 = new PinView(options1.pinNumber, options1.value, options1.isTooltipDisabled, options1.isVertical);
   });
   test('should store HTML element as element property', () => {
     expect(pin.element).toBeInstanceOf(HTMLElement);
