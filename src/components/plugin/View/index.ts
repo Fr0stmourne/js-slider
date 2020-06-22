@@ -7,7 +7,7 @@ import BarView from './components/BarView';
 import InputView from './components/InputView';
 import ScaleView from './components/ScaleView';
 import Observer from '../Observer';
-import { ViewState, ModelState, PinData, ScaleData, Objects, MouseMoveData, EventTypes, BarData } from 'types';
+import { ViewState, ModelState, Objects, MouseMoveData, EventTypes } from 'types';
 import { DEFAULT_VIEW_STATE } from 'defaults';
 
 class View extends Observer {
@@ -93,7 +93,7 @@ class View extends Observer {
 
     this.objects = {
       bar: new BarView(minValue, maxValue, isVertical),
-      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical),
+      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical, this.sliderSize),
       input: new InputView(value),
     };
 
@@ -102,7 +102,7 @@ class View extends Observer {
     }
 
     if (range) {
-      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical);
+      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical, this.sliderSize);
     }
 
     const { firstPin, secondPin, scale, bar, input } = this.objects;
