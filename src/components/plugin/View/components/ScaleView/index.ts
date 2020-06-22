@@ -35,7 +35,7 @@ class ScaleView extends DefaultView {
 
     const optionNodes = calculatedOptions.map((el, index) => {
       const optionNode = render(`<div class="slider-plugin__scale-option js-option">${el}</div>`);
-      optionNode.style[isVertical ? 'bottom' : 'left'] = `${optionPositions[index]}px`;
+      optionNode.style[isVertical ? 'bottom' : 'left'] = `${(optionPositions[index] / sliderSize) * 100}%`;
       return optionNode;
     });
     this.element = render(

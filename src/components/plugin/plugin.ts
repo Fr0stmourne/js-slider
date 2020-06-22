@@ -39,11 +39,7 @@ $.fn.slider = function(methodOrOptions, params) {
     updateValue(this: JQuery, { value }: { value: number | number[] }): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
-        if (typeof value === 'number') {
-          slider.value = [value];
-        } else {
-          slider.value = value;
-        }
+        slider.value = typeof value === 'number' ? [value] : value;
       });
     },
     update(this: JQuery, options: Options): JQuery<HTMLElement> {
