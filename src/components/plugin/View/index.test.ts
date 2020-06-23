@@ -122,7 +122,7 @@ describe('render()', () => {
     defaultView.on(EventTypes.ValueChanged, callback);
     rangeView.on(EventTypes.ValueChanged, callback);
   });
-  describe('should bind callbacks to needed slider getObjects()', () => {
+  describe('should bind callbacks to needed slider objects', () => {
     test('bar', () => {
       const objects = defaultView.getObjects();
       objects.bar.element.dispatchEvent(new Event('mousedown'));

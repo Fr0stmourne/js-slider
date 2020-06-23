@@ -18,7 +18,6 @@ class View extends Observer {
   constructor(private modelState: ModelState, private viewState: ViewState = DEFAULT_VIEW_STATE) {
     super();
     this.viewState = { ...DEFAULT_VIEW_STATE, ...viewState };
-    this.modelState = modelState;
     this.render();
   }
 
