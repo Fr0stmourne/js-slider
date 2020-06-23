@@ -25,6 +25,14 @@ const testOptions: { normal: ModelState; range: ModelState } = {
 let defaultModel: Model;
 let rangeModel: Model;
 
+describe('constructor', () => {
+  test('should correctly create model when options object is not passed', () => {
+    const modelWithNoOptions = new Model();
+
+    expect(modelWithNoOptions.getState().value).toStrictEqual([50, 100]);
+  });
+});
+
 describe('setState', () => {
   beforeEach(() => {
     defaultModel = new Model(testOptions.normal);
@@ -96,6 +104,7 @@ describe('setState', () => {
       expect(rangeModel.getState().value).toStrictEqual([30, 76]);
     });
   });
+
   test('should handle the case for range model when min value > max value', () => {
     rangeModel.setState({
       value: [70, 64],
@@ -108,6 +117,13 @@ describe('setState', () => {
       value: [34, 34],
     });
     expect(rangeModel.getState().value).toStrictEqual([32, 34]);
+  });
+
+  test('should handle the case when 2 values are equal (new second value is less than the previous one', () => {
+    rangeModel.setState({
+      value: [6, 6],
+    });
+    expect(rangeModel.getState().value).toStrictEqual([4, 6]);
   });
 
   test('should handle undefined as new value', () => {

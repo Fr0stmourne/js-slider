@@ -74,6 +74,12 @@ describe('View constructor', () => {
     expect(verticalView.getElement()).toBeInstanceOf(HTMLElement);
     expect(rangeView.getElement()).toBeInstanceOf(HTMLElement);
   });
+
+  test('should correctly handle case when view options object is not passed', () => {
+    const noOptionsView = new View(testOptions.normal.modelState);
+
+    expect(noOptionsView.state.modelState.value).toStrictEqual([45]);
+  });
 });
 
 describe('Update value()', () => {

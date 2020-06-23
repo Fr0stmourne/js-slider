@@ -36,15 +36,16 @@ class Model extends Observer {
     const firstValue = this.findClosestStep(newValue[0]);
     let secondValue: number;
     if (newValue.length === 2) {
-      secondValue = this.findClosestStep(newValue[1] || prevValue[1]);
+      secondValue = this.findClosestStep(newValue[1]);
     } else {
-      secondValue = state.maxValue;
+      secondValue = prevValue[1] || state.maxValue;
     }
     validatedValue = [firstValue, secondValue];
     const calculateValidatedValue = (): number[] => {
       const {
-        state: { steps },
+        state: { steps, minValue },
       } = this;
+      if (newValue.every(value => value === minValue)) return [minValue, steps[steps.indexOf(newValue[1]) + 1]];
       if (newValue[0] === newValue[1]) return [steps[steps.indexOf(newValue[1]) - 1], newValue[1]];
       return prevValue[0] !== newValue[0]
         ? [steps[steps.indexOf(secondValue) - 1], secondValue]
