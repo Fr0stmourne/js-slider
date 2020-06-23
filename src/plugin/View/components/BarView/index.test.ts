@@ -1,4 +1,5 @@
 import { EventTypes } from 'types';
+
 import BarView from '.';
 
 describe('BarView', () => {
