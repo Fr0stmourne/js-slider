@@ -32,7 +32,7 @@ class Model extends Observer {
     if (newValue === undefined) return this.state.value;
     let validatedValue: number[];
 
-    const { value: prevValue } = state;
+    const { value: prevValue, range } = state;
     const firstValue = this.findClosestStep(newValue[0]);
     let secondValue: number;
     if (newValue.length === 2) {
@@ -51,7 +51,7 @@ class Model extends Observer {
         : [firstValue, steps[steps.indexOf(firstValue) + 1]];
     };
 
-    if (state.range) {
+    if (state.range || range) {
       if (firstValue >= secondValue) {
         validatedValue = calculateValidatedValue();
       }
@@ -87,6 +87,12 @@ class Model extends Observer {
     return Math.abs(step);
   }
 
+  private validateRange(range?: boolean): boolean {
+    const { range: prevRange } = this.state;
+    if (range === undefined) return prevRange;
+    return range === true;
+  }
+
   private validateState(newState: Partial<ModelState>): ModelState {
     const stateToValidate = { ...newState };
 
@@ -97,12 +103,13 @@ class Model extends Observer {
       maxValue: validatedMinMaxValues.maxValue,
       step: validatedStep,
     });
+
     const validatedValue = this.validateValue(
       {
         ...this.state,
         step: validatedStep,
         ...validatedMinMaxValues,
-        range: stateToValidate.range || false,
+        range: this.validateRange(stateToValidate.range),
       },
       stateToValidate.value,
     );
@@ -112,7 +119,7 @@ class Model extends Observer {
       step: validatedStep,
       ...validatedMinMaxValues,
       value: validatedValue,
-      range: stateToValidate.range || false,
+      range: this.validateRange(stateToValidate.range),
     };
 
     return validatedState;

@@ -25,7 +25,7 @@ const testOptions: { normal: ModelState; range: ModelState } = {
 let defaultModel: Model;
 let rangeModel: Model;
 
-describe('state setter', () => {
+describe('setState', () => {
   beforeEach(() => {
     defaultModel = new Model(testOptions.normal);
     rangeModel = new Model(testOptions.range);
@@ -102,9 +102,23 @@ describe('state setter', () => {
     });
     expect(rangeModel.getState().value).toStrictEqual([62, 64]);
   });
+
+  test('should handle the case when 2 values are equal', () => {
+    rangeModel.setState({
+      value: [34, 34],
+    });
+    expect(rangeModel.getState().value).toStrictEqual([32, 34]);
+  });
+
+  test('should handle undefined as new value', () => {
+    defaultModel.setState({
+      value: undefined,
+    });
+    expect(defaultModel.getState().value).toStrictEqual([45]);
+  });
 });
 
-describe('state getter', () => {
+describe('getState()', () => {
   beforeEach(() => {
     defaultModel = new Model(testOptions.normal);
     rangeModel = new Model(testOptions.range);

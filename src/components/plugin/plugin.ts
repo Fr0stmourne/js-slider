@@ -1,5 +1,4 @@
 /* eslint-disable fsd/split-conditionals */
-import { keys } from 'ts-transformer-keys';
 
 import View from './View';
 import Model from './Model';
@@ -22,7 +21,7 @@ function getProps(options: Options, target: ViewState | ModelState): Partial<Mod
   const state: Partial<ViewState | ModelState> = {};
   const keys = Object.keys(target) as Array<keyof typeof target>;
   return keys.reduce((acc, key) => {
-    if (options[key]) {
+    if (options[key] !== undefined) {
       acc[key] = options[key];
     }
     return acc;
@@ -42,7 +41,6 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
         const controller: Controller = $(el).data().slider;
         const newOptions: Options = { ...options, container: el };
         const updatedViewState = getProps({ ...newOptions }, DEFAULT_VIEW_STATE);
-
         const updatedModelState = getProps({ ...newOptions }, DEFAULT_MODEL_STATE);
 
         controller.setModelState(updatedModelState);

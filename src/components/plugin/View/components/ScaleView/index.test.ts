@@ -11,7 +11,7 @@ const options: ScaleData = {
   sliderSize: 300,
 };
 
-const verticalOptions: ScaleData = { ...options, isVertical: true };
+const verticalOptions: ScaleData = { ...options, scaleOptionsNum: 9999, isVertical: true };
 
 describe('ScaleView', () => {
   let scale: ScaleView;
@@ -42,6 +42,7 @@ describe('ScaleView', () => {
 
   test('should store correct number of scale milestones', () => {
     expect(scale.element.querySelectorAll('.js-option').length).toBe(12);
+    expect(vScale.element.querySelectorAll('.js-option').length).toBe(27);
   });
 
   test('should not react on click between scale milestones', () => {
@@ -58,6 +59,14 @@ describe('ScaleView', () => {
 
     (scale.element.querySelector('.js-option') as HTMLElement).click();
     expect(callback).toHaveBeenCalled();
+  });
+
+  test('should do nothing on a random scale place click', () => {
+    const callback = jest.fn();
+    scale.on(EventTypes.NewScaleValue, callback);
+
+    (scale.element as HTMLElement).click();
+    expect(callback).not.toHaveBeenCalled();
   });
 
   test('should correct place nodes in vertical case', () => {
