@@ -33,13 +33,13 @@ class Model extends Observer {
     if (newValue === undefined) return this.state.value;
     let validatedValue: number[];
 
-    const { value: prevValue, range } = state;
+    const { value: prevValue, range, maxValue } = state;
     const firstValue = this.findClosestStep(newValue[0]);
     let secondValue: number;
     if (newValue.length === 2) {
       secondValue = this.findClosestStep(newValue[1]);
     } else {
-      secondValue = prevValue[1] || state.maxValue;
+      secondValue = prevValue[1] ? Math.max(maxValue, prevValue[1]) : maxValue;
     }
     validatedValue = [firstValue, secondValue];
     const calculateValidatedValue = (): number[] => {
