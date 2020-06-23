@@ -1,4 +1,5 @@
 import render from 'View/utils/render';
+
 import DefaultView from '../DefaultView';
 
 class PinView extends DefaultView {

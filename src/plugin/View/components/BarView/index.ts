@@ -1,7 +1,8 @@
 import calculateValue from 'View/utils/calculateValue';
 import render from 'View/utils/render';
-import DefaultView from '../DefaultView';
 import { EventTypes } from 'types';
+
+import DefaultView from '../DefaultView';
 
 class BarView extends DefaultView {
   constructor(private minValue: number, private maxValue: number, private isVertical: boolean) {
