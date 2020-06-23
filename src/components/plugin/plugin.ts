@@ -6,6 +6,7 @@ import Model from './Model';
 import Controller from './Controller';
 import { Options, ModelState, ViewState, API } from './types';
 import './slider.scss';
+import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
 
 type ReturnType = JQuery<HTMLElement> | number | number[] | undefined;
 
@@ -15,24 +16,17 @@ declare global {
   }
 }
 
-function getModelState<T extends Options, K extends keyof ModelState>(options: T, keys: K[]): Partial<T> {
-  const result: Partial<T> = {};
+function getProps(options: Options, target: ViewState): Partial<ViewState>;
+function getProps(options: Options, target: ModelState): Partial<ModelState>;
+function getProps(options: Options, target: ViewState | ModelState): Partial<ModelState> | Partial<ViewState> {
+  const state: Partial<ViewState | ModelState> = {};
+  const keys = Object.keys(target) as Array<keyof typeof target>;
   return keys.reduce((acc, key) => {
     if (options[key]) {
       acc[key] = options[key];
     }
     return acc;
-  }, result);
-}
-
-function getViewState<T extends Options, K extends keyof ViewState>(options: T, keys: K[]): Partial<T> {
-  const result: Partial<T> = {};
-  return keys.reduce((acc, key) => {
-    if (options[key]) {
-      acc[key] = options[key];
-    }
-    return acc;
-  }, result);
+  }, state);
 }
 
 $.fn.slider = function(methodOrOptions, params): ReturnType {
@@ -47,9 +41,9 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
       return this.each((_: number, el: HTMLElement) => {
         const controller: Controller = $(el).data().slider;
         const newOptions: Options = { ...options, container: el };
-        const updatedViewState = getViewState({ ...newOptions }, keys<ViewState>());
+        const updatedViewState = getProps({ ...newOptions }, DEFAULT_VIEW_STATE);
 
-        const updatedModelState = getModelState({ ...newOptions }, keys<ModelState>());
+        const updatedModelState = getProps({ ...newOptions }, DEFAULT_MODEL_STATE);
 
         controller.setModelState(updatedModelState);
         controller.setViewState(updatedViewState, controller.getModelState());
