@@ -1,6 +1,6 @@
 import Observer from 'Observer';
 
-class DefaultView extends Observer {
+abstract class DefaultView extends Observer {
   public element!: HTMLElement;
 
   render(): void {
