@@ -1,14 +1,11 @@
 {
   "compilerOptions": {
     "outDir": "./dist/",
-    "baseUrl": "./src/components/plugin",
+    "baseUrl": "./src/plugin",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es6",
     "strict": true,
     "experimentalDecorators": true,
-    "plugins": [{
-      "transform": "ts-transformer-keys/transformer"
-    }]
   }
 }

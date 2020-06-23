@@ -1,5 +1,6 @@
-import Observer from '.';
 import { EventTypes } from 'types';
+
+import Observer from '.';
 
 describe('Observer', () => {
   let observer: Observer;

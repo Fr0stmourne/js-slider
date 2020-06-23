@@ -1,4 +1,5 @@
-import { ModelState, ViewState, Options } from './types';
+import { ModelState, ViewState, Options } from 'types';
+
 import calculateSteps from './Model/utils/calculateSteps';
 
 const DEFAULT_MODEL_STATE: ModelState = {

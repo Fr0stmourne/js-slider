@@ -1,6 +1,7 @@
+import { ModelState } from 'types';
+
 import calculateSteps from './utils/calculateSteps';
 import Model from '.';
-import { ModelState } from 'types';
 
 const testOptions: { normal: ModelState; range: ModelState } = {
   normal: {

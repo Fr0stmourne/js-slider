@@ -39,7 +39,7 @@ module.exports = {
   },
   entry: {
     utils: [`${__dirname}/../src/utils/scaffoldings.scss`, `${__dirname}/../src/utils/fonts.scss`],
-    plugin: `${__dirname}/../src/components/plugin/index.ts`,
+    plugin: `${__dirname}/../src/plugin/index.ts`,
     ...getEntrypoints(PAGE_SCRIPTS),
   },
   output: {
@@ -78,12 +78,6 @@ module.exports = {
         test: /\.ts(x?)$/,
         exclude: /node_modules/,
         loader: 'ts-loader',
-        options: {
-          // make sure not to set `transpileOnly: true` here, otherwise it will not work
-          getCustomTransformers: program => ({
-            before: [keysTransformer(program)],
-          }),
-        },
       },
       {
         test: /\.js$/,

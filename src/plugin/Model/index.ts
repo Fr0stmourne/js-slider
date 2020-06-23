@@ -1,7 +1,8 @@
-import calculateSteps from './utils/calculateSteps';
-import Observer from '../Observer';
-import { DEFAULT_MODEL_STATE } from 'defaults';
 import { ModelState, EventTypes } from 'types';
+import { DEFAULT_MODEL_STATE } from 'defaults';
+
+import Observer from '../Observer';
+import calculateSteps from './utils/calculateSteps';
 
 class Model extends Observer {
   constructor(private state: ModelState = DEFAULT_MODEL_STATE) {
