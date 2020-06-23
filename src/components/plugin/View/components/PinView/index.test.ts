@@ -6,12 +6,14 @@ const options: PinData = {
   isTooltipDisabled: false,
   isVertical: true,
   value: 50,
+  container: document.createElement('div'),
 };
 const options1: PinData = {
   pinNumber: 2,
   isTooltipDisabled: true,
   isVertical: false,
   value: 70,
+  container: document.createElement('div'),
 };
 
 const pxNum = 10;
@@ -19,8 +21,20 @@ const pxNum = 10;
 describe('PinView', () => {
   let pin: PinView, pin1: PinView;
   beforeEach(() => {
-    pin = new PinView(options.pinNumber, options.value, options.isTooltipDisabled, options.isVertical);
-    pin1 = new PinView(options1.pinNumber, options1.value, options1.isTooltipDisabled, options1.isVertical);
+    pin = new PinView(
+      options.pinNumber,
+      options.value,
+      options.isTooltipDisabled,
+      options.isVertical,
+      options.container,
+    );
+    pin1 = new PinView(
+      options1.pinNumber,
+      options1.value,
+      options1.isTooltipDisabled,
+      options1.isVertical,
+      options1.container,
+    );
   });
   test('should store HTML element as element property', () => {
     expect(pin.element).toBeInstanceOf(HTMLElement);

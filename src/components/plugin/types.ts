@@ -9,7 +9,7 @@ type ViewState = {
   scaleOptionsNum: number;
   isTooltipDisabled: boolean;
   isVertical: boolean;
-  sliderSize: DOMRect;
+  container: HTMLElement;
 };
 
 type EventCallback = (data: any) => void;
@@ -32,6 +32,7 @@ type PinData = {
   isTooltipDisabled: boolean;
   isVertical: boolean;
   value: number;
+  container: HTMLElement;
 };
 
 type ScaleData = {

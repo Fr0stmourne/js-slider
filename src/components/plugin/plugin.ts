@@ -18,7 +18,9 @@ declare global {
 function getModelState<T extends Options, K extends keyof ModelState>(options: T, keys: K[]): Partial<T> {
   const result: Partial<T> = {};
   return keys.reduce((acc, key) => {
-    acc[key] = options[key];
+    if (options[key]) {
+      acc[key] = options[key];
+    }
     return acc;
   }, result);
 }
@@ -26,7 +28,9 @@ function getModelState<T extends Options, K extends keyof ModelState>(options: T
 function getViewState<T extends Options, K extends keyof ViewState>(options: T, keys: K[]): Partial<T> {
   const result: Partial<T> = {};
   return keys.reduce((acc, key) => {
-    acc[key] = options[key];
+    if (options[key]) {
+      acc[key] = options[key];
+    }
     return acc;
   }, result);
 }
@@ -42,8 +46,9 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
     update(this: JQuery, options: Options): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const controller: Controller = $(el).data().slider;
-        const newOptions = { ...options, sliderSize: (el.firstChild as HTMLElement).getBoundingClientRect() };
+        const newOptions: Options = { ...options, container: el };
         const updatedViewState = getViewState({ ...newOptions }, keys<ViewState>());
+
         const updatedModelState = getModelState({ ...newOptions }, keys<ModelState>());
 
         controller.setModelState(updatedModelState);

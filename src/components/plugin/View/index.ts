@@ -74,13 +74,13 @@ class View extends Observer {
     const dataAttributes = { ...modelState, ...viewState };
 
     (Object.keys(dataAttributes) as Array<keyof typeof dataAttributes>).forEach(option => {
-      if (option !== 'sliderSize')
+      if (option !== 'container')
         this.element.setAttribute(`data-${camelToHyphen(option)}`, String(dataAttributes[option]));
     });
   }
 
   render(): void {
-    const { isVertical, scaleOptionsNum, isTooltipDisabled, sliderSize } = this.viewState;
+    const { isVertical, scaleOptionsNum, isTooltipDisabled, container } = this.viewState;
     const { value, minValue, maxValue, range, steps } = this.modelState;
     this.element = render(
       `
@@ -89,11 +89,11 @@ class View extends Observer {
     `,
     );
 
-    this.sliderSize = sliderSize && Math.max(sliderSize.height, sliderSize.width);
+    this.sliderSize = container && Math.max(container.clientHeight, container.clientWidth);
 
     this.objects = {
       bar: new BarView(minValue, maxValue, isVertical),
-      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical),
+      firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical, container),
       input: new InputView(value),
     };
 
@@ -102,7 +102,7 @@ class View extends Observer {
     }
 
     if (range) {
-      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical);
+      this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical, container);
     }
 
     const { firstPin, secondPin, scale, bar, input } = this.objects;

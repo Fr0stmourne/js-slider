@@ -12,16 +12,7 @@ const testOptions: {
       isTooltipDisabled: false,
       isVertical: false,
       scaleOptionsNum: 5,
-      sliderSize: {
-        bottom: 93,
-        height: 5,
-        left: 361,
-        right: 661,
-        top: 88,
-        width: 300,
-        x: 361,
-        y: 88,
-      } as DOMRect,
+      container: document.createElement('div'),
     },
     modelState: {
       minValue: -30,
@@ -38,16 +29,7 @@ const testOptions: {
       isTooltipDisabled: false,
       isVertical: true,
       scaleOptionsNum: 5,
-      sliderSize: {
-        bottom: 93,
-        height: 300,
-        left: 361,
-        right: 661,
-        top: 88,
-        width: 5,
-        x: 361,
-        y: 88,
-      } as DOMRect,
+      container: document.createElement('div'),
     },
     modelState: {
       minValue: -30,
@@ -64,16 +46,7 @@ const testOptions: {
       isTooltipDisabled: true,
       isVertical: false,
       scaleOptionsNum: 10,
-      sliderSize: {
-        bottom: 93,
-        height: 5,
-        left: 361,
-        right: 661,
-        top: 88,
-        width: 300,
-        x: 361,
-        y: 88,
-      } as DOMRect,
+      container: document.createElement('div'),
     },
     modelState: {
       minValue: 0,
@@ -164,8 +137,11 @@ describe('render()', () => {
 
     test('scale', () => {
       const objects = defaultView.getObjects();
-      (objects.scale?.element.firstElementChild as HTMLElement).click();
-      expect(callback).toBeCalled();
+      const scaleOption = objects.scale?.element.firstElementChild as HTMLElement;
+      if (scaleOption) {
+        scaleOption.click();
+        expect(callback).toBeCalled();
+      }
     });
 
     test('pin', () => {

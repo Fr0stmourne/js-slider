@@ -9,6 +9,7 @@ class PinView extends DefaultView {
     private value: number,
     private isTooltipDisabled: boolean,
     private isVertical: boolean,
+    private container: HTMLElement,
   ) {
     super();
 
@@ -46,12 +47,11 @@ class PinView extends DefaultView {
     const {
       isVertical,
       elements: { pin },
+      container,
     } = this;
-    const slider = pin.closest('.js-slider');
-    if (slider) {
-      const sliderSize = Math.max(slider.clientWidth, slider.clientHeight);
-      pin.style[isVertical ? 'bottom' : 'left'] = `${(value / sliderSize) * 100}%`;
-    }
+
+    const sliderSize = Math.max(container.clientWidth, container.clientHeight);
+    pin.style[isVertical ? 'bottom' : 'left'] = `${(value / sliderSize) * 100}%`;
   }
 }
 
