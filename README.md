@@ -123,4 +123,4 @@ $(#slider).slider({
 
 ### UML-диаграмма классов
 
-![UML-диаграмма](https://imgur.com/Oeft01A.png)
+![UML-диаграмма](https://i.imgur.com/a6ywn1i.jpg)
