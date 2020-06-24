@@ -33,7 +33,7 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
     updateValue(this: JQuery, { value }: { value: number[] }): JQuery<HTMLElement> {
       return this.each((_: number, el: HTMLElement) => {
         const slider: Controller = $(el).data().slider;
-        slider.value = value;
+        slider.setValue(value);
       });
     },
     update(this: JQuery, options: Options): JQuery<HTMLElement> {
@@ -53,7 +53,7 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
           .first()
           .replaceWith(controller.element);
 
-        controller.value = controller.getModelState().value;
+        controller.setValue(controller.getModelState().value);
       });
     },
     onValueChange(this: JQuery, callback: Function): JQuery<HTMLElement> {

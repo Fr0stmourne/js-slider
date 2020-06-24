@@ -79,7 +79,7 @@ describe('View constructor', () => {
   test('should correctly handle case when view options object is not passed', () => {
     const noOptionsView = new View(testOptions.normal.modelState);
 
-    expect(noOptionsView.state.modelState.value).toStrictEqual([45]);
+    expect(noOptionsView.getState().modelState.value).toStrictEqual([45]);
   });
 });
 
@@ -87,16 +87,16 @@ describe('Update value()', () => {
   test('should correctly update pin value', () => {
     defaultView.updateValue([100]);
     expect(defaultView.getObjects().firstPin.getValue()).toBe(100);
-    expect(defaultView.state.modelState.value).toStrictEqual([100]);
+    expect(defaultView.getState().modelState.value).toStrictEqual([100]);
 
     verticalView.updateValue([-30]);
     expect(verticalView.getObjects().firstPin.getValue()).toBe(-30);
-    expect(verticalView.state.modelState.value).toStrictEqual([-30]);
+    expect(verticalView.getState().modelState.value).toStrictEqual([-30]);
 
     rangeView.updateValue([30, 50]);
     expect(rangeView.getObjects().firstPin.getValue()).toBe(30);
     expect(rangeView.getObjects().secondPin?.getValue()).toBe(50);
-    expect(rangeView.state.modelState.value).toStrictEqual([30, 50]);
+    expect(rangeView.getState().modelState.value).toStrictEqual([30, 50]);
   });
 
   test('should throw an error if the passed value is not correct', () => {

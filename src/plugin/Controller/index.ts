@@ -27,11 +27,7 @@ class Controller {
     return this.userCallback;
   }
 
-  get value(): number[] {
-    return this.model.getState().value;
-  }
-
-  set value(value: number[]) {
+  setValue(value: number[]): void {
     this.model.setState({
       ...this.model.getState(),
       value,
@@ -39,7 +35,7 @@ class Controller {
   }
 
   getViewState(): ViewState {
-    return { ...this.view.state.viewState };
+    return { ...this.view.getState().viewState };
   }
 
   setViewState(viewState: Partial<ViewState>, modelState: ModelState): void {

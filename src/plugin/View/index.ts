@@ -30,7 +30,7 @@ class View extends Observer {
     return this.objects;
   }
 
-  get state(): { viewState: ViewState; modelState: ModelState } {
+  getState(): { viewState: ViewState; modelState: ModelState } {
     return {
       viewState: { ...this.viewState },
       modelState: { ...this.modelState },
@@ -68,7 +68,7 @@ class View extends Observer {
       firstPin.updateValue(pxNum, value[0]);
     }
 
-    input.value = value;
+    input.setValue(value);
     this.modelState.value = value;
 
     const dataAttributes = { ...modelState, ...viewState };
