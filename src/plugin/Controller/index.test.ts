@@ -1,8 +1,8 @@
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
 
-import View from '../View';
-import Model from '../Model';
 import Controller from '.';
+import Model from '../Model';
+import View from '../View';
 
 let controller: Controller;
 let view: View;

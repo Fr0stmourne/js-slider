@@ -8,6 +8,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: [
     'fsd',
+    'import',
     '@typescript-eslint',
     "prettier",
     "jest",
@@ -22,4 +23,13 @@ module.exports = {
     "plugin:jest/recommended",
     "prettier/@typescript-eslint",
   ],
+  rules: {
+    "import/order": ["warn",
+      {
+        "groups": [["builtin", "external"], "internal", ["index","parent", "sibling" ]],
+        "newlines-between": "always",
+        "alphabetize": {"order": "asc", "caseInsensitive": true}
+      },
+    ],
+  }
 };

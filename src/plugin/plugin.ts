@@ -1,10 +1,10 @@
 /* eslint-disable fsd/split-conditionals */
-import { Options, ModelState, ViewState, API } from 'types';
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
+import { Options, ModelState, ViewState, API } from 'types';
 
-import View from './View';
-import Model from './Model';
 import Controller from './Controller';
+import Model from './Model';
+import View from './View';
 import './slider.scss';
 
 type ReturnType = JQuery<HTMLElement> | number | number[] | undefined;

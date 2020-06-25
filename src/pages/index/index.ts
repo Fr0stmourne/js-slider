@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Options } from 'types';
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
+import { Options } from 'types';
 
 const testOptions: {
   default: Options;
@@ -21,7 +21,7 @@ const testOptions: {
     maxValue: 100,
     step: 8,
     value: [-56, 56],
-    range: false,
+    range: true,
     isVertical: true,
     scaleOptionsNum: 5,
   },

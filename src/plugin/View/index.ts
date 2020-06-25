@@ -1,15 +1,15 @@
-import { ViewState, ModelState, Objects, MouseMoveData, EventTypes } from 'types';
 import { DEFAULT_VIEW_STATE } from 'defaults';
+import { ViewState, ModelState, Objects, MouseMoveData, EventTypes } from 'types';
 
 import Observer from '../Observer';
+import BarView from './components/BarView';
+import InputView from './components/InputView';
+import PinView from './components/PinView';
+import ScaleView from './components/ScaleView';
 import calculatePxNum from './utils/calculatePxNum';
 import calculateValue from './utils/calculateValue';
 import camelToHyphen from './utils/camelToHyphen';
 import render from './utils/render';
-import PinView from './components/PinView';
-import BarView from './components/BarView';
-import InputView from './components/InputView';
-import ScaleView from './components/ScaleView';
 
 class View extends Observer {
   private sliderSize!: number;

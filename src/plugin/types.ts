@@ -1,6 +1,6 @@
 import BarView from './View/components/BarView';
-import PinView from './View/components/PinView';
 import InputView from './View/components/InputView';
+import PinView from './View/components/PinView';
 import ScaleView from './View/components/ScaleView';
 
 type Options = Partial<ViewState> & Partial<ModelState>;

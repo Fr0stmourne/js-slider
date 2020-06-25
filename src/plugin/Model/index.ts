@@ -1,5 +1,5 @@
-import { ModelState, EventTypes } from 'types';
 import { DEFAULT_MODEL_STATE } from 'defaults';
+import { ModelState, EventTypes } from 'types';
 
 import Observer from '../Observer';
 import calculateSteps from './utils/calculateSteps';

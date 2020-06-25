@@ -1,6 +1,6 @@
+import { EventTypes } from 'types';
 import calculateValue from 'View/utils/calculateValue';
 import render from 'View/utils/render';
-import { EventTypes } from 'types';
 
 import DefaultView from '../DefaultView';
 
