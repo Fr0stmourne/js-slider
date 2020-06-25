@@ -26,7 +26,7 @@ module.exports = {
   rules: {
     "import/order": ["warn",
       {
-        "groups": [["builtin", "external"], "internal", ["index","parent", "sibling" ]],
+        "groups": [["builtin", "external"], "internal", ["parent", "sibling", "index"]],
         "newlines-between": "always",
         "alphabetize": {"order": "asc", "caseInsensitive": true}
       },
