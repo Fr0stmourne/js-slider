@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 module.exports = {
   root: true,
   env: {
@@ -24,13 +26,21 @@ module.exports = {
     'plugin:jest/recommended',
     'prettier/@typescript-eslint',
   ],
+  settings: {
+    'import/resolver': {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "directory": "./tsconfig.json"
+      },
+    },
+  },
   rules: {
     'import/order': ['warn',
       {
-        'groups': [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+        'groups': [['builtin', 'external'], ['internal'], ['parent', 'sibling', 'index']],
         'newlines-between': 'always',
         'alphabetize': {'order': 'asc', 'caseInsensitive': true}
       },
-    ],
+    ]
   }
 };

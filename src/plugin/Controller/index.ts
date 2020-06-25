@@ -1,4 +1,5 @@
 import { boundMethod } from 'autobind-decorator';
+
 import { EventTypes, ModelState, ViewState } from 'types';
 
 import Model from '../Model';
