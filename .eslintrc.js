@@ -10,25 +10,26 @@ module.exports = {
     'fsd',
     'import',
     '@typescript-eslint',
-    "prettier",
-    "jest",
-    "babel",
+    'prettier',
+    'jest',
+    'babel',
   ],
   extends: [
-    "plugin:fsd/all",
+    'plugin:fsd/all',
     'eslint:recommended',
+    'plugin:import/typescript',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    "plugin:prettier/recommended",
-    "plugin:jest/recommended",
-    "prettier/@typescript-eslint",
+    'plugin:prettier/recommended',
+    'plugin:jest/recommended',
+    'prettier/@typescript-eslint',
   ],
   rules: {
-    "import/order": ["warn",
+    'import/order': ['warn',
       {
-        "groups": [["builtin", "external"], "internal", ["parent", "sibling", "index"]],
-        "newlines-between": "always",
-        "alphabetize": {"order": "asc", "caseInsensitive": true}
+        'groups': [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
+        'newlines-between': 'always',
+        'alphabetize': {'order': 'asc', 'caseInsensitive': true}
       },
     ],
   }
