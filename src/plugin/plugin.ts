@@ -51,7 +51,7 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
         $(el)
           .children()
           .first()
-          .replaceWith(controller.element);
+          .replaceWith(controller.getElement());
 
         controller.setValue(controller.getModelState().value);
       });
@@ -69,7 +69,11 @@ $.fn.slider = function(methodOrOptions, params): ReturnType {
         const controller = new Controller(model, view);
 
         $(el).data('slider', controller);
-        el.append($(el).data('slider').element);
+        el.append(
+          $(el)
+            .data('slider')
+            .getElement(),
+        );
 
         $(el).slider('update', {
           ...methodOrOptions,

@@ -50,7 +50,7 @@ class Controller {
     this.model.setState(state);
   }
 
-  get element(): HTMLElement {
+  getElement(): HTMLElement {
     return this.view.getElement();
   }
 
