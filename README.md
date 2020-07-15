@@ -1,5 +1,7 @@
 # FSD plugin
 
+[Демо](https://wizardly-clarke-fcc5e9.netlify.app/)
+
 ## Команды проекта
 
 Установка зависимостей
