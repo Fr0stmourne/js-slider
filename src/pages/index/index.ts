@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { boundMethod } from 'autobind-decorator';
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
 import { Options } from 'types';
 
@@ -49,34 +50,48 @@ $('.js-example-vr').slider(testOptions.vr);
 $('.js-example-r').slider(testOptions.r);
 $('.js-example-v').slider(testOptions.v);
 
-function createPanel(el: HTMLElement, initialOptions: Options): void {
-  const element = el;
+type Inputs = {
+  isTooltipDisabled: HTMLInputElement;
+  step: HTMLInputElement;
+  minValue: HTMLInputElement;
+  maxValue: HTMLInputElement;
+  scaleOptionsNum: HTMLInputElement;
+  firstValue: HTMLInputElement;
+  secondValue: HTMLInputElement;
+  isVertical: HTMLInputElement;
+  range: HTMLInputElement;
+};
 
-  type Inputs = {
-    isTooltipDisabled: HTMLInputElement;
-    step: HTMLInputElement;
-    minValue: HTMLInputElement;
-    maxValue: HTMLInputElement;
-    scaleOptionsNum: HTMLInputElement;
-    firstValue: HTMLInputElement;
-    secondValue: HTMLInputElement;
-    isVertical: HTMLInputElement;
-    range: HTMLInputElement;
-  };
+class ControlPanel {
+  inputs!: Inputs;
+  slider!: HTMLElement;
 
-  const inputs: Inputs = {
-    isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
-    step: element.querySelector('.js-step') as HTMLInputElement,
-    minValue: element.querySelector('.js-min-value') as HTMLInputElement,
-    maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
-    scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
-    firstValue: element.querySelector('.js-first-value') as HTMLInputElement,
-    secondValue: element.querySelector('.js-second-value') as HTMLInputElement,
-    isVertical: element.querySelector('.js-direction') as HTMLInputElement,
-    range: element.querySelector('.js-range') as HTMLInputElement,
-  };
+  constructor(private element: HTMLElement, private initialOptions: Options) {
+    this.findElements();
+    this.setInitialValues();
+    this.bindListeners();
+  }
 
-  function setInitialInputValues(initialOptions: Options): void {
+  private findElements(): void {
+    const { element } = this;
+    this.inputs = {
+      isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
+      step: element.querySelector('.js-step') as HTMLInputElement,
+      minValue: element.querySelector('.js-min-value') as HTMLInputElement,
+      maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
+      scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
+      firstValue: element.querySelector('.js-first-value') as HTMLInputElement,
+      secondValue: element.querySelector('.js-second-value') as HTMLInputElement,
+      isVertical: element.querySelector('.js-direction') as HTMLInputElement,
+      range: element.querySelector('.js-range') as HTMLInputElement,
+    };
+
+    this.slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
+    console.log(this.slider);
+  }
+
+  private setInitialValues(): void {
+    const { inputs, initialOptions } = this;
     inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled || DEFAULT_VIEW_STATE.isTooltipDisabled;
     inputs.isVertical.checked = initialOptions.isVertical || DEFAULT_VIEW_STATE.isVertical;
     inputs.step.value = String(initialOptions.step);
@@ -97,35 +112,9 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     inputs.firstValue.setAttribute('data-value', String(initialOptions.value));
   }
 
-  const slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
-  setInitialInputValues(initialOptions);
-
-  function handlePanelChange(): void {
-    const newOptions = getInputsState();
-    $(slider).slider('update', newOptions);
-    bindListeners(inputs);
-  }
-
-  function bindListeners(inputs: Inputs): void {
-    Object.values(inputs).forEach(input => {
-      (input as HTMLInputElement).addEventListener('change', handlePanelChange);
-    });
-    function updateInputValue(value: number[]): void {
-      const { range } = $(slider)
-        .children()
-        .first()
-        .data();
-
-      inputs.firstValue.value = String(value[0]);
-      inputs.secondValue.value = String(value[1]);
-
-      inputs.secondValue.disabled = !range;
-    }
-
-    $(slider).slider('onValueChange', updateInputValue);
-  }
-
-  function getInputsState(): Options {
+  @boundMethod
+  private getInputsState(): Options {
+    const { inputs } = this;
     return {
       isTooltipDisabled: inputs.isTooltipDisabled.checked,
       step: Number(inputs.step.value),
@@ -138,10 +127,42 @@ function createPanel(el: HTMLElement, initialOptions: Options): void {
     };
   }
 
-  bindListeners(inputs);
+  @boundMethod
+  private handlePanelChange(): void {
+    const { slider, bindListeners, getInputsState } = this;
+
+    const newOptions = getInputsState();
+    $(slider).slider('update', newOptions);
+    bindListeners();
+  }
+
+  @boundMethod
+  private bindListeners(): void {
+    const { inputs, slider, handlePanelChange, updateInputValue } = this;
+    Object.values(inputs).forEach(input => {
+      (input as HTMLInputElement).addEventListener('change', handlePanelChange);
+    });
+
+    $(slider).slider('onValueChange', updateInputValue);
+  }
+
+  @boundMethod
+  private updateInputValue(value: number[]): void {
+    const { slider, inputs } = this;
+
+    const { range } = $(slider)
+      .children()
+      .first()
+      .data();
+
+    inputs.firstValue.value = String(value[0]);
+    inputs.secondValue.value = String(value[1]);
+
+    inputs.secondValue.disabled = !range;
+  }
 }
 
 Object.values(testOptions).forEach((options: Options, index) => {
   const panels = document.querySelectorAll('.js-control-panel');
-  createPanel(panels[index] as HTMLElement, options);
+  new ControlPanel(panels[index] as HTMLElement, options);
 });
