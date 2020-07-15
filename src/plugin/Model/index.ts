@@ -75,6 +75,11 @@ class Model extends Observer {
         maxValue: this.state.maxValue,
       };
     }
+    if (minValue === maxValue)
+      return {
+        minValue,
+        maxValue: minValue + 1,
+      };
     return minValue > maxValue
       ? {
           minValue: maxValue,
@@ -88,7 +93,7 @@ class Model extends Observer {
 
   private validateStep(step?: number): number {
     if (step === undefined) return this.state.step;
-    return Math.abs(step);
+    return Math.abs(step) || 1;
   }
 
   private validateRange(range?: boolean): boolean {

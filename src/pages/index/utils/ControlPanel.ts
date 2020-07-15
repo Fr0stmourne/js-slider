@@ -99,7 +99,7 @@ class ControlPanel {
 
       if (step !== undefined) {
         const absoluteValue = Math.abs(maxValue - minValue);
-        inputs.step.value = String(step < absoluteValue ? step : absoluteValue);
+        inputs.step.value = String(step < absoluteValue ? step : absoluteValue) || String(1);
       }
 
       $(slider).slider('update', newOptions);
