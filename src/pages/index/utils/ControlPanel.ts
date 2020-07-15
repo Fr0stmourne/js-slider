@@ -80,11 +80,31 @@ class ControlPanel {
 
   @boundMethod
   private handlePanelChange(): void {
-    const { slider, bindListeners, getInputsState } = this;
+    const { slider, inputs, bindListeners, getInputsState } = this;
 
     const newOptions = getInputsState();
-    $(slider).slider('update', newOptions);
-    bindListeners();
+    const { minValue, maxValue, step } = newOptions;
+
+    if (minValue !== undefined && maxValue !== undefined) {
+      if (minValue === maxValue) {
+        const correctMaxValue = minValue + 1;
+        inputs.maxValue.value = String(correctMaxValue);
+        newOptions.maxValue = correctMaxValue;
+      }
+
+      if (minValue > maxValue) {
+        inputs.minValue.value = String(maxValue);
+        inputs.maxValue.value = String(minValue);
+      }
+
+      if (step !== undefined) {
+        const absoluteValue = Math.abs(maxValue - minValue);
+        inputs.step.value = String(step < absoluteValue ? step : absoluteValue);
+      }
+
+      $(slider).slider('update', newOptions);
+      bindListeners();
+    }
   }
 
   @boundMethod
