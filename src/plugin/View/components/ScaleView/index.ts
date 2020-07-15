@@ -1,5 +1,6 @@
+import calculatePxValue from 'View/utils/calculatePxValue';
+
 import { EventTypes } from 'types';
-import calculatePxNum from 'View/utils/calculatePxNum';
 import render from 'View/utils/render';
 
 import DefaultView from '../DefaultView';
@@ -27,7 +28,7 @@ class ScaleView extends DefaultView {
     const calculatedOptions = this.getMilestones();
 
     const optionPositions = calculatedOptions.map(value => {
-      return calculatePxNum({ value, minValue, maxValue, elementSize: sliderSize });
+      return calculatePxValue({ value, minValue, maxValue, elementSize: sliderSize });
     });
 
     const optionNodes = calculatedOptions.map((el, index) => {

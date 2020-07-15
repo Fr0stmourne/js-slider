@@ -17,7 +17,7 @@ const options1: PinData = {
   container: document.createElement('div'),
 };
 
-const pxNum = 10;
+const pxValue = 10;
 
 describe('PinView', () => {
   let pin: PinView, pin1: PinView;
@@ -49,18 +49,18 @@ describe('PinView', () => {
     });
 
     test('should correctly update the value after updateValue method call', () => {
-      pin.updateValue(pxNum, 52);
+      pin.updateValue(pxValue, 52);
       expect(pin.getValue()).toBe(52);
 
-      pin1.updateValue(pxNum, 74);
+      pin1.updateValue(pxValue, 74);
       expect(pin1.getValue()).toBe(74);
     });
 
     test('should correctly update textContent prop after updateValue method call', () => {
-      pin.updateValue(pxNum, 52);
+      pin.updateValue(pxValue, 52);
       expect(pin.element.textContent?.trim()).toBe('52');
 
-      pin1.updateValue(pxNum, 74);
+      pin1.updateValue(pxValue, 74);
       expect(pin1.element.textContent?.trim()).toBe('74');
     });
   });

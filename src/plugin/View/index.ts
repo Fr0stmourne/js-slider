@@ -6,7 +6,7 @@ import BarView from './components/BarView';
 import InputView from './components/InputView';
 import PinView from './components/PinView';
 import ScaleView from './components/ScaleView';
-import calculatePxNum from './utils/calculatePxNum';
+import calculatePxValue from './utils/calculatePxValue';
 import calculateValue from './utils/calculateValue';
 import camelToHyphen from './utils/camelToHyphen';
 import render from './utils/render';
@@ -57,15 +57,15 @@ class View extends Observer {
     const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
     if (range) {
       const pins = [1, 2];
-      const pxNums = pins.map((el, idx) =>
-        calculatePxNum({ value: value[idx], minValue, maxValue, elementSize: sliderSize }),
+      const pxValues = pins.map((el, idx) =>
+        calculatePxValue({ value: value[idx], minValue, maxValue, elementSize: sliderSize }),
       );
 
-      firstPin.updateValue(pxNums[0], value[0]);
-      secondPin?.updateValue(pxNums[1], value[1]);
+      firstPin.updateValue(pxValues[0], value[0]);
+      secondPin?.updateValue(pxValues[1], value[1]);
     } else {
-      const pxNum = calculatePxNum({ value: value[0], minValue, maxValue, elementSize: sliderSize });
-      firstPin.updateValue(pxNum, value[0]);
+      const pxValue = calculatePxValue({ value: value[0], minValue, maxValue, elementSize: sliderSize });
+      firstPin.updateValue(pxValue, value[0]);
     }
 
     input.setValue(value);

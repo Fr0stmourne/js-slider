@@ -21,8 +21,8 @@ class PinView extends DefaultView {
     return Number(this.elements.tooltip.textContent?.trim());
   }
 
-  updateValue(pxNum: number, value: number): void {
-    this.movePin(pxNum);
+  updateValue(pxValue: number, value: number): void {
+    this.movePin(pxValue);
 
     this.elements.tooltip.textContent = String(value);
   }

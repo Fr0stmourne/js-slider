@@ -1,4 +1,4 @@
-function calculatePxNum({
+function calculatePxValue({
   value,
   minValue,
   maxValue,
@@ -15,4 +15,4 @@ function calculatePxNum({
   return (Math.abs(value - minValue) / Math.abs(maxValue - minValue)) * elementSize;
 }
 
-export default calculatePxNum;
+export default calculatePxValue;
