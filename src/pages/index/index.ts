@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Options } from 'types';
 
-import ControlPanel from './utils/ControlPanel';
+import ControlPanel from '../../components/ControlPanel';
 
 const testOptions: {
   default: Options;
