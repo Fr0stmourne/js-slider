@@ -83,7 +83,7 @@ class ControlPanel {
   @boundMethod
   synchronizeInputs(): void {
     const { inputs } = this;
-    const { step, minValue, maxValue } = $(this.slider)
+    const { step, minValue, maxValue, steps, scaleOptionsNum } = $(this.slider)
       .children()
       .first()
       .data();
@@ -91,6 +91,7 @@ class ControlPanel {
     inputs.step.value = step;
     inputs.minValue.value = String(minValue);
     inputs.maxValue.value = String(maxValue);
+    inputs.scaleOptionsNum.value = String(Math.min(steps.split(',').length, scaleOptionsNum));
   }
 
   @boundMethod
