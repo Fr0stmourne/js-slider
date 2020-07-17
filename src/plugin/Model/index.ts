@@ -92,7 +92,11 @@ class Model extends Observer {
   }
 
   private validateStep(step?: number): number {
+    const { minValue, maxValue } = this.state;
     if (step === undefined) return this.state.step;
+    if (step > Math.abs(maxValue - minValue)) {
+      return Math.abs(maxValue - minValue);
+    }
     return Math.abs(step) || 1;
   }
 

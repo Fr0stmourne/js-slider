@@ -79,32 +79,27 @@ class ControlPanel {
   }
 
   @boundMethod
+  synchronizeInputs(): void {
+    const { inputs } = this;
+    const { step, minValue, maxValue } = $(this.slider)
+      .children()
+      .first()
+      .data();
+
+    inputs.step.value = step;
+    inputs.minValue.value = String(minValue);
+    inputs.maxValue.value = String(maxValue);
+  }
+
+  @boundMethod
   private handlePanelChange(): void {
-    const { slider, inputs, bindListeners, getInputsState } = this;
+    const { slider, bindListeners, getInputsState, synchronizeInputs } = this;
 
     const newOptions = getInputsState();
-    const { minValue, maxValue, step } = newOptions;
 
-    if (minValue !== undefined && maxValue !== undefined) {
-      if (minValue === maxValue) {
-        const correctMaxValue = minValue + 1;
-        inputs.maxValue.value = String(correctMaxValue);
-        newOptions.maxValue = correctMaxValue;
-      }
-
-      if (minValue > maxValue) {
-        inputs.minValue.value = String(maxValue);
-        inputs.maxValue.value = String(minValue);
-      }
-
-      if (step !== undefined) {
-        const absoluteValue = Math.abs(maxValue - minValue);
-        inputs.step.value = String(step < absoluteValue ? step : absoluteValue) || String(1);
-      }
-
-      $(slider).slider('update', newOptions);
-      bindListeners();
-    }
+    $(slider).slider('update', newOptions);
+    synchronizeInputs();
+    bindListeners();
   }
 
   @boundMethod
