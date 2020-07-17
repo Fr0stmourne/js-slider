@@ -2,6 +2,8 @@ import { boundMethod } from 'autobind-decorator';
 import { DEFAULT_VIEW_STATE, DEFAULT_MODEL_STATE } from 'defaults';
 import { Options } from 'types';
 
+import './controlPanel.scss';
+
 type Inputs = {
   isTooltipDisabled: HTMLInputElement;
   step: HTMLInputElement;
