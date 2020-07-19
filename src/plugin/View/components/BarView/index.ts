@@ -17,20 +17,20 @@ class BarView extends DefaultView {
       `,
     );
 
-    const handleBarClick = (e: MouseEvent): void => {
-      const target = e.target as HTMLElement;
+    const handleBarClick = (event: MouseEvent): void => {
+      const target = event.target as HTMLElement;
       const { minValue, maxValue, isVertical } = this;
       const isPin = target.classList.contains('js-slider-pin');
       const isTooltip = target.classList.contains('js-slider-value');
 
       if (!isPin && !isTooltip) {
-        const target = e.target as HTMLElement;
+        const target = event.target as HTMLElement;
         const percentage = isVertical
-          ? (target.getBoundingClientRect().height - e.offsetY) / target.getBoundingClientRect().height
-          : e.offsetX / target.getBoundingClientRect().width;
+          ? (target.getBoundingClientRect().height - event.offsetY) / target.getBoundingClientRect().height
+          : event.offsetX / target.getBoundingClientRect().width;
 
         const newValue = calculateValue({ percentage, minValue, maxValue });
-        this.emit(EventTypes.NewBarValue, { e, value: newValue });
+        this.emit(EventTypes.NewBarValue, { event, value: newValue });
       }
     };
 

@@ -152,7 +152,7 @@ class View extends Observer {
     const { range } = this.modelState;
     const { bar } = this.objects;
 
-    const handleBarClick = ({ e, value }: { e: MouseEvent; value: number }): void => {
+    const handleBarClick = ({ event, value }: { event: MouseEvent; value: number }): void => {
       const { firstPin, secondPin } = this.objects;
       if (range && secondPin) {
         const prevValues = [firstPin.getValue(), secondPin.getValue()];
@@ -160,10 +160,10 @@ class View extends Observer {
         const updatedPin = prevValues[0] === updatedValues[0] ? secondPin : firstPin;
         this.emit(EventTypes.ValueChanged, { value: updatedValues });
 
-        this.handleMouseDown(e, updatedPin);
+        this.handleMouseDown(event, updatedPin);
       } else {
         this.emit(EventTypes.ValueChanged, { value: [value] });
-        this.handleMouseDown(e, firstPin);
+        this.handleMouseDown(event, firstPin);
       }
     };
 
@@ -197,7 +197,7 @@ class View extends Observer {
       shift,
     };
 
-    const handleMouseMove = (e: MouseEvent): void => this.handleMouseMove(e, mouseMoveData);
+    const handleMouseMove = (event: MouseEvent): void => this.handleMouseMove(event, mouseMoveData);
 
     const handleMouseUp = (): void => {
       document.removeEventListener('mouseup', handleMouseUp);
@@ -208,15 +208,15 @@ class View extends Observer {
     document.addEventListener('mouseup', handleMouseUp);
   }
 
-  private handleMouseMove(e: MouseEvent, data: MouseMoveData): void {
+  private handleMouseMove(event: MouseEvent, data: MouseMoveData): void {
     const { isVertical } = this.viewState;
     const { minValue, maxValue, range, value } = this.modelState;
     const { pin, shift } = data;
     const slider = this.objects.bar.element;
 
     let newValue = isVertical
-      ? -(e.clientY - shift / 2 - slider.getBoundingClientRect().bottom)
-      : e.clientX - shift / 2 - slider.getBoundingClientRect().left;
+      ? -(event.clientY - shift / 2 - slider.getBoundingClientRect().bottom)
+      : event.clientX - shift / 2 - slider.getBoundingClientRect().left;
 
     const sliderSize = isVertical ? slider.offsetHeight : slider.offsetWidth;
     if (newValue < 0) newValue = 0;
