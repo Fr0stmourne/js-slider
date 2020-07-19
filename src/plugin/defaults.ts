@@ -12,7 +12,7 @@ const DEFAULT_MODEL_STATE: ModelState = {
 };
 
 const DEFAULT_VIEW_STATE: ViewState = {
-  scaleOptionsNum: 5,
+  milestonesNumber: 5,
   isTooltipDisabled: false,
   isVertical: false,
   container: document.createElement('div'),

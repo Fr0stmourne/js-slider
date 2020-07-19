@@ -6,7 +6,7 @@ import ScaleView from './View/components/ScaleView';
 type Options = Partial<ViewState> & Partial<ModelState>;
 
 type ViewState = {
-  scaleOptionsNum: number;
+  milestonesNumber: number;
   isTooltipDisabled: boolean;
   isVertical: boolean;
   container: HTMLElement;
@@ -36,7 +36,7 @@ type PinData = {
 };
 
 type ScaleData = {
-  scaleOptionsNum: number;
+  milestonesNumber: number;
   steps: number[];
   isVertical: boolean;
   minValue: number;

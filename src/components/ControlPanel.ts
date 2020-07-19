@@ -9,7 +9,7 @@ type Inputs = {
   step: HTMLInputElement;
   minValue: HTMLInputElement;
   maxValue: HTMLInputElement;
-  scaleOptionsNum: HTMLInputElement;
+  milestonesNumber: HTMLInputElement;
   firstValue: HTMLInputElement;
   secondValue: HTMLInputElement;
   isVertical: HTMLInputElement;
@@ -33,7 +33,7 @@ class ControlPanel {
       step: element.querySelector('.js-step') as HTMLInputElement,
       minValue: element.querySelector('.js-min-value') as HTMLInputElement,
       maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
-      scaleOptionsNum: element.querySelector('.js-scale') as HTMLInputElement,
+      milestonesNumber: element.querySelector('.js-scale') as HTMLInputElement,
       firstValue: element.querySelector('.js-first-value') as HTMLInputElement,
       secondValue: element.querySelector('.js-second-value') as HTMLInputElement,
       isVertical: element.querySelector('.js-direction') as HTMLInputElement,
@@ -50,7 +50,7 @@ class ControlPanel {
     inputs.step.value = String(initialOptions.step);
     inputs.minValue.value = String(initialOptions.minValue);
     inputs.maxValue.value = String(initialOptions.maxValue);
-    inputs.scaleOptionsNum.value = String(initialOptions.scaleOptionsNum);
+    inputs.milestonesNumber.value = String(initialOptions.milestonesNumber);
     inputs.range.checked = Boolean(initialOptions.range);
 
     if (initialOptions.value) {
@@ -73,7 +73,7 @@ class ControlPanel {
       step: Number(inputs.step.value),
       minValue: inputs.minValue.value !== '' ? Number(inputs.minValue.value) : undefined,
       maxValue: inputs.maxValue.value !== '' ? Number(inputs.maxValue.value) : undefined,
-      scaleOptionsNum: inputs.scaleOptionsNum.value !== '' ? Number(inputs.scaleOptionsNum.value) : undefined,
+      milestonesNumber: inputs.milestonesNumber.value !== '' ? Number(inputs.milestonesNumber.value) : undefined,
       isVertical: inputs.isVertical.checked,
       range: inputs.range.checked,
       value: [inputs.firstValue.value, inputs.secondValue.value].map(el => Number(el)),
@@ -83,7 +83,7 @@ class ControlPanel {
   @boundMethod
   synchronizeInputs(): void {
     const { inputs } = this;
-    const { step, minValue, maxValue, steps, scaleOptionsNum } = $(this.slider)
+    const { step, minValue, maxValue, steps, milestonesNumber } = $(this.slider)
       .children()
       .first()
       .data();
@@ -91,7 +91,7 @@ class ControlPanel {
     inputs.step.value = step;
     inputs.minValue.value = String(minValue);
     inputs.maxValue.value = String(maxValue);
-    inputs.scaleOptionsNum.value = String(Math.min(steps.split(',').length, scaleOptionsNum));
+    inputs.milestonesNumber.value = String(Math.min(steps.split(',').length, milestonesNumber));
   }
 
   @boundMethod

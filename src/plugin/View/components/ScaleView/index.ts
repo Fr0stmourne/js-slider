@@ -7,7 +7,7 @@ import DefaultView from '../DefaultView';
 
 class ScaleView extends DefaultView {
   constructor(
-    private scaleOptionsNum: number,
+    private milestonesNumber: number,
     private isVertical: boolean,
     private steps: number[],
     private minValue: number,
@@ -20,8 +20,8 @@ class ScaleView extends DefaultView {
   }
 
   render(): void {
-    const { scaleOptionsNum, isVertical, minValue, maxValue, sliderSize } = this;
-    const options = new Array(scaleOptionsNum).fill(null);
+    const { milestonesNumber, isVertical, minValue, maxValue, sliderSize } = this;
+    const options = new Array(milestonesNumber).fill(null);
     options[0] = minValue;
     options[options.length - 1] = maxValue;
 
@@ -62,15 +62,15 @@ class ScaleView extends DefaultView {
   }
 
   private getMilestones(): number[] {
-    const { scaleOptionsNum, steps } = this;
+    const { milestonesNumber, steps } = this;
 
-    function filterSteps(steps: number[], scaleOptionsNum: number): number[] {
-      if (scaleOptionsNum >= steps.length) {
+    function filterSteps(steps: number[], milestonesNumber: number): number[] {
+      if (milestonesNumber >= steps.length) {
         return [...steps];
       }
 
-      const interval = steps.length / scaleOptionsNum;
-      const result = Array(Math.floor(scaleOptionsNum))
+      const interval = steps.length / milestonesNumber;
+      const result = Array(Math.floor(milestonesNumber))
         .fill(null)
         .reduce((acc: number[], el: number, index: number) => {
           acc.push(steps[Math.floor(index * interval + interval / 2)]);
@@ -83,7 +83,7 @@ class ScaleView extends DefaultView {
       return result;
     }
 
-    const filteredSteps = filterSteps(steps, scaleOptionsNum);
+    const filteredSteps = filterSteps(steps, milestonesNumber);
     return filteredSteps;
   }
 }

@@ -53,7 +53,7 @@ $(#slider).slider({
 | maxValue          | number             | 100                   | Максимальное значение слайдера                                                                  |
 | step              | number             | 1                     | Шаг значений                                                                                    |
 | value             | number[]           | [50, 100]                    | Стартовое значение слайдера |
-| scaleOptionsNum   | number             | 5                     | Количество интерактивных меток под слайдером                                                    |
+| milestonesNumber   | number             | 5                     | Количество интерактивных меток под слайдером                                                    |
 | isTooltipDisabled | boolean            | false                 | Определяет, включен или нет элемент с цифрой над бегунком                                       |
 | isVertical        | boolean            | false                 | Определяет направление слайдера (горизонтальное/вертикальное)                                   |
 | range             | boolean            | false                 | Показывает/скрывает второй бегунок                                                              |

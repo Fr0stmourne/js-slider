@@ -12,7 +12,7 @@ const testOptions: {
     viewState: {
       isTooltipDisabled: false,
       isVertical: false,
-      scaleOptionsNum: 5,
+      milestonesNumber: 5,
       container: document.createElement('div'),
     },
     modelState: {
@@ -29,7 +29,7 @@ const testOptions: {
     viewState: {
       isTooltipDisabled: false,
       isVertical: true,
-      scaleOptionsNum: 5,
+      milestonesNumber: 5,
       container: document.createElement('div'),
     },
     modelState: {
@@ -46,7 +46,7 @@ const testOptions: {
     viewState: {
       isTooltipDisabled: true,
       isVertical: false,
-      scaleOptionsNum: 10,
+      milestonesNumber: 10,
       container: document.createElement('div'),
     },
     modelState: {

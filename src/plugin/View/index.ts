@@ -80,7 +80,7 @@ class View extends Observer {
   }
 
   render(): void {
-    const { isVertical, scaleOptionsNum, isTooltipDisabled, container } = this.viewState;
+    const { isVertical, milestonesNumber, isTooltipDisabled, container } = this.viewState;
     const { value, minValue, maxValue, range, steps } = this.modelState;
     this.element = render(
       `
@@ -97,8 +97,8 @@ class View extends Observer {
       input: new InputView(value),
     };
 
-    if (scaleOptionsNum && this.sliderSize) {
-      this.objects.scale = new ScaleView(scaleOptionsNum, isVertical, steps, minValue, maxValue, this.sliderSize);
+    if (milestonesNumber && this.sliderSize) {
+      this.objects.scale = new ScaleView(milestonesNumber, isVertical, steps, minValue, maxValue, this.sliderSize);
     }
 
     if (range) {

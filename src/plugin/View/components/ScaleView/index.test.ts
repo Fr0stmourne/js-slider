@@ -8,11 +8,11 @@ const options: ScaleData = {
   maxValue: 100,
   isVertical: false,
   steps: calculateSteps({ minValue: -30, maxValue: 100, step: 5 }),
-  scaleOptionsNum: 12,
+  milestonesNumber: 12,
   sliderSize: 300,
 };
 
-const verticalOptions: ScaleData = { ...options, scaleOptionsNum: 9999, isVertical: true };
+const verticalOptions: ScaleData = { ...options, milestonesNumber: 9999, isVertical: true };
 
 describe('ScaleView', () => {
   let scale: ScaleView;
@@ -20,7 +20,7 @@ describe('ScaleView', () => {
 
   beforeEach(() => {
     scale = new ScaleView(
-      options.scaleOptionsNum,
+      options.milestonesNumber,
       options.isVertical,
       options.steps,
       options.minValue,
@@ -28,7 +28,7 @@ describe('ScaleView', () => {
       options.sliderSize,
     );
     vScale = new ScaleView(
-      verticalOptions.scaleOptionsNum,
+      verticalOptions.milestonesNumber,
       verticalOptions.isVertical,
       verticalOptions.steps,
       verticalOptions.minValue,

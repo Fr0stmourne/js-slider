@@ -14,7 +14,7 @@ const testOptions: {
     maxValue: 103,
     step: 1,
     value: [72],
-    scaleOptionsNum: 9,
+    milestonesNumber: 9,
     range: false,
   },
   vr: {
@@ -24,7 +24,7 @@ const testOptions: {
     value: [-56, 56],
     range: true,
     isVertical: true,
-    scaleOptionsNum: 5,
+    milestonesNumber: 5,
   },
   r: {
     minValue: -33,
@@ -32,7 +32,7 @@ const testOptions: {
     step: 2,
     value: [29, 79],
     range: true,
-    scaleOptionsNum: 5,
+    milestonesNumber: 5,
   },
   v: {
     minValue: 0,
@@ -41,7 +41,7 @@ const testOptions: {
     value: [49],
     range: false,
     isVertical: true,
-    scaleOptionsNum: 5,
+    milestonesNumber: 5,
   },
 };
 
