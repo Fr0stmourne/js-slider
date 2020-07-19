@@ -1,6 +1,5 @@
-import calculatePxValue from 'View/utils/calculatePxValue';
-
 import { EventTypes } from 'types';
+import calculatePxValue from 'View/utils/calculatePxValue';
 import render from 'View/utils/render';
 
 import DefaultView from '../DefaultView';
