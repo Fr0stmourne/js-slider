@@ -7,10 +7,7 @@ import calculateSteps from './utils/calculateSteps';
 class Model extends Observer {
   constructor(private state: ModelState = DEFAULT_MODEL_STATE) {
     super();
-    this.state = { ...DEFAULT_MODEL_STATE, ...state };
-
-    const { minValue, maxValue, step } = this.getState();
-    this.state.steps = calculateSteps({ minValue, maxValue, step });
+    this.init(state);
   }
 
   getState(): ModelState {
@@ -23,6 +20,13 @@ class Model extends Observer {
     const { minValue, maxValue, step } = this.getState();
     this.state.steps = calculateSteps({ minValue, maxValue, step });
     this.emit(EventTypes.StateChanged, { value: this.getState().value });
+  }
+
+  init(state: ModelState): void {
+    this.state = { ...DEFAULT_MODEL_STATE, ...state };
+
+    const { minValue, maxValue, step } = this.getState();
+    this.state.steps = calculateSteps({ minValue, maxValue, step });
   }
 
   private findClosestStep(value: number): number {

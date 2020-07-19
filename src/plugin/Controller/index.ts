@@ -9,8 +9,7 @@ class Controller {
   private userCallback!: Function;
 
   constructor(private model: Model, private view: View) {
-    this.view.render();
-    this.connect();
+    this.init();
   }
 
   setUserCallback(callback: Function): void {
@@ -56,6 +55,11 @@ class Controller {
 
   render(): void {
     this.view.render();
+  }
+
+  init(): void {
+    this.view.render();
+    this.connect();
   }
 
   connect(): void {
