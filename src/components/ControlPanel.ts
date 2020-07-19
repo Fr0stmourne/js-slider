@@ -44,39 +44,56 @@ class ControlPanel {
   }
 
   private setInitialValues(): void {
-    const { inputs, initialOptions } = this;
-    inputs.isTooltipDisabled.checked = initialOptions.isTooltipDisabled || DEFAULT_VIEW_STATE.isTooltipDisabled;
-    inputs.isVertical.checked = initialOptions.isVertical || DEFAULT_VIEW_STATE.isVertical;
-    inputs.step.value = String(initialOptions.step);
-    inputs.minValue.value = String(initialOptions.minValue);
-    inputs.maxValue.value = String(initialOptions.maxValue);
-    inputs.milestonesNumber.value = String(initialOptions.milestonesNumber);
-    inputs.range.checked = Boolean(initialOptions.range);
+    const {
+      inputs,
+      initialOptions: { isTooltipDisabled, isVertical, step, minValue, maxValue, milestonesNumber, range, value },
+    } = this;
+    inputs.isTooltipDisabled.checked = isTooltipDisabled || DEFAULT_VIEW_STATE.isTooltipDisabled;
+    inputs.isVertical.checked = isVertical || DEFAULT_VIEW_STATE.isVertical;
+    inputs.step.value = String(step);
+    inputs.minValue.value = String(minValue);
+    inputs.maxValue.value = String(maxValue);
+    inputs.milestonesNumber.value = String(milestonesNumber);
+    inputs.range.checked = Boolean(range);
 
-    if (initialOptions.value) {
-      inputs.firstValue.value = String(initialOptions.value[0] || DEFAULT_MODEL_STATE.value[0]);
-      inputs.secondValue.value = String(initialOptions.value[1] || initialOptions.maxValue);
+    if (value) {
+      inputs.firstValue.value = String(value[0] || DEFAULT_MODEL_STATE.value[0]);
+      inputs.secondValue.value = String(value[1] || maxValue);
     }
 
-    if (!initialOptions.range) {
+    if (!range) {
       inputs.secondValue.disabled = true;
     }
 
-    inputs.firstValue.setAttribute('data-value', String(initialOptions.value));
+    inputs.firstValue.setAttribute('data-value', String(value));
   }
 
   @boundMethod
   private getInputsState(): Options {
-    const { inputs } = this;
+    const {
+      inputs: {
+        isTooltipDisabled,
+        step,
+        minValue,
+        maxValue,
+        milestonesNumber,
+        isVertical,
+        range,
+        firstValue,
+        secondValue,
+      },
+    } = this;
+    const MINIMAL_MILESTONES_NUMBER = 2;
     return {
-      isTooltipDisabled: inputs.isTooltipDisabled.checked,
-      step: Number(inputs.step.value),
-      minValue: inputs.minValue.value !== '' ? Number(inputs.minValue.value) : undefined,
-      maxValue: inputs.maxValue.value !== '' ? Number(inputs.maxValue.value) : undefined,
-      milestonesNumber: inputs.milestonesNumber.value !== '' ? Number(inputs.milestonesNumber.value) : undefined,
-      isVertical: inputs.isVertical.checked,
-      range: inputs.range.checked,
-      value: [inputs.firstValue.value, inputs.secondValue.value].map(el => Number(el)),
+      isTooltipDisabled: isTooltipDisabled.checked,
+      step: Number(step.value),
+      minValue: minValue.value !== '' ? Number(minValue.value) : undefined,
+      maxValue: maxValue.value !== '' ? Number(maxValue.value) : undefined,
+      milestonesNumber:
+        milestonesNumber.value !== '' ? Math.max(Number(milestonesNumber.value), MINIMAL_MILESTONES_NUMBER) : undefined,
+      isVertical: isVertical.checked,
+      range: range.checked,
+      value: [firstValue.value, secondValue.value].map(el => Number(el)),
     };
   }
 
