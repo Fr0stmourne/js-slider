@@ -30,16 +30,16 @@ class ControlPanel {
   private findElements(): void {
     const { element } = this;
     this.inputs = {
-      isTooltipDisabled: element.querySelector('.js-tooltip-checkbox') as HTMLInputElement,
-      step: element.querySelector('.js-step') as HTMLInputElement,
-      minValue: element.querySelector('.js-min-value') as HTMLInputElement,
-      maxValue: element.querySelector('.js-max-value') as HTMLInputElement,
-      milestonesNumber: element.querySelector('.js-scale') as HTMLInputElement,
-      firstValue: element.querySelector('.js-first-value') as HTMLInputElement,
-      secondValue: element.querySelector('.js-second-value') as HTMLInputElement,
-      isVertical: element.querySelector('.js-direction') as HTMLInputElement,
-      range: element.querySelector('.js-range') as HTMLInputElement,
-      progress: element.querySelector('.js-progress') as HTMLInputElement,
+      isTooltipDisabled: element.querySelector('.control-panel__tooltip') as HTMLInputElement,
+      step: element.querySelector('.control-panel__step') as HTMLInputElement,
+      minValue: element.querySelector('.control-panel__min-value') as HTMLInputElement,
+      maxValue: element.querySelector('.control-panel__max-value') as HTMLInputElement,
+      milestonesNumber: element.querySelector('.control-panel__milestones') as HTMLInputElement,
+      firstValue: element.querySelector('.control-panel__first-value') as HTMLInputElement,
+      secondValue: element.querySelector('.control-panel__second-value') as HTMLInputElement,
+      isVertical: element.querySelector('.control-panel__direction') as HTMLInputElement,
+      range: element.querySelector('.control-panel__range') as HTMLInputElement,
+      progress: element.querySelector('.control-panel__progress') as HTMLInputElement,
     };
 
     this.slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
