@@ -57,6 +57,7 @@ $(#slider).slider({
 | isTooltipDisabled | boolean            | false                 | Определяет, включен или нет элемент с цифрой над бегунком                                       |
 | isVertical        | boolean            | false                 | Определяет направление слайдера (горизонтальное/вертикальное)                                   |
 | range             | boolean            | false                 | Показывает/скрывает второй бегунок                                                              |
+| showProgress             | boolean            | true                 | Показывает/скрывает шкалу прогресса                                                               |
 
 ## API плагина
 

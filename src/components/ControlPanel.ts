@@ -14,6 +14,7 @@ type Inputs = {
   secondValue: HTMLInputElement;
   isVertical: HTMLInputElement;
   range: HTMLInputElement;
+  progress: HTMLInputElement;
 };
 
 class ControlPanel {
@@ -38,6 +39,7 @@ class ControlPanel {
       secondValue: element.querySelector('.js-second-value') as HTMLInputElement,
       isVertical: element.querySelector('.js-direction') as HTMLInputElement,
       range: element.querySelector('.js-range') as HTMLInputElement,
+      progress: element.querySelector('.js-progress') as HTMLInputElement,
     };
 
     this.slider = element.closest('.js-test')?.querySelector('.js-example') as HTMLElement;
@@ -46,7 +48,17 @@ class ControlPanel {
   private setInitialValues(): void {
     const {
       inputs,
-      initialOptions: { isTooltipDisabled, isVertical, step, minValue, maxValue, milestonesNumber, range, value },
+      initialOptions: {
+        isTooltipDisabled,
+        isVertical,
+        step,
+        minValue,
+        maxValue,
+        milestonesNumber,
+        range,
+        value,
+        showProgress,
+      },
     } = this;
     inputs.isTooltipDisabled.checked = isTooltipDisabled || DEFAULT_VIEW_STATE.isTooltipDisabled;
     inputs.isVertical.checked = isVertical || DEFAULT_VIEW_STATE.isVertical;
@@ -55,6 +67,7 @@ class ControlPanel {
     inputs.maxValue.value = String(maxValue);
     inputs.milestonesNumber.value = String(milestonesNumber);
     inputs.range.checked = Boolean(range);
+    inputs.progress.checked = Boolean(showProgress || DEFAULT_VIEW_STATE.showProgress);
 
     if (value) {
       inputs.firstValue.value = String(value[0] || DEFAULT_MODEL_STATE.value[0]);
@@ -79,6 +92,7 @@ class ControlPanel {
         milestonesNumber,
         isVertical,
         range,
+        progress,
         firstValue,
         secondValue,
       },
@@ -93,6 +107,7 @@ class ControlPanel {
         milestonesNumber.value !== '' ? Math.max(Number(milestonesNumber.value), MINIMAL_MILESTONES_NUMBER) : undefined,
       isVertical: isVertical.checked,
       range: range.checked,
+      showProgress: progress.checked,
       value: [firstValue.value, secondValue.value].map(el => Number(el)),
     };
   }
