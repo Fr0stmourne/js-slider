@@ -16,6 +16,11 @@
       width: 100%;
     }
 
+    .slider-plugin__progress {
+      height: 0;
+      width: 100%;
+    }
+
     .slider-plugin__pin {
       left: 50%;
       top: initial;
@@ -50,6 +55,16 @@
     background-color: lightgray;
     border-radius: 3px;
     cursor: pointer;
+  }
+
+  &__progress {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: red;
+    height: 100%;
+    pointer-events: none;
+    touch-action: none;
   }
 
   &__pin {

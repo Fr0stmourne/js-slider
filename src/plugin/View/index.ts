@@ -5,6 +5,7 @@ import Observer from '../Observer';
 import BarView from './components/BarView';
 import InputView from './components/InputView';
 import PinView from './components/PinView';
+import ProgressView from './components/ProgressView';
 import ScaleView from './components/ScaleView';
 import calculatePxValue from './utils/calculatePxValue';
 import calculateValue from './utils/calculateValue';
@@ -56,20 +57,23 @@ class View extends Observer {
     const { isVertical } = this.viewState;
     const { modelState, viewState } = this;
     const { minValue, maxValue, range } = modelState;
-    const { input, firstPin, secondPin, bar } = this.objects;
+    const { input, firstPin, secondPin, bar, progress } = this.objects;
 
     const sliderSize = isVertical ? bar.element.clientHeight : bar.element.clientWidth;
     if (range) {
       const pins = [1, 2];
-      const pxValues = pins.map((el, idx) =>
-        calculatePxValue({ value: value[idx], minValue, maxValue, elementSize: sliderSize }),
+      const pxValues = pins.map((el, index) =>
+        calculatePxValue({ value: value[index], minValue, maxValue, elementSize: sliderSize }),
       );
 
       firstPin.updateValue(pxValues[0], value[0]);
       secondPin?.updateValue(pxValues[1], value[1]);
+      progress.setWidth(((pxValues[1] - pxValues[0]) / sliderSize) * 100);
+      progress.setPadding((pxValues[0] / sliderSize) * 100);
     } else {
       const pxValue = calculatePxValue({ value: value[0], minValue, maxValue, elementSize: sliderSize });
       firstPin.updateValue(pxValue, value[0]);
+      progress.setWidth((pxValue / sliderSize) * 100);
     }
 
     input.setValue(value);
@@ -99,6 +103,7 @@ class View extends Observer {
       bar: new BarView(minValue, maxValue, isVertical),
       firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical, container),
       input: new InputView(value),
+      progress: new ProgressView(isVertical),
     };
 
     if (milestonesNumber && this.sliderSize) {
@@ -109,8 +114,9 @@ class View extends Observer {
       this.objects.secondPin = new PinView(2, value[1], isTooltipDisabled, isVertical, container);
     }
 
-    const { firstPin, secondPin, scale, bar, input } = this.objects;
+    const { firstPin, secondPin, scale, bar, input, progress } = this.objects;
     bar.element.append(firstPin.element);
+    bar.element.append(progress.element);
     if (range) {
       bar.element.append(secondPin?.element as HTMLElement);
     }

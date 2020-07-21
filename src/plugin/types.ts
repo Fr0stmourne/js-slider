@@ -1,3 +1,5 @@
+import ProgressView from 'View/components/ProgressView';
+
 import BarView from './View/components/BarView';
 import InputView from './View/components/InputView';
 import PinView from './View/components/PinView';
@@ -55,6 +57,7 @@ type Objects = {
   firstPin: PinView;
   secondPin?: PinView;
   input: InputView;
+  progress: ProgressView;
   scale?: ScaleView;
 };
 
