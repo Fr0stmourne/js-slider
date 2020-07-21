@@ -37,7 +37,7 @@ class Model extends Observer {
     if (newValue === undefined) return this.state.value;
     let validatedValue: number[];
 
-    const { value: prevValue, range, maxValue, step } = state;
+    const { value: prevValue, range, maxValue, minValue, step } = state;
     const firstValue = this.findClosestStep(newValue[0]);
     let secondValue: number;
     if (newValue.length === 2) {
@@ -49,11 +49,12 @@ class Model extends Observer {
 
     const calculateValidatedValue = (): number[] => {
       const {
-        state: { steps, minValue },
+        state: { steps },
       } = this;
       if (Math.abs(maxValue - minValue) === step) return [steps[0], steps[1]];
+      if (firstValue === secondValue && firstValue === maxValue)
+        return [steps[steps.length - 2], steps[steps.length - 1]];
       if (newValue.every(value => value < minValue || value > maxValue)) return [steps[0], steps[1]];
-      if (newValue[0] === newValue[1]) return [steps[steps.indexOf(newValue[1]) - 1], newValue[1]];
       return prevValue[0] !== newValue[0]
         ? [steps[steps.indexOf(secondValue) - 1], secondValue]
         : [firstValue, steps[steps.indexOf(firstValue) + 1]];
