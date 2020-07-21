@@ -68,12 +68,12 @@ class View extends Observer {
 
       firstPin.updateValue(pxValues[0], value[0]);
       secondPin?.updateValue(pxValues[1], value[1]);
-      progress.setWidth(((pxValues[1] - pxValues[0]) / sliderSize) * 100);
-      progress.setPadding((pxValues[0] / sliderSize) * 100);
+      progress?.setWidth(((pxValues[1] - pxValues[0]) / sliderSize) * 100);
+      progress?.setPadding((pxValues[0] / sliderSize) * 100);
     } else {
       const pxValue = calculatePxValue({ value: value[0], minValue, maxValue, elementSize: sliderSize });
       firstPin.updateValue(pxValue, value[0]);
-      progress.setWidth((pxValue / sliderSize) * 100);
+      progress?.setWidth((pxValue / sliderSize) * 100);
     }
 
     input.setValue(value);
@@ -88,7 +88,7 @@ class View extends Observer {
   }
 
   render(): void {
-    const { isVertical, milestonesNumber, isTooltipDisabled, container } = this.viewState;
+    const { isVertical, milestonesNumber, isTooltipDisabled, container, showProgress } = this.viewState;
     const { value, minValue, maxValue, range, steps } = this.modelState;
     this.element = render(
       `
@@ -103,11 +103,14 @@ class View extends Observer {
       bar: new BarView(minValue, maxValue, isVertical),
       firstPin: new PinView(1, value[0], isTooltipDisabled, isVertical, container),
       input: new InputView(value),
-      progress: new ProgressView(isVertical),
     };
 
     if (milestonesNumber && this.sliderSize) {
       this.objects.scale = new ScaleView(milestonesNumber, isVertical, steps, minValue, maxValue, this.sliderSize);
+    }
+
+    if (showProgress) {
+      this.objects.progress = new ProgressView(isVertical);
     }
 
     if (range) {
@@ -116,7 +119,9 @@ class View extends Observer {
 
     const { firstPin, secondPin, scale, bar, input, progress } = this.objects;
     bar.element.append(firstPin.element);
-    bar.element.append(progress.element);
+    if (progress) {
+      bar.element.append(progress.element);
+    }
     if (range) {
       bar.element.append(secondPin?.element as HTMLElement);
     }

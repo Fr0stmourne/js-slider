@@ -15,6 +15,7 @@ const DEFAULT_VIEW_STATE: ViewState = {
   milestonesNumber: 5,
   isTooltipDisabled: false,
   isVertical: false,
+  showProgress: true,
   container: document.createElement('div'),
 };
 

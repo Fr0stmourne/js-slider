@@ -13,6 +13,7 @@ const testOptions: {
       isTooltipDisabled: false,
       isVertical: false,
       milestonesNumber: 5,
+      showProgress: true,
       container: document.createElement('div'),
     },
     modelState: {
@@ -30,6 +31,7 @@ const testOptions: {
       isTooltipDisabled: false,
       isVertical: true,
       milestonesNumber: 5,
+      showProgress: true,
       container: document.createElement('div'),
     },
     modelState: {
@@ -47,6 +49,7 @@ const testOptions: {
       isTooltipDisabled: true,
       isVertical: false,
       milestonesNumber: 10,
+      showProgress: true,
       container: document.createElement('div'),
     },
     modelState: {

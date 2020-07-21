@@ -11,6 +11,7 @@ type ViewState = {
   milestonesNumber: number;
   isTooltipDisabled: boolean;
   isVertical: boolean;
+  showProgress: boolean;
   container: HTMLElement;
 };
 
@@ -57,7 +58,7 @@ type Objects = {
   firstPin: PinView;
   secondPin?: PinView;
   input: InputView;
-  progress: ProgressView;
+  progress?: ProgressView;
   scale?: ScaleView;
 };
 
