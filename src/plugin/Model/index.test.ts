@@ -124,7 +124,7 @@ describe('setState', () => {
     rangeModel.setState({
       value: [6, 6],
     });
-    expect(rangeModel.getState().value).toStrictEqual([4, 6]);
+    expect(rangeModel.getState().value).toStrictEqual([6, 8]);
   });
 
   test('should handle undefined as new value', () => {
