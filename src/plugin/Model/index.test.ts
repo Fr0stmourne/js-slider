@@ -120,7 +120,7 @@ describe('setState', () => {
     expect(rangeModel.getState().value).toStrictEqual([32, 34]);
   });
 
-  test('should handle the case when 2 values are equal (new second value is less than the previous one', () => {
+  test('should handle the case when 2 values are equal (new second value is greater than the previous one', () => {
     rangeModel.setState({
       value: [6, 6],
     });
