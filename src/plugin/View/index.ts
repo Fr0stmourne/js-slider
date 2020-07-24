@@ -92,7 +92,7 @@ class View extends Observer {
     const { value, minValue, maxValue, range, steps } = this.modelState;
     this.element = render(
       `
-    <div class="slider-plugin js-slider ${isVertical ? 'slider-plugin--vertical' : ''}">
+    <div class="slider-plugin js-slider ${isVertical ? 'slider-plugin_vertical' : ''}">
     </div>
     `,
     );
