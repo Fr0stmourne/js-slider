@@ -32,7 +32,7 @@ class PinView extends DefaultView {
       `
       <div class="slider-plugin__pin js-slider-pin js-slider-pin-${this.pinNumber}">
         <div class="slider-plugin__value ${
-          this.isTooltipDisabled ? 'slider-plugin__value--hidden' : ''
+          this.isTooltipDisabled ? 'slider-plugin__value_hidden' : ''
         } js-slider-value">${this.value}</div>
       </div>
       `,

@@ -40,11 +40,11 @@
       right: 20px;
       margin-top: 0;
       padding-top: 0;
+    }
 
-      &-option {
-        right: 0;
-        transform: translate(0, 50%);
-      }
+    .slider-plugin__scale-option {
+      right: 0;
+      transform: translate(0, 50%);
     }
   }
 
@@ -87,12 +87,12 @@
     padding-top: 10px;
     width: 100%;
     display: flex;
+  }
 
-    &-option {
-      position: absolute;
-      transform: translate(-50%, 0);
-      cursor: pointer;
-    }
+  &__scale-option {
+    position: absolute;
+    transform: translate(-50%, 0);
+    cursor: pointer;
   }
 
   &__input {
@@ -112,7 +112,7 @@
     transform: translate(-50%);
     border-radius: 5px;
 
-    &--hidden {
+    &_hidden {
       display: none;
     }
   }
