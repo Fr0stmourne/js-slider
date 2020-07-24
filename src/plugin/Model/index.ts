@@ -33,11 +33,42 @@ class Model extends Observer {
     return this.state.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
+  private calculateValidatedValue({
+    maxValue,
+    minValue,
+    step,
+    firstValue,
+    secondValue,
+    newValue,
+    prevValue,
+  }: {
+    maxValue: number;
+    minValue: number;
+    step: number;
+    firstValue: number;
+    secondValue: number;
+    newValue: number[];
+    prevValue: number[];
+  }): number[] {
+    const {
+      state: { steps },
+    } = this;
+
+    if (Math.abs(maxValue - minValue) === step) return [steps[0], steps[1]];
+    if (firstValue === secondValue && firstValue === maxValue)
+      return [steps[steps.length - 2], steps[steps.length - 1]];
+    if (newValue.every((value: number) => value < minValue || value > maxValue)) return [steps[0], steps[1]];
+    return prevValue[0] !== newValue[0]
+      ? [steps[steps.indexOf(secondValue) - 1], secondValue]
+      : [firstValue, steps[steps.indexOf(firstValue) + 1]];
+  }
+
   private validateValue(state: ModelState, newValue?: number[]): number[] {
     if (newValue === undefined) return this.state.value;
     let validatedValue: number[];
 
     const { value: prevValue, range, maxValue, minValue, step } = state;
+    const { calculateValidatedValue } = this;
     const firstValue = this.findClosestStep(newValue[0]);
     let secondValue: number;
     if (newValue.length === 2) {
@@ -47,26 +78,29 @@ class Model extends Observer {
     }
     validatedValue = [firstValue, secondValue];
 
-    const calculateValidatedValue = (): number[] => {
-      const {
-        state: { steps },
-      } = this;
-      if (Math.abs(maxValue - minValue) === step) return [steps[0], steps[1]];
-      if (firstValue === secondValue && firstValue === maxValue)
-        return [steps[steps.length - 2], steps[steps.length - 1]];
-      if (newValue.every(value => value < minValue || value > maxValue)) return [steps[0], steps[1]];
-      return prevValue[0] !== newValue[0]
-        ? [steps[steps.indexOf(secondValue) - 1], secondValue]
-        : [firstValue, steps[steps.indexOf(firstValue) + 1]];
-    };
-
     if (state.range || range) {
       if (firstValue >= secondValue) {
-        validatedValue = calculateValidatedValue();
+        validatedValue = calculateValidatedValue({
+          maxValue,
+          minValue,
+          step,
+          firstValue,
+          secondValue,
+          newValue,
+          prevValue,
+        });
       }
     } else {
       if (firstValue > secondValue) {
-        validatedValue = calculateValidatedValue();
+        validatedValue = calculateValidatedValue({
+          maxValue,
+          minValue,
+          step,
+          firstValue,
+          secondValue,
+          newValue,
+          prevValue,
+        });
       }
     }
 
