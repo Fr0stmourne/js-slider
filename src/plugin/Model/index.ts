@@ -1,3 +1,5 @@
+import { boundMethod } from 'autobind-decorator';
+
 import { DEFAULT_MODEL_STATE } from 'defaults';
 import { ModelState, EventTypes } from 'types';
 
@@ -33,6 +35,7 @@ class Model extends Observer {
     return this.state.steps.reduce((a, b) => (Math.abs(b - value) < Math.abs(a - value) ? b : a));
   }
 
+  @boundMethod
   private calculateValidatedValue({
     maxValue,
     minValue,
